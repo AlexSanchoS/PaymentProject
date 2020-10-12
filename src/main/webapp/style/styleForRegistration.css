@@ -1,0 +1,21 @@
+.leng_buttons{
+    position: absolute;
+    top: 2%;
+    right: 10%;
+}
+div{
+    margin: 20px;
+}
+
+.input_area{
+    display: flex;
+}
+
+.input_area label{
+    width: 7%;
+}
+
+.form_button{
+    width: 7%;
+    margin: 1% 6%;
+}
