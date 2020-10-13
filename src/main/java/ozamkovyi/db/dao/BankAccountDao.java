@@ -116,6 +116,13 @@ public class BankAccountDao {
     private static final String SQL_GET_COUNT_BANK_ACCOUNT_BY_CLIENT_ID = "SELECT COUNT(" + Fields.BANK_ACCOUNT__NUMBER + ") " +
             " FROM " + Fields.TABLE__BANK_ACCOUNT + " WHERE " + Fields.BANK_ACCOUNT__USER_ID + " = ?";
 
+    private static final String SQL_GET_COUNT_BANK_ACCOUNT_FOR_UNLOCK =
+            "SELECT COUNT(" + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ") " +
+                    " FROM " + Fields.TABLE__BANK_ACCOUNT + " join " + Fields.TABLE__ACCOUNT_STATUS + " ON " +
+                    Fields.TABLE__BANK_ACCOUNT+"."+ Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " = "+
+            Fields.TABLE__ACCOUNT_STATUS+"."+Fields.ACCOUNT_STATUS__ID+ " and "+
+            Fields.TABLE__ACCOUNT_STATUS+"."+Fields.ACCOUNT_STATUS__STATUS+ " = '" + Fields.ACCOUNT_STATUS__EXPECTATION+"'";
+
     private static final String SQL_CHANGE_STATUS_ID_FOR_BANK_ACCOUNT = "UPDATE " + Fields.TABLE__BANK_ACCOUNT +
             " SET " + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " =? WHERE " + Fields.BANK_ACCOUNT__NUMBER + " =?";
 
@@ -158,6 +165,82 @@ public class BankAccountDao {
                     Fields.BANK_ACCOUNT__BALANCE + ", " + Fields.BANK_ACCOUNT__CURRENCY_ID + ", " +
                     Fields.BANK_ACCOUNT__USER_ID + ", " + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " ) " +
                     " VALUES (?, ?, ?, ?, ?)";
+
+    private static final String SQL_GET_ACCOUNT_BALANCE_BY_NUMBER =
+            "SELECT " + Fields.BANK_ACCOUNT__BALANCE + " FROM " +
+                    Fields.TABLE__BANK_ACCOUNT + " WHERE " +
+                    Fields.BANK_ACCOUNT__NUMBER + " = ?";
+
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT1_LIMIT =
+            "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
+                    Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + ", " +
+                    Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + ", " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS +
+                    " FROM " + Fields.TABLE__BANK_ACCOUNT + " join " +
+                    Fields.TABLE__CURRENCY + " join " +
+                    Fields.TABLE__CLIENT + " join " +
+                    Fields.TABLE__ACCOUNT_STATUS + " on " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + " = " + Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID + " = " + Fields.TABLE__CLIENT + "." + Fields.CLIENT__ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " = " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__ID + " and " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS + " = '" +
+                    Fields.ACCOUNT_STATUS__EXPECTATION +
+                    "' ORDER BY " + Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + " limit 10 offset ?";
+
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT2_LIMIT =
+            "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
+                    Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + ", " +
+                    Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + ", " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS +
+                    " FROM " + Fields.TABLE__BANK_ACCOUNT + " join " +
+                    Fields.TABLE__CURRENCY + " join " +
+                    Fields.TABLE__CLIENT + " join " +
+                    Fields.TABLE__ACCOUNT_STATUS + " on " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + " = " + Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID + " = " + Fields.TABLE__CLIENT + "." + Fields.CLIENT__ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " = " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__ID + " and " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS + " = '" +
+                    Fields.ACCOUNT_STATUS__EXPECTATION +
+                    "' ORDER BY " + Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + " DESC limit 10 offset ?";
+
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT3_LIMIT =
+            "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
+                    Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + ", " +
+                    Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + ", " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS +
+                    " FROM " + Fields.TABLE__BANK_ACCOUNT + " join " +
+                    Fields.TABLE__CURRENCY + " join " +
+                    Fields.TABLE__CLIENT + " join " +
+                    Fields.TABLE__ACCOUNT_STATUS + " on " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + " = " + Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID + " = " + Fields.TABLE__CLIENT + "." + Fields.CLIENT__ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " = " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__ID + " and " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS + " = '" +
+                    Fields.ACCOUNT_STATUS__EXPECTATION +
+                    "' ORDER BY " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " limit 10 offset ?";
+
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT4_LIMIT =
+            "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
+                    Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + ", " +
+                    Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME +
+                    " FROM " + Fields.TABLE__BANK_ACCOUNT + " join " +
+                    Fields.TABLE__CURRENCY + " join " +
+                    Fields.TABLE__CLIENT + " join " +
+                    Fields.TABLE__ACCOUNT_STATUS + " on " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + " = " + Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID + " = " + Fields.TABLE__CLIENT + "." + Fields.CLIENT__ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " = " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__ID + " and " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS + " = '" +
+                    Fields.ACCOUNT_STATUS__EXPECTATION +
+                    "' ORDER BY " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " DESC limit 10 offset ?";
 
 
     public static ArrayList<BankAccount> getAllAccount(Client client) {
@@ -273,6 +356,55 @@ public class BankAccountDao {
         return listOfBankAccount;
     }
 
+    public static ArrayList<BankAccount> getAccountListForUnlock(int page, int sortType) {
+        ArrayList<BankAccount> listOfBankAccount = new ArrayList<>();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        String sort = null;
+        switch (sortType) {
+            case 1:
+                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT1_LIMIT;
+                break;
+            case 2:
+                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT2_LIMIT;
+                break;
+            case 3:
+                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT3_LIMIT;
+                break;
+            case 4:
+                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT4_LIMIT;
+                break;
+        }
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(sort);
+            BankAccountMapper mapper = new BankAccountMapper();
+            pstmt.setInt(1, page * 10 - 10);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                BankAccount bankAccount = new BankAccount();
+                bankAccount.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
+                bankAccount.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                bankAccount.setClientName(rs.getString(Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME));
+                bankAccount.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
+                listOfBankAccount.add(bankAccount);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+        return listOfBankAccount;
+    }
+
     private static int getStatusIdByStatus(String status) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -313,7 +445,7 @@ public class BankAccountDao {
             pstmt = con.prepareStatement(SQL_CHANGE_STATUS_ID_FOR_BANK_ACCOUNT);
             pstmt.setInt(1, newStatusId);
             pstmt.setString(2, bankAccount.getNumber());
-            if (newStatus.equals(Fields.ACCOUNT_STATUS__BLOCKED)){
+            if (newStatus.equals(Fields.ACCOUNT_STATUS__BLOCKED)) {
                 CreditCardDao.blockAllCardForAccount(bankAccount);
             }
             pstmt.executeUpdate();
@@ -326,8 +458,36 @@ public class BankAccountDao {
 
     }
 
-    public static void addToBalance(BankAccount bankAccount, double amount) {
-        double course = getCourse(bankAccount);
+    private static int getAccountBalance(String number) {
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        DBManager dbManager = DBManager.getInstance();
+        ResultSet rs = null;
+        int statusId = 0;
+        try {
+            con = dbManager.getConnection();
+            pstmt = con.prepareStatement(SQL_GET_ACCOUNT_BALANCE_BY_NUMBER);
+            pstmt.setString(1, number);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                statusId = rs.getInt(1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+        return statusId;
+    }
+
+    public static void addToBalance(String number, double amount) {
+        double course = getCourse(number);
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -335,9 +495,10 @@ public class BankAccountDao {
         try {
             con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_CHANGE_BALANCE_FOR_BANK_ACCOUNT);
-            int newBalance = (int) ((bankAccount.getBalanceDouble() + amount / course) * 100);
+            int currentBalance = getAccountBalance(number);
+            int newBalance = (int) (currentBalance + amount / course * 100);
             pstmt.setInt(1, newBalance);
-            pstmt.setString(2, bankAccount.getNumber());
+            pstmt.setString(2, number);
             System.out.println(pstmt);
             pstmt.executeUpdate();
 
@@ -348,7 +509,7 @@ public class BankAccountDao {
         }
     }
 
-    private static double getCourse(BankAccount bankAccount) {
+    private static double getCourse(String number) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -356,7 +517,7 @@ public class BankAccountDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_COURSE_FOR_BANK_ACCOUNT);
-            pstmt.setString(1, bankAccount.getNumber());
+            pstmt.setString(1, number);
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getDouble(1);
@@ -406,7 +567,7 @@ public class BankAccountDao {
         return re;
     }
 
-    public static void addNewAccount(Currency currency, Client client){
+    public static void addNewAccount(Currency currency, Client client) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -430,6 +591,32 @@ public class BankAccountDao {
         } finally {
             dbManager.commitAndClose(con);
         }
+    }
+
+    public static int getCountBankAccountForUnlock() {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        int rez = 0;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_GET_COUNT_BANK_ACCOUNT_FOR_UNLOCK);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                rez = rs.getInt(1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+        return rez;
     }
 
     private static class BankAccountMapper implements EntityMapper<BankAccount> {

@@ -1,6 +1,7 @@
 package ozamkovyi.db.entity;
 
 import ozamkovyi.db.Fields;
+import ozamkovyi.web.CalendarProcessing;
 import ozamkovyi.web.Localization;
 
 import java.util.Calendar;
@@ -132,5 +133,9 @@ public class CreditCard extends Entity {
             sb.append((random.nextInt(9)));
         }
         return sb.toString();
+    }
+
+    public boolean isValid(){
+        return CalendarProcessing.isCardValid(this);
     }
 }

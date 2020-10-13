@@ -1,5 +1,7 @@
 package ozamkovyi.web;
 
+import ozamkovyi.db.entity.CreditCard;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -59,7 +61,7 @@ public class CalendarProcessing {
 
     }
 
-    public static String allDate2String(Calendar date) {
+    public static String fullDate2String(Calendar date) {
         StringBuilder sb = new StringBuilder();
         sb.append(date.get(Calendar.YEAR) + "-");
         int a = date.get(Calendar.MONTH) + 1;
@@ -103,5 +105,29 @@ public class CalendarProcessing {
         sb.append((calendar.get(Calendar.MONTH)+1)+"-");
         sb.append("01");
         return sb.toString();
+    }
+
+    public static String getFullCurrentDate(){
+        Calendar calendar = Calendar.getInstance();
+        return fullDate2String(calendar);
+    }
+
+    public static boolean isCardValid(CreditCard creditCard){
+        Calendar calendar = Calendar.getInstance();
+        int creditCardYear =creditCard.getValidity().get(Calendar.YEAR);
+        int creditCardMouth =creditCard.getValidity().get(Calendar.MONTH);
+
+        if (calendar.get(Calendar.YEAR)>creditCardYear){
+            return false;
+        }
+        if (calendar.get(Calendar.YEAR)<creditCardYear){
+            return true;
+        }
+        if (calendar.get(Calendar.MONTH)<creditCardMouth){
+            return true;
+        }
+        return false;
+
+
     }
 }

@@ -1,42 +1,51 @@
-body{
+body {
     padding-left: 5%;
     background-color: rgba(237, 237, 237, 1);
 }
 
 
-.button_l{
+.button_l {
     width: 50px;
     color: black;
-    background-color: rgba(255,255,255,0.6);
+    background-color: rgba(255, 255, 255, 0.6);
 }
 
 
-.button_ukr{
+.button_ukr {
     display: inline;
     background-image: url(ukr.webp);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    width: 50px;
 }
 
-.button_eng{
+.button_eng {
     display: inline;
     background-image: url(eng.svg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    width: 50px;
 }
 
-.standart_buttons{
+.standart_buttons {
     text-align: end;
     position: absolute;
     top: 5%;
     right: 10%;
 }
 
+.bottom_button:disabled {
+    opacity: 0.7
+}
+
+.button:disabled {
+    opacity: 0.7
+}
 
 
-.exit_button{
+.exit_button {
     width: 120px;
     padding: 18%;
     margin-top: 20%;
@@ -44,34 +53,34 @@ body{
     color: white;
     border: none;
     background-color: rgba(27, 93, 125, 1);
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 
-.buttons{
+.buttons {
     display: flex;
     flex-direction: column;
 }
 
-.button{
+.button {
     width: 130px;
     height: 50px;
     text-align: center;
     color: white;
     border: none;
     background-color: rgba(27, 93, 125, 1);
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 
-.content{
+.content {
     padding-top: 5%;
     display: flex;
     width: 80%;
     color: rgba(47, 66, 72, 1);
 }
 
-.main_content{
+.main_content {
     width: 80%;
     display: flex;
     flex-direction: column;
@@ -80,33 +89,33 @@ body{
     margin-left: 5%;
 }
 
-.table_top{
+.table_top {
     width: 80%;
     display: flex;
     justify-content: space-between;
 }
 
-.head_of_table{
+.head_of_table {
     background-color: rgba(100, 155, 152, 1);
     color: white;
 }
 
-.last_col{
+.last_col {
     display: none;
 }
 
-.sort_section{
+.sort_section {
     position: relative;
     display: flex;
 }
 
-.sort_title{
+.sort_title {
     position: absolute;
     top: 30%;
     right: 110%
 }
 
-.sort_card{
+.sort_card {
     width: 100px;
     height: 20px;
     margin-top: 4px;
@@ -116,23 +125,42 @@ body{
     background-color: rgba(62, 161, 188, 1);
 }
 
-.sort_section-cards{
+.block_card:disabled {
+    opasity: 0.2;
+}
+.button_l:disabled {
+    opasity: 0.2;
+}
+.button_ukr:disabled {
+    opasity: 0.2;
+}
+.block_card_section:disabled{
+    opacity: 0.2;
+}
+.button_eng:disabled {
+    opasity: 0.2;
+}
+.line:nth-child(odd) >:not(.block_card_section){
+    background-color: rgb(213, 231, 243);
+}
+
+.sort_section-cards {
     width: 100%;
     display: flex;
     flex-direction: column;
 }
 
-.add{
+.add {
     width: 40%;
     display: flex;
     align-items: center;
 }
 
-.add_select{
+.add_select {
     width: 50%;
 }
 
-.add_card{
+.add_card {
     width: 50%;
     height: 40px;
     color: white;
@@ -142,18 +170,18 @@ body{
 
 }
 
-table{
+table {
     width: 80%;
     text-align: center;
 }
 
-td{
+td {
     background-color: white;
     width: 20%;
     border: 1px solid black;
 }
 
-.block_card{
+.block_card {
     width: 100%;
     border: none;
     height: 100%;
@@ -161,20 +189,12 @@ td{
     color: white;
 }
 
-.block_card_section{
-    background-color: rgba(100, 155, 152, 1);
+.block_card_section {
+    background-color: rgba(62, 161, 188, 1);
     border-radius: 7%;
 }
 
-.button:disabled{
-    opacity: 0.7
-}
-
-.bottom_button:disabled{
-    opacity: 0.7
-}
-
-.bottom_button{
+.bottom_button {
     margin-top: 15px;
     width: 40px;
     color: white;

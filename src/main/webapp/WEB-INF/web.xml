@@ -37,7 +37,7 @@
     
     <servlet>
         <servlet-name>ClientHomepage</servlet-name>
-        <servlet-class>ozamkovyi.web.servlet.ClientHomepageServlet</servlet-class>
+        <servlet-class>ozamkovyi.web.servlet.clientServlets.ClientHomepageServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ClientHomepage</servlet-name>
@@ -54,7 +54,7 @@
 
     <servlet>
         <servlet-name>clientCardMenu</servlet-name>
-        <servlet-class>ozamkovyi.web.servlet.ClientCardMenuServlet</servlet-class>
+        <servlet-class>ozamkovyi.web.servlet.clientServlets.ClientCardMenuServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>clientCardMenu</servlet-name>
@@ -63,7 +63,7 @@
 
     <servlet>
         <servlet-name>clientAccountMenu</servlet-name>
-        <servlet-class>ozamkovyi.web.servlet.ClientAccountMenuServlet</servlet-class>
+        <servlet-class>ozamkovyi.web.servlet.clientServlets.ClientAccountMenuServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>clientAccountMenu</servlet-name>
@@ -72,24 +72,38 @@
 
     <servlet>
         <servlet-name>clientPaymentMenu</servlet-name>
-        <servlet-class>ozamkovyi.web.servlet.ClientPaymentMenuServlet</servlet-class>
+        <servlet-class>ozamkovyi.web.servlet.clientServlets.ClientPaymentMenuServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>clientPaymentMenu</servlet-name>
         <url-pattern>/clientPaymentMenu</url-pattern>
     </servlet-mapping>
 
-
     <servlet>
         <servlet-name>addPayment</servlet-name>
-        <servlet-class>ozamkovyi.web.servlet.AddPaymentServlet</servlet-class>
+        <servlet-class>ozamkovyi.web.servlet.clientServlets.AddPaymentServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>addPayment</servlet-name>
         <url-pattern>/addPayment</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>adminHomepage</servlet-name>
+        <servlet-class>ozamkovyi.web.servlet.adminServlets.AdminHomepageRequestServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>adminHomepage</servlet-name>
+        <url-pattern>/adminHomepage</url-pattern>
+    </servlet-mapping>
 
-    addPayment
+    <servlet>
+        <servlet-name>allUsers</servlet-name>
+        <servlet-class>ozamkovyi.web.servlet.adminServlets.AllClientServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>allUsers</servlet-name>
+        <url-pattern>/allUsers</url-pattern>
+    </servlet-mapping>
 
 </web-app>

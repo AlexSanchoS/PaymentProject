@@ -13,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
-    <link rel="stylesheet" href="./../style/styleForRegistration.css">
+    <link rel="stylesheet" href="./../style/styleForRegistration4.css">
 </head>
 
 <body>
@@ -37,7 +37,7 @@
             <button class="button_l" name="engButton" ${engDisable}>Eng</button>
         </div>
         <div class="button_ukr">
-            <button class="  button_l" name="uaButton" ${uaDisable}>Ua</button>
+            <button class="button_l" name="uaButton" ${uaDisable}>Ua</button>
         </div>
     </div>
 
@@ -49,7 +49,7 @@
         <label><%=localization.getClientPaymentMenuTableSender()%>
         </label>
         <div class="add_select">
-            <select name="currencyForNewAccount" id="sort1">
+            <select name="senderNumber" id="sort1">
                 <option>${currentPayment.getSenderCardNumber()}</option>
             </select>
         </div>
@@ -57,13 +57,13 @@
     <div class="input_area">
         <label for="POST-password"><%=localization.getClientPaymentMenuTableRecipient()%>
         </label>
-        <input class="area" id="POST-password" type="text" name="recipientCardNumber"
+        <input required class="area" id="POST-password" type="text" name="recipientCardNumber" pattern="[0-9]{16}"
                value="${currentPayment.getRecipientCardNumber()}">
     </div>
     <div class="input_area">
         <label for="POST-date"><%=localization.getClientPaymentMenuTableAmount()%>
         </label>
-        <input class="area" id="POST-date" type="number" step="any" name="amount" value="${currentPayment.getAmount()}">
+        <input required class="area" id="POST-date" type="number" step="any" name="amount" value="${currentPayment.getAmount()}">
     </div>
     <div class="input_area">
         <button class="form_button" name="pay">pay

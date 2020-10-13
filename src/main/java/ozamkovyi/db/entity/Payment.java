@@ -1,6 +1,8 @@
 package ozamkovyi.db.entity;
 
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.dao.BankAccountDao;
+import ozamkovyi.db.dao.CreditCardDao;
 import ozamkovyi.web.CalendarProcessing;
 import ozamkovyi.web.Localization;
 
@@ -14,7 +16,7 @@ public class Payment extends Entity {
 
     private Calendar date;
 
-    private long amount;
+    private double amount;
 
     private int paymentStatusId;
 
@@ -39,11 +41,11 @@ public class Payment extends Entity {
         this.date = date;
     }
 
-    public long getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(long amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -120,12 +122,9 @@ public class Payment extends Entity {
     }
 
     public String getStringDate(){
-        return CalendarProcessing.allDate2String(date);
+        return CalendarProcessing.fullDate2String(date);
     }
 
-    public double getDoubleAmount(){
-        return ((double) amount)/100;
-    }
 
     public String getButtonNameByStatus(Localization localization){
         if (statusName.equals(Fields.PAYMENT_STATUS__PREPARED)){
@@ -133,6 +132,21 @@ public class Payment extends Entity {
         }else{
             return localization.getClientPaymentMenuButtonRepeat();
         }
+    }
+
+    public boolean transactionIfValid(){
+        CreditCard senderCreditCard =CreditCardDao.getCardById(senderCardId);
+        CreditCard recipientCreditCard =CreditCardDao.getCardById(recipientCardId);
+        if (!senderCreditCard.isValid()||!recipientCreditCard.isValid()){
+            return false;
+        }
+        int senderCardBalance = CreditCardDao.getUAHBalance(senderCardId);
+        if (senderCardBalance<amount*100){
+            return false;
+        }
+        BankAccountDao.addToBalance(senderCreditCard.getBankAccountNumber(), amount*(-1));
+        BankAccountDao.addToBalance(recipientCreditCard.getBankAccountNumber(), amount);
+        return true;
     }
 
     @Override

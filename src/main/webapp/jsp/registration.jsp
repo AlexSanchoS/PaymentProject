@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
-    <link rel="stylesheet" href="./../style/styleForRegistration.css">
+    <link rel="stylesheet" href="./../style/styleForRegistration4.css">
 </head>
 
 <body>

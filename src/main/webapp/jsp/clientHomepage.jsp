@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
-    <link rel="stylesheet" href="./../style/styleForClientHomepage1.css">
+    <link rel="stylesheet" href="./../style/styleForClientHomepage4.css">
 </head>
 <body>
 <%

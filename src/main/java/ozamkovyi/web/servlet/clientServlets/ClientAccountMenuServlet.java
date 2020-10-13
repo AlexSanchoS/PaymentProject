@@ -1,8 +1,8 @@
-package ozamkovyi.web.servlet;
+package ozamkovyi.web.servlet.clientServlets;
 
 import ozamkovyi.db.dao.BankAccountDao;
-import ozamkovyi.db.dao.CreditCardDao;
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.dao.CurrencyDao;
 import ozamkovyi.db.entity.*;
 import ozamkovyi.web.Localization;
 
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ClientCardMenuServlet extends HttpServlet {
+public class ClientAccountMenuServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -33,20 +33,19 @@ public class ClientCardMenuServlet extends HttpServlet {
                 if (page == null) {
                     session.setAttribute("pageNumber", 1);
                     session.setAttribute("sortType", 1);
-                    System.out.println("page = null");
                     sortType = 1;
                     pageNumber = 1;
                 } else {
                     pageNumber = (int) page;
                     sortType = (int) session.getAttribute("sortType");
                 }
-                CreditCardDao creditCardDao = new CreditCardDao();
-                session.setAttribute("countCard", creditCardDao.getCountCardByUser((Client) currentUser));
-                ArrayList<CreditCard> listOfCreditCard = creditCardDao.getCardList((Client) currentUser, pageNumber, sortType);
-                session.setAttribute("listOfCreditCard", listOfCreditCard);
-                ArrayList<BankAccount> listOfAccountForCreditCard = BankAccountDao.getAllAccount((Client) currentUser);
-                session.setAttribute("listOfAccountForCreditCard", listOfAccountForCreditCard);
-                getServletContext().getRequestDispatcher("/jsp/clientCardMenu.jsp").forward(req, resp);
+                session.setAttribute("countAccount", BankAccountDao.getCountBankAccountByUser((Client) currentUser));
+                ArrayList<BankAccount> listOfBankAccount = BankAccountDao.getAccountList((Client) currentUser, pageNumber, sortType);
+                session.setAttribute("listOfBankAccount", listOfBankAccount);
+                ArrayList<Currency> listOfCurrencyForNewAccount = CurrencyDao.getAllCurrency();
+                session.setAttribute("listOfCurrencyForNewAccount", listOfCurrencyForNewAccount);
+                getServletContext().getRequestDispatcher("/jsp/clientAccountMenu.jsp").forward(req, resp);
+
             } else {
                 localization.setLocal(((Admin) currentUser).getLanguage());
                 getServletContext().getRequestDispatcher("/jsp/adminHomepage.jsp").forward(req, resp);
@@ -62,17 +61,17 @@ public class ClientCardMenuServlet extends HttpServlet {
             if (pageNumber != null) {
                 session.setAttribute("pageNumber", (int) pageNumber + 1);
             }
-            resp.sendRedirect("/clientCardMenu");
+            resp.sendRedirect("/clientAccountMenu");
         }
         if (req.getParameter("previousPage") != null) {
             Object pageNumber = session.getAttribute("pageNumber");
             if (pageNumber != null) {
                 session.setAttribute("pageNumber", (int) pageNumber - 1);
             }
-            resp.sendRedirect("/clientCardMenu");
+            resp.sendRedirect("/clientAccountMenu");
         }
 
-        if (req.getParameter("currency") != null) {
+        if (req.getParameter("sortByNumber") != null) {
             Object sortType = session.getAttribute("sortType");
             if (sortType != null) {
                 int sort = (int)sortType;
@@ -86,9 +85,9 @@ public class ClientCardMenuServlet extends HttpServlet {
                 session.setAttribute("sortType", null);
             }
             session.setAttribute("pageNumber", 1);
-            resp.sendRedirect("/clientCardMenu");
+            resp.sendRedirect("/clientAccountMenu");
         }
-        if (req.getParameter("balance") != null) {
+        if (req.getParameter("sortByCurrency") != null) {
             Object sortType = session.getAttribute("sortType");
             if (sortType != null) {
                 int sort = (int)sortType;
@@ -102,25 +101,29 @@ public class ClientCardMenuServlet extends HttpServlet {
                 session.setAttribute("sortType", null);
             }
             session.setAttribute("pageNumber", 1);
-            resp.sendRedirect("/clientCardMenu");
+            resp.sendRedirect("/clientAccountMenu");
         }
-
-        ArrayList<CreditCard> listOfCreditCard = (ArrayList<CreditCard>) session.getAttribute("listOfCreditCard");
-        for (CreditCard creditCard : listOfCreditCard) {
-            if (req.getParameter("blocButton " + creditCard.getId()) != null) {
-                if (creditCard.getCardStatusName().equals(Fields.CARD_STATUS__BLOCKED)) {
-                    CreditCardDao.unblockCard(creditCard);
-                } else {
-                    CreditCardDao.blocCard(creditCard);
+        if (req.getParameter("sortByBalance") != null) {
+            Object sortType = session.getAttribute("sortType");
+            if (sortType != null) {
+                int sort = (int)sortType;
+                if (sort==5){
+                    session.setAttribute("sortType", 6);
                 }
-                resp.sendRedirect("/clientCardMenu");
+                else{
+                    session.setAttribute("sortType", 5);
+                }
+            } else {
+                session.setAttribute("sortType", null);
             }
+            session.setAttribute("pageNumber", 1);
+            resp.sendRedirect("/clientAccountMenu");
         }
 
-        if (req.getParameter("buttonMyAccount") != null){
+        if (req.getParameter("buttonMyCard") != null){
             session.setAttribute("pageNumber", null);
             session.setAttribute("sortType", null);
-            resp.sendRedirect("/clientAccountMenu");
+            resp.sendRedirect("/clientCardMenu");
         }
         if (req.getParameter("buttonMyPayment") != null){
             session.setAttribute("pageNumber", null);
@@ -128,16 +131,39 @@ public class ClientCardMenuServlet extends HttpServlet {
             resp.sendRedirect("/clientPaymentMenu");
         }
 
+        ArrayList<BankAccount> listOfBankAccount = (ArrayList<BankAccount>) session.getAttribute("listOfBankAccount");
+        for (BankAccount bankAccount : listOfBankAccount) {
+            if (req.getParameter("blocButton " + bankAccount.getNumber()) != null) {
+                if (bankAccount.getAccountStatusName().equals(Fields.ACCOUNT_STATUS__BLOCKED)) {
+                    BankAccountDao.changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__EXPECTATION);
+                } else {
+                    BankAccountDao.changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__BLOCKED);
+                }
+                resp.sendRedirect("/clientAccountMenu");
+            }
 
-        if (req.getParameter("add_card")!=null){
-            ArrayList<BankAccount> listOfAccountForCreditCard = (ArrayList<BankAccount>) session.getAttribute("listOfAccountForCreditCard");
-            for (BankAccount account : listOfAccountForCreditCard) {
-                String selectOption = req.getParameter("accountForNewCard");
-                if (selectOption.equals(account.getAccountForNewCard())) {
-                    CreditCardDao.addNewCard(account);
-                    resp.sendRedirect("/clientCardMenu");
+            if (req.getParameter("replenishButton " + bankAccount.getNumber()) != null){
+                Object amountOdj = req.getParameter("amount " + bankAccount.getNumber());
+                double amount = 0;
+                if (amountOdj!=null){
+                    amount = Double.parseDouble((String) amountOdj);
+                }
+                BankAccountDao.addToBalance(bankAccount.getNumber(), amount);
+                resp.sendRedirect("/clientAccountMenu");
+            }
+        }
+
+        if (req.getParameter("add_account")!=null){
+            ArrayList<Currency> listOfCurrency = (ArrayList<Currency>) session.getAttribute("listOfCurrencyForNewAccount");
+            for (Currency currency : listOfCurrency) {
+                String selectOption = req.getParameter("currencyForNewAccount");
+                if (selectOption.equals(currency.getName())) {
+                    Client client = (Client)session.getAttribute("currentUser");
+                    BankAccountDao.addNewAccount(currency, client);
+                    resp.sendRedirect("/clientAccountMenu");
                 }
             }
         }
+
     }
 }

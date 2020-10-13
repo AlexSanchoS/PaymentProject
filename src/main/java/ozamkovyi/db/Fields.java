@@ -8,6 +8,7 @@ public final class Fields {
     public static final String CLIENT__NAME = "name";
     public static final String CLIENT__DATE_OF_BIRTH = "date_of_birth";
     public static final String CLIENT__LANGUAGE = "language";
+    public static final String CLIENT__STATUS = "status";
 
 
     public static final String CARD_STATUS__BLOCKED = "blocked";
@@ -20,6 +21,11 @@ public final class Fields {
     public static final String PAYMENT_STATUS__SENT = "sent";
     public static final String PAYMENT_STATUS__PREPARED = "prepared";
     public static final String PAYMENT_STATUS__REJECTED = "rejected";
+
+
+    public static final String CLIENT_STATUS__BLOCK = "block";
+    public static final String CLIENT_STATUS__UNBLOCK = "unblock";
+
 
 
 

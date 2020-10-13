@@ -31,6 +31,7 @@ public class LoginServlet extends HttpServlet {
             if (currentUser instanceof Client) {
                 getServletContext().getRequestDispatcher("/jsp/clientHomepage.jsp").forward(req, resp);
             } else {
+
                 getServletContext().getRequestDispatcher("/jsp/adminHomepage.jsp").forward(req, resp);
             }
         }
@@ -45,7 +46,7 @@ public class LoginServlet extends HttpServlet {
             Admin admin = new AdminDao().findAdminByLoginAndPassword(login, password);
             if (admin != null) {
                 session.setAttribute("currentUser", admin);
-                getServletContext().getRequestDispatcher("/jsp/adminHomepage.jsp").forward(req, resp);
+                resp.sendRedirect("/adminHomepage");
             } else {
                 Client client = new ClientDao().findClientByLoginAndPassword(login, password);
                 if (client != null) {

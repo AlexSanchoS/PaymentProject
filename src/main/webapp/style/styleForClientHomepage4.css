@@ -27,6 +27,22 @@ body{
     right: 10%;
 }
 
+.block_card:disabled {
+    opasity: 0.2;
+}
+.button_l:disabled {
+    opasity: 0.2;
+}
+.button_ukr:disabled {
+    opasity: 0.2;
+}
+.block_card_section:disabled{
+    opacity: 0.2;
+}
+.button_eng:disabled {
+    opasity: 0.2;
+}
+
 
 
 .button_l{
@@ -42,6 +58,7 @@ body{
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    width: 50px;
 }
 
 .button_eng{
@@ -50,6 +67,7 @@ body{
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    width: 50px;
 }
 
 .standart_buttons{

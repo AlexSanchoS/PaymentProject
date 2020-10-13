@@ -133,6 +133,37 @@ public class CreditCardDao {
                     Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS + " = ? and " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID + " = ?";
 
+    private static final String SQL_GET_CREDIT_CARD_BY_ID =
+            "SELECT " + Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + ", " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER + "," +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY + ", " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER + ", " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID + ", " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID + ", " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
+                    Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + ", " +
+                    Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS +
+                    " FROM " + Fields.TABLE__CREDIT_CARD + " join " + Fields.TABLE__BANK_ACCOUNT +
+                    " join " + Fields.TABLE__CURRENCY + " join " + Fields.TABLE__CARD_STATUS +
+                    " on " + Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__ID + " = " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID + " and " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER + " = " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + " = " +
+                    Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__ID + " and " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + " = ? ";
+
+    private static final String SQL_GET_UAH_BALANCE_BY_ID =
+            "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + "*" +
+                    Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__COURSE + " FROM " +
+                    Fields.TABLE__CREDIT_CARD + " join " + Fields.TABLE__BANK_ACCOUNT + " join " +
+                    Fields.TABLE__CURRENCY + " on " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER + "=" +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + "=" +
+                    Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__ID + " and " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + " = ?";
+
     public static ArrayList<CreditCard> getAllUnblockCreditCard(Client client) {
         ArrayList<CreditCard> listOfCreditCard = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -243,7 +274,7 @@ public class CreditCardDao {
         }
     }
 
-    public int getCountCardByUser(Client client) {
+    public static int  getCountCardByUser(Client client) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -338,6 +369,35 @@ public class CreditCardDao {
         return rez;
     }
 
+    public static CreditCard getCardById(int id) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        CreditCard creditCard = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_GET_CREDIT_CARD_BY_ID);
+            CreditCardMapper mapper = new CreditCardMapper();
+            pstmt.setInt(1, id);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                creditCard = mapper.mapRow(rs);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+        return creditCard;
+    }
+
     public static void blocCard(CreditCard card) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -377,6 +437,28 @@ public class CreditCardDao {
         }
 
     }
+
+    public static int getUAHBalance(int id) {
+        int rez = 0;
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        DBManager dbManager = DBManager.getInstance();
+        ResultSet rs = null;
+        try {
+            con = dbManager.getConnection();
+            pstmt = con.prepareStatement(SQL_GET_UAH_BALANCE_BY_ID);
+            pstmt.setInt(1, id);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                rez = (int) rs.getDouble(1);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return rez;
+    }
+
 
     private static class CreditCardMapper implements EntityMapper<CreditCard> {
 

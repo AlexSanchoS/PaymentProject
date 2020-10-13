@@ -1,4 +1,4 @@
-package ozamkovyi.web.servlet;
+package ozamkovyi.web.servlet.clientServlets;
 
 import ozamkovyi.db.Fields;
 import ozamkovyi.db.dao.PaymentDao;
@@ -32,7 +32,6 @@ public class ClientPaymentMenuServlet extends HttpServlet {
                 if (page == null) {
                     session.setAttribute("pageNumber", 1);
                     session.setAttribute("sortType", 1);
-                    System.out.println("page = null");
                     sortType = 1;
                     pageNumber = 1;
                 } else {
@@ -151,10 +150,13 @@ public class ClientPaymentMenuServlet extends HttpServlet {
 
         ArrayList<Payment> listOfPayment = (ArrayList<Payment>) session.getAttribute("listOfPayment");
         for (Payment payment : listOfPayment) {
-            System.out.println(payment.getId());
             if (req.getParameter("blocButton " + payment.getId()) != null) {
                 if (payment.getStatusName().equals(Fields.PAYMENT_STATUS__PREPARED)) {
-                    PaymentDao.updatePaymentStatus(payment, Fields.PAYMENT_STATUS__SENT);
+                    if (payment.transactionIfValid()){
+                        PaymentDao.updatePaymentStatus(payment, Fields.PAYMENT_STATUS__SENT);
+                    }else{
+                        PaymentDao.updatePaymentStatus(payment, Fields.PAYMENT_STATUS__REJECTED);
+                    }
                     resp.sendRedirect("/clientPaymentMenu");
                 } else {
                     session.setAttribute("currentPayment", payment);

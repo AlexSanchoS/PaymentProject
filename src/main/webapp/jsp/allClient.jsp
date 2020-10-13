@@ -17,7 +17,7 @@
 <body>
 <%
     Localization localization = (Localization) session.getAttribute("localization");
-    session.setAttribute("currentURL", "/clientCardMenu");
+    session.setAttribute("currentURL", "/allUsers");
     String engDisable = "disabled";
     String uaDisable = "";
     if (localization.getLocal().equals("ua")) {
@@ -29,7 +29,7 @@
 
     String nextDisable = "disabled";
     String previousDisable = "disabled";
-    int countCard = (int) session.getAttribute("countCard");
+    int countCard = (int) session.getAttribute("countClient");
     int pageNumber = (int) session.getAttribute("pageNumber");
     if (countCard > pageNumber * 10) {
         nextDisable = "";
@@ -60,63 +60,58 @@
 
 </form>
 
-<form action="/clientCardMenu" method="post">
+<form action="/allUsers" method="post">
     <div class="content">
         <div class="buttons">
-            <button name="buttonMyCard" disabled="true"
-                    class="button"><%=localization.getClientHomepageMyCardsButton()%>
+            <button name="buttonUnlockRequests"
+                    class="button"><%=localization.getAllUsersButtonUnlockRequests()%>
             </button>
-            <button name="buttonMyAccount" class="button"><%=localization.getClientHomepageMyAccountButton()%>
-            </button>
-            <button name="buttonMyPayment" class="button"><%=localization.getClientHomepageMyPaymentButton()%>
+            <button name="buttonAllUsers" class="button" disabled="true"><%=localization.getAllUsersButtonAllUsers()%>
             </button>
         </div>
 
         <div class="main_content">
             <div class="table_top">
-                <div class="add">
-                    <button name="add_card" class="add_card"><%=localization.getClientCardMenuButtonAddCard()%>
-                    </button>
-                        <select class="add_select" name="accountForNewCard" id="sort1">
-                            <option name="accountForNewCard 0"></option>
-                            <c:forEach var="account" items="${listOfAccountForCreditCard}">
-                                <option name="accountForNewCard ${account.getNumber()}">${account.getAccountForNewCard()}</option>
-                            </c:forEach>
-                        </select>
-                </div>
                 <div class="sort_section">
                     <div class="sort_title"><%=localization.getClientCardMenuTableSort()%>
                     </div>
                     <div class="sort_section-cards">
-                        <button name="currency" class="sort_card"><%=localization.getClientCardMenuSortByCurrency()%>
+                        <button name="sortByName" class="sort_card"><%=localization.getAllUsersButtonSortByName()%>
                         </button>
-                        <button name="balance" class="sort_card"><%=localization.getClientCardMenuSortByBalance()%>
+                        <button name="sortByStatus" class="sort_card"><%=localization.getAllUsersButtonSortByStatus()%>
                         </button>
                     </div>
                 </div>
             </div>
             <table>
                 <tr>
-                    <td class="head_of_table"><%=localization.getClientCardMenuTableNumber()%>
+                    <td class="head_of_table"><%=localization.getAllUsersTableName()%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientCardMenuTableValidity()%>
+                    <td class="head_of_table"><%=localization.getAllUsersTableCountOfAccount()%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientCardMenuTableCurrency()%>
-                    </td>
-                    <td class="head_of_table"><%=localization.getClientCardMenuTableBalance()%>
+                    <td class="head_of_table"><%=localization.getAllUsersTableCountOfCard()%>
                     </td>
                     <td class="last_col"></td>
+                    <td class="last_col"></td>
+                    <td class="last_col"></td>
                 </tr>
-                <c:forEach var="creditCard" items="${listOfCreditCard}">
+                <c:forEach var="client" items="${listOfClient}">
 
                     <tr class="line">
-                        <td>${creditCard.getNumber()}</td>
-                        <td>${CalendarProcessing.date2StringForCard(creditCard.getValidity())}</td>
-                        <td>${creditCard.getCurrency()}</td>
-                        <td>${creditCard.getBalanceDouble()}</td>
+                        <td>${client.getName()}</td>
+                        <td>${client.getAccountCount()}</td>
+                        <td>${client.getCreditCardCount()}</td>
                         <td class="block_card_section">
-                            <button name="blocButton ${creditCard.getId()}"
-                                    class="block_card">${creditCard.getButtonBloc(localization)}</button>
+                            <button name="allAccount ${client.getId()}"
+                                    class="block_card"><%=localization.getAllUsersButtonShowAllAccount()%></button>
+                        </td>
+                        <td class="block_card_section">
+                            <button name="allCard ${client.getId()}"
+                                    class="block_card"><%=localization.getAllUsersButtonShowAllCard()%></button>
+                        </td>
+                        <td class="block_card_section">
+                            <button name="unblockButton ${client.getId()}"
+                                class="block_card">${client.getBlocButton(localization)}</button>
                         </td>
                     </tr>
                 </c:forEach>

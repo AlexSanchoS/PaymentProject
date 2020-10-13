@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>login</title>
-    <link rel="stylesheet" href="../style/styleForLogin1.css">
+    <link rel="stylesheet" href="../style/styleForLogin4.css">
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
@@ -28,7 +28,7 @@
             <button class="button_l" name="engButton" ${engDisable}>Eng</button>
         </div>
         <div class="button_ukr">
-            <button class="  button_l" name="uaButton" ${uaDisable}>Ua</button>
+            <button class="button_l" name="uaButton" ${uaDisable}>Ua</button>
         </div>
     </div>
 

@@ -1,5 +1,6 @@
 package ozamkovyi.db.entity;
 
+import ozamkovyi.db.Fields;
 import ozamkovyi.db.dao.ClientDao;
 import ozamkovyi.web.CalendarProcessing;
 import ozamkovyi.web.Localization;
@@ -17,6 +18,10 @@ public class Client extends Entity {
     private String name;
     private Calendar date;
     private String language;
+    private String status;
+    private int accountCount;
+    private int creditCardCount;
+
 
     public String getName() {
         return name;
@@ -65,6 +70,38 @@ public class Client extends Entity {
 
     public void setDate(Calendar date) {
         this.date = date;
+    }
+
+    public int getAccountCount() {
+        return accountCount;
+    }
+
+    public void setAccountCount(int accountCount) {
+        this.accountCount = accountCount;
+    }
+
+
+    public int getCreditCardCount() {
+        return creditCardCount;
+    }
+
+    public void setCreditCardCount(int creditCardCount) {
+        this.creditCardCount = creditCardCount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public String getBlocButton(Localization localization){
+        if (status.equals(Fields.CLIENT_STATUS__BLOCK)){
+           return localization.getAllUsersButtonUnblock();
+        }else{
+            return localization.getAllUsersButtonBlock();
+        }
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

@@ -194,22 +194,40 @@ public class PaymentDao {
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID + " = ?";
 
     private static final String SQL_GET_COUNT_PAYMENT_BY_CLIENT_ID = "SELECT COUNT(" +
-            Fields.TABLE__PAYMENT+"."+Fields.PAYMENT__ID + ") " +
-            " FROM " + Fields.TABLE__PAYMENT + " JOIN "+Fields.TABLE__CREDIT_CARD+ " ON " +
+            Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID + ") " +
+            " FROM " + Fields.TABLE__PAYMENT + " JOIN " + Fields.TABLE__CREDIT_CARD + " ON " +
             Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD + " = " +
             Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + " and " +
             Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID + " = ?";
 
     private static final String SQL_UPDATE_PAYMENT_STATUS =
-            "update "+Fields.TABLE__PAYMENT+" set "+Fields.PAYMENT__PAYMENT_STATUS_ID+ " = ? where "+
-                    Fields.PAYMENT__ID+" = ?";
+            "update " + Fields.TABLE__PAYMENT + " set " + Fields.PAYMENT__PAYMENT_STATUS_ID + " = ? where " +
+                    Fields.PAYMENT__ID + " = ?";
 
     private static final String SQL_GET_PAYMENT_STATUS_ID_BY_NAME =
-            "SELECT " +Fields.PAYMENT_STATUS__ID+ " FROM "+
-                    Fields.TABLE__PAYMENT_STATUS+ " WHERE "+Fields.PAYMENT_STATUS__STATUS+" =?";
+            "SELECT " + Fields.PAYMENT_STATUS__ID + " FROM " +
+                    Fields.TABLE__PAYMENT_STATUS + " WHERE " + Fields.PAYMENT_STATUS__STATUS + " =?";
 
 
-    private static void setRecipientCardNumberAndName(Payment payment) {
+    private static final String SQL_CREATE_NEW_PAYMENT =
+            "insert into " + Fields.TABLE__PAYMENT + " (" +
+                    Fields.PAYMENT__NUMBER + ", " + Fields.PAYMENT__DATE + ", " + Fields.PAYMENT__AMOUNT + ", " +
+                    Fields.PAYMENT__PAYMENT_STATUS_ID + ", " + Fields.PAYMENT__SENDER_CREDIT_CARD + ", " + Fields.PAYMENT__RECIPIENT_CREDIT_CARD + ")" +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
+
+    private static final String SQL_GET_MAX_PAYMENT_NUMBER_FOR_CLIENT =
+            "SELECT max(" + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER + ") FROM " +
+                    Fields.TABLE__PAYMENT + " join " + Fields.TABLE__CREDIT_CARD + " ON " +
+                    Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD + " = " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + " and " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID + " = ?";
+
+    private static final String SQL_GET_CREDIT_CARD_ID_BY_NUMBER =
+            "SELECT " + Fields.CREDIT_CARD__ID + " FROM " + Fields.TABLE__CREDIT_CARD + " WHERE " +
+                    Fields.CREDIT_CARD__NUMBER + " = ?";
+
+
+    private static void getRecipientCardNumberAndName(Payment payment) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -235,7 +253,7 @@ public class PaymentDao {
         }
     }
 
-    private static void setSenderCardNumberAndName(Payment payment) {
+    private static void getSenderCardNumber(Payment payment) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -304,8 +322,8 @@ public class PaymentDao {
             while (rs.next()) {
                 payment = mapper.mapRow(rs);
                 listOfPayment.add(payment);
-                setRecipientCardNumberAndName(payment);
-                setSenderCardNumberAndName(payment);
+                getRecipientCardNumberAndName(payment);
+                getSenderCardNumber(payment);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -348,7 +366,7 @@ public class PaymentDao {
         return rez;
     }
 
-    private static int getPaymentStatusIdByName(String status){
+    private static int getPaymentStatusIdByName(String status) {
         int rez = 0;
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -368,16 +386,79 @@ public class PaymentDao {
         return rez;
     }
 
-    public static void updatePaymentStatus(Payment payment, String newStatus){
+    private static int getCreditCardIdByNumber(String number) {
+        int rez = 0;
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
         ResultSet rs = null;
         try {
             con = dbManager.getConnection();
-            int paymentStatusId = getPaymentStatusIdByName(newStatus);
+            pstmt = con.prepareStatement(SQL_GET_CREDIT_CARD_ID_BY_NUMBER);
+            pstmt.setString(1, number);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                rez = rs.getInt(1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return rez;
+    }
+
+    private static int getNewPaymentNumber(Client client) {
+        int rez = 0;
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        DBManager dbManager = DBManager.getInstance();
+        ResultSet rs = null;
+        try {
+            con = dbManager.getConnection();
+            pstmt = con.prepareStatement(SQL_GET_MAX_PAYMENT_NUMBER_FOR_CLIENT);
+            pstmt.setInt(1, client.getId());
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                rez = rs.getInt(1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return ++rez;
+    }
+
+    public static void createNewPayment(Client client, String senderNumber, String recipientNumber, double amount) {
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        DBManager dbManager = DBManager.getInstance();
+        ResultSet rs = null;
+        try {
+            con = dbManager.getConnection();
+            pstmt = con.prepareStatement(SQL_CREATE_NEW_PAYMENT);
+            pstmt.setInt(1, getNewPaymentNumber(client));
+            pstmt.setString(2, CalendarProcessing.getFullCurrentDate());
+            pstmt.setDouble(3, amount);
+            pstmt.setInt(4, getPaymentStatusIdByName(Fields.PAYMENT_STATUS__PREPARED));
+            pstmt.setInt(5, getCreditCardIdByNumber(senderNumber));
+            pstmt.setInt(6, getCreditCardIdByNumber(recipientNumber));
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            dbManager.commitAndClose(con);
+        }
+    }
+
+    public static void updatePaymentStatus(Payment payment, String newStatus) {
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        DBManager dbManager = DBManager.getInstance();
+        ResultSet rs = null;
+        try {
+            con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_UPDATE_PAYMENT_STATUS);
-            pstmt.setInt(1, paymentStatusId);
+            pstmt.setInt(1, getPaymentStatusIdByName(newStatus));
             pstmt.setInt(2, payment.getId());
             pstmt.executeUpdate();
 
@@ -386,8 +467,6 @@ public class PaymentDao {
         } finally {
             dbManager.commitAndClose(con);
         }
-
-
     }
 
     private static class BankAccountMapper implements EntityMapper<Payment> {
@@ -400,7 +479,7 @@ public class PaymentDao {
                 payment.setId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID));
                 payment.setNumber(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER));
                 payment.setDate(calendar);
-                payment.setAmount(rs.getLong(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__AMOUNT));
+                payment.setAmount(rs.getDouble(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__AMOUNT));
                 payment.setPaymentStatusId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID));
                 payment.setSenderCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD));
                 payment.setRecipientCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD));

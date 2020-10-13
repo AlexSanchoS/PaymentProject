@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>clientCardMenu</title>
-    <link rel="stylesheet" href="../style/styleForClientPaymentMenu1.css">
+    <link rel="stylesheet" href="../style/styleForClientPaymentMenu4.css">
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
@@ -50,7 +50,7 @@
                 <button class="button_l" name="engButton" ${engDisable}>Eng</button>
             </div>
             <div class="button_ukr">
-                <button class="  button_l" name="uaButton" ${uaDisable}>Ua</button>
+                <button class="button_l" name="uaButton" ${uaDisable}>Ua</button>
             </div>
         </div>
 
@@ -120,10 +120,10 @@
                     <td class="last_col"></td>
                 </tr>
                 <c:forEach var="payment" items="${listOfPayment}">
-                    <tr>
+                    <tr class="line">
                         <td>${payment.getNumber()}</td>
                         <td>${payment.getStringDate()}</td>
-                        <td>${payment.getDoubleAmount()}</td>
+                        <td>${payment.getAmount()}</td>
                         <td>${payment.getSenderCardNumber()}</td>
                         <td>${payment.getRecipientCardNumber()}</td>
                         <td>${payment.getRecipientName()}</td>

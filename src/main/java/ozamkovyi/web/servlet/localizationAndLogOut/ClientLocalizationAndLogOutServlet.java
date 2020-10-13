@@ -1,7 +1,10 @@
 package ozamkovyi.web.servlet.localizationAndLogOut;
 
+import ozamkovyi.db.dao.AdminDao;
 import ozamkovyi.db.dao.ClientDao;
+import ozamkovyi.db.entity.Admin;
 import ozamkovyi.db.entity.Client;
+import ozamkovyi.db.entity.Entity;
 import ozamkovyi.web.Localization;
 
 import javax.servlet.ServletException;
@@ -16,21 +19,36 @@ public class ClientLocalizationAndLogOutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         Localization localization = (Localization) session.getAttribute("localization");
-        Client client = (Client) session.getAttribute("currentUser");
+        Object us = session.getAttribute("currentUser");
         ClientDao clientDao = new ClientDao();
         if (req.getParameter("logOut") != null) {
             session.invalidate();
             resp.sendRedirect("/login");
         } else {
-            if (req.getParameter("engButton") != null) {
-                localization.setLocal("en");
-                client.setLanguage("en");
+
+            if (us instanceof Client) {
+                Client user = (Client) us;
+                if (req.getParameter("engButton") != null) {
+                    localization.setLocal("en");
+                    user.setLanguage("en");
+                }
+                if (req.getParameter("uaButton") != null) {
+                    localization.setLocal("ua");
+                    user.setLanguage("ua");
+                }
+                clientDao.setClientLocal(user);
+            } else {
+                Admin admin = (Admin) us;
+                if (req.getParameter("engButton") != null) {
+                    localization.setLocal("en");
+                    admin.setLanguage("en");
+                }
+                if (req.getParameter("uaButton") != null) {
+                    localization.setLocal("ua");
+                    admin.setLanguage("ua");
+                }
+                AdminDao.setAdminLocal(admin);
             }
-            if (req.getParameter("uaButton") != null) {
-                localization.setLocal("ua");
-                client.setLanguage("ua");
-            }
-            clientDao.setClientLocal(client);
             resp.sendRedirect((String) session.getAttribute("currentURL"));
         }
     }

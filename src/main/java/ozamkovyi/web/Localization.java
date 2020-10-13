@@ -63,7 +63,29 @@ public class Localization {
     private String clientPaymentMenuButtonRepeat = null;
     private String clientPaymentMenuButtonConfirm = null;
 
+    private String unlockRequestsButtonLogOut = null;
+    private String unlockRequestsButtonAllUsers = null;
+    private String unlockRequestsButtonUnlockRequests = null;
+    private String unlockRequestsTableNumber = null;
+    private String unlockRequestsTableBalance = null;
+    private String unlockRequestsTableCurrency = null;
+    private String unlockRequestsTableName = null;
+    private String unlockRequestsButtonUnlock = null;
+    private String unlockRequestsButtonSortByName = null;
+    private String unlockRequestsButtonSortByNumber = null;
 
+    private String allUsersButtonLogOut = null;
+    private String allUsersButtonAllUsers = null;
+    private String allUsersButtonUnlockRequests = null;
+    private String allUsersTableName = null;
+    private String allUsersTableCountOfAccount = null;
+    private String allUsersTableCountOfCard = null;
+    private String allUsersButtonShowAllCard = null;
+    private String allUsersButtonShowAllAccount = null;
+    private String allUsersButtonUnblock = null;
+    private String allUsersButtonBlock = null;
+    private String allUsersButtonSortByName = null;
+    private String allUsersButtonSortByStatus = null;
 
     private String wrongLogin = null;
     private String notAdult = null;
@@ -77,12 +99,10 @@ public class Localization {
     public void setLocal(String local) {
         if (local.equals("ua")) {
             this.local = local;
-            System.out.println("set local ua");
 
             setProperties("C:\\Users\\User\\IdeaProjects\\PaymentProject\\src\\main\\java\\resources_ru.properties");
         } else {
             this.local = local;
-            System.out.println("set local en");
             setProperties("C:\\Users\\User\\IdeaProjects\\PaymentProject\\src\\main\\java\\resources_en.properties");
         }
     }
@@ -151,6 +171,30 @@ public class Localization {
             clientPaymentMenuButtonSortByStatus = property.getProperty("clientPaymentMenu_jsp.button.sortByStatus");
             clientPaymentMenuButtonRepeat = property.getProperty("clientPaymentMenu_jsp.button.repeat");
             clientPaymentMenuButtonConfirm = property.getProperty("clientPaymentMenu_jsp.button.confirm");
+
+            unlockRequestsButtonLogOut = property.getProperty("adminHomepage_jsp.button.logOut");
+            unlockRequestsButtonAllUsers = property.getProperty("adminHomepage_jsp.button.allUsers");
+            unlockRequestsButtonUnlockRequests = property.getProperty("adminHomepage_jsp.button.unlockRequests");
+            unlockRequestsTableNumber = property.getProperty("adminHomepage_jsp.table.number");
+            unlockRequestsTableBalance = property.getProperty("adminHomepage_jsp.table.balance");
+            unlockRequestsTableCurrency = property.getProperty("adminHomepage_jsp.table.currency");
+            unlockRequestsTableName = property.getProperty("adminHomepage_jsp.table.name");
+            unlockRequestsButtonUnlock = property.getProperty("adminHomepage_jsp.button.unblock");
+            unlockRequestsButtonSortByName = property.getProperty("adminHomepage_jsp.button.sortByName");
+            unlockRequestsButtonSortByNumber = property.getProperty("adminHomepage_jsp.button.sortByNumber");
+
+            allUsersButtonLogOut = property.getProperty("allUsers_jsp.button.logOut");
+            allUsersButtonAllUsers = property.getProperty("allUsers_jsp.button.allUsers");
+            allUsersButtonUnlockRequests = property.getProperty("allUsers_jsp.button.unlockRequests");
+            allUsersTableName = property.getProperty("allUsers_jsp.table.name");
+            allUsersTableCountOfAccount = property.getProperty("allUsers_jsp.table.countOfAccount");
+            allUsersTableCountOfCard = property.getProperty("allUsers_jsp.table.countOfCard");
+            allUsersButtonShowAllCard = property.getProperty("allUsers_jsp.button.showAllCard");
+            allUsersButtonShowAllAccount = property.getProperty("allUsers_jsp.button.showAllAccount");
+            allUsersButtonUnblock = property.getProperty("allUsers_jsp.button.unblock");
+            allUsersButtonBlock = property.getProperty("allUsers_jsp.button.block");
+            allUsersButtonSortByName = property.getProperty("allUsers_jsp.button.sortByName");
+            allUsersButtonSortByStatus = property.getProperty("allUsers_jsp.button.sortByStatus");
 
         } catch (IOException e) {
             System.err.println("file not found");
@@ -379,5 +423,93 @@ public class Localization {
 
     public String getClientPaymentMenuButtonConfirm() {
         return clientPaymentMenuButtonConfirm;
+    }
+
+    public String getUnlockRequestsButtonLogOut() {
+        return unlockRequestsButtonLogOut;
+    }
+
+    public String getUnlockRequestsButtonAllUsers() {
+        return unlockRequestsButtonAllUsers;
+    }
+
+    public String getUnlockRequestsButtonUnlockRequests() {
+        return unlockRequestsButtonUnlockRequests;
+    }
+
+    public String getUnlockRequestsTableNumber() {
+        return unlockRequestsTableNumber;
+    }
+
+    public String getUnlockRequestsTableBalance() {
+        return unlockRequestsTableBalance;
+    }
+
+    public String getUnlockRequestsTableCurrency() {
+        return unlockRequestsTableCurrency;
+    }
+
+    public String getUnlockRequestsTableName() {
+        return unlockRequestsTableName;
+    }
+
+    public String getUnlockRequestsButtonUnlock() {
+        return unlockRequestsButtonUnlock;
+    }
+
+    public String getUnlockRequestsButtonSortByName() {
+        return unlockRequestsButtonSortByName;
+    }
+
+    public String getUnlockRequestsButtonSortByNumber() {
+        return unlockRequestsButtonSortByNumber;
+    }
+
+    public String getAllUsersButtonLogOut() {
+        return allUsersButtonLogOut;
+    }
+
+    public String getAllUsersButtonAllUsers() {
+        return allUsersButtonAllUsers;
+    }
+
+    public String getAllUsersButtonUnlockRequests() {
+        return allUsersButtonUnlockRequests;
+    }
+
+    public String getAllUsersTableName() {
+        return allUsersTableName;
+    }
+
+    public String getAllUsersTableCountOfAccount() {
+        return allUsersTableCountOfAccount;
+    }
+
+    public String getAllUsersTableCountOfCard() {
+        return allUsersTableCountOfCard;
+    }
+
+    public String getAllUsersButtonShowAllCard() {
+        return allUsersButtonShowAllCard;
+    }
+
+    public String getAllUsersButtonShowAllAccount() {
+        return allUsersButtonShowAllAccount;
+    }
+
+    public String getAllUsersButtonUnblock() {
+        return allUsersButtonUnblock;
+    }
+
+    public String getAllUsersButtonBlock() {
+        return allUsersButtonBlock;
+    }
+
+    public String getAllUsersButtonSortByName() {
+        return allUsersButtonSortByName;
+    }
+
+    public String getAllUsersButtonSortByStatus() {
+        return allUsersButtonSortByStatus;
     }
 }

@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>clientCardMenu</title>
-    <link rel="stylesheet" href="../style/styleForClientAccountMenu1.css">
+    <link rel="stylesheet" href="../style/styleForClientAccountMenu4.css">
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
@@ -48,7 +48,7 @@
                 <button class="button_l" name="engButton" ${engDisable}>Eng</button>
             </div>
             <div class="button_ukr">
-                <button class="  button_l" name="uaButton" ${uaDisable}>Ua</button>
+                <button class="button_l" name="uaButton" ${uaDisable}>Ua</button>
             </div>
         </div>
 
@@ -119,7 +119,7 @@
                 </tr>
                 <c:forEach var="bankAccount" items="${listOfBankAccount}">
 
-                    <tr>
+                    <tr class="line">
                         <td>${bankAccount.getNumber()}</td>
                         <td>${bankAccount.getCurrencyName()}</td>
                         <td>${bankAccount.getBalanceDouble()}</td>
@@ -127,7 +127,7 @@
                             <input type="number" step="any" min="0" name="amount ${bankAccount.getNumber()}">
                         </td>
                         <td class="block_card_section">
-                            <button name="replenishButton ${bankAccount.getNumber()}"
+                            <button ${bankAccount.getDisableRefill()} name="replenishButton ${bankAccount.getNumber()}"
                                     class="block_card"><%=localization.getClientAccountMenuButtonReplenish()%>
                             </button>
                         </td>

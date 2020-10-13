@@ -5,7 +5,7 @@ import ozamkovyi.web.Localization;
 
 import java.util.Random;
 
-public class BankAccount extends Entity{
+public class BankAccount extends Entity {
 
     private String number;
 
@@ -20,6 +20,8 @@ public class BankAccount extends Entity{
     private String accountStatusName;
 
     private String currencyName;
+
+    private String ClientName;
 
 
     public String getNumber() {
@@ -78,42 +80,57 @@ public class BankAccount extends Entity{
         this.currencyName = currencyName;
     }
 
-    public double getBalanceDouble(){
-        return ((double)balance)/100;
+    public double getBalanceDouble() {
+        return ((double) balance) / 100;
     }
 
-    public String getButtonBloc(Localization localization){
-        if (accountStatusName.equals(Fields.ACCOUNT_STATUS__UNBLOCKED)){
+    public String getClientName() {
+        return ClientName;
+    }
+
+    public void setClientName(String clientName) {
+        ClientName = clientName;
+    }
+
+    public String getButtonBloc(Localization localization) {
+        if (accountStatusName.equals(Fields.ACCOUNT_STATUS__UNBLOCKED)) {
             return localization.getClientAccountMenuButtonBloc();
-        }else{
+        } else {
             return localization.getClientAccountMenuButtonUnBloc();
         }
     }
 
-    public String getDisable(){
-        if (accountStatusName.equals(Fields.ACCOUNT_STATUS__EXPECTATION)){
+    public String getDisable() {
+        if (accountStatusName.equals(Fields.ACCOUNT_STATUS__EXPECTATION)) {
             return "disabled";
-        }
-        else{
+        } else {
             return "";
         }
     }
 
-    public String getAccountForNewCard(){
+    public String getAccountForNewCard() {
         StringBuilder sb = new StringBuilder();
-        sb.append(number+" ");
-        sb.append(currencyName+" ");
+        sb.append(number + " ");
+        sb.append(currencyName + " ");
         sb.append(getBalanceDouble());
         return sb.toString();
     }
 
-    public static String generatorCardNumber(){
+    public static String generatorCardNumber() {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < 20; i++) {
             sb.append((random.nextInt(9)));
         }
         return sb.toString();
+    }
+
+    public String getDisableRefill() {
+        if (accountStatusName.equals(Fields.ACCOUNT_STATUS__UNBLOCKED)) {
+            return "";
+        } else {
+            return "disabled";
+        }
     }
 
     @Override
