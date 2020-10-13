@@ -61,6 +61,7 @@ public class Localization {
     private String clientPaymentMenuButtonSortByAmount = null;
     private String clientPaymentMenuButtonSortByStatus = null;
     private String clientPaymentMenuButtonRepeat = null;
+    private String clientPaymentMenuButtonConfirm = null;
 
 
 
@@ -149,6 +150,7 @@ public class Localization {
             clientPaymentMenuButtonSortByAmount = property.getProperty("clientPaymentMenu_jsp.button.sortByAmount");
             clientPaymentMenuButtonSortByStatus = property.getProperty("clientPaymentMenu_jsp.button.sortByStatus");
             clientPaymentMenuButtonRepeat = property.getProperty("clientPaymentMenu_jsp.button.repeat");
+            clientPaymentMenuButtonConfirm = property.getProperty("clientPaymentMenu_jsp.button.confirm");
 
         } catch (IOException e) {
             System.err.println("file not found");
@@ -373,5 +375,9 @@ public class Localization {
 
     public String getClientPaymentMenuButtonRepeat() {
         return clientPaymentMenuButtonRepeat;
+    }
+
+    public String getClientPaymentMenuButtonConfirm() {
+        return clientPaymentMenuButtonConfirm;
     }
 }

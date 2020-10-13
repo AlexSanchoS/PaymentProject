@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>clientCardMenu</title>
-    <link rel="stylesheet" href="../style/styleForClientPaymentMenu.css">
+    <link rel="stylesheet" href="../style/styleForClientPaymentMenu1.css">
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
@@ -46,8 +46,12 @@
 <form method="get" action="/clientLocalization">
     <div class="standart_buttons">
         <div class="leng_buttons">
-            <button name="engButton" ${engDisable}>Eng</button>
-            <button name="uaButton" ${uaDisable}>Ua</button>
+            <div class="button_eng">
+                <button class="button_l" name="engButton" ${engDisable}>Eng</button>
+            </div>
+            <div class="button_ukr">
+                <button class="  button_l" name="uaButton" ${uaDisable}>Ua</button>
+            </div>
         </div>
 
         <div class="exit">
@@ -60,20 +64,24 @@
 
 <form action="/clientPaymentMenu" method="post">
     <div class="content">
-        <nav class="nav_section">
-            <button name="buttonMyCard" class="navigation"><%=localization.getClientHomepageMyCardsButton()%>
+        <div class="buttons">
+            <button name="buttonMyCard" class="button"><%=localization.getClientHomepageMyCardsButton()%>
             </button>
             <button name="buttonMyAccount"
-                    class="navigation"><%=localization.getClientHomepageMyAccountButton()%>
+                    class="button"><%=localization.getClientHomepageMyAccountButton()%>
             </button>
-            <button name="buttonMyPayment" disabled="true" class="navigation"><%=localization.getClientHomepageMyPaymentButton()%>
+            <button name="buttonMyPayment" disabled="true"
+                    class="button"><%=localization.getClientHomepageMyPaymentButton()%>
             </button>
-        </nav>
+        </div>
+
         <div class="main_content">
 
             <div class="table_top">
-                <button name="add_payment" class="add_card"><%=localization.getClientPaymentMenuButtonNewPayment()%>
-                </button>
+                <div class="add">
+                    <button name="add_payment" class="add_card"><%=localization.getClientPaymentMenuButtonNewPayment()%>
+                    </button>
+                </div>
                 <div class="sort_section">
                     <div class="sort_title"><%=localization.getClientAccountMenuTableSort()%>
                     </div>
@@ -95,21 +103,21 @@
             </div>
             <table>
                 <tr>
-                    <td><%=localization.getClientPaymentMenuTableNumber()%>
+                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableNumber()%>
                     </td>
-                    <td><%=localization.getClientPaymentMenuTableDate()%>
+                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableDate()%>
                     </td>
-                    <td><%=localization.getClientPaymentMenuTableAmount()%>
+                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableAmount()%>
                     </td>
-                    <td><%=localization.getClientPaymentMenuTableSender()%>
+                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableSender()%>
                     </td>
-                    <td><%=localization.getClientPaymentMenuTableRecipient()%>
+                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableRecipient()%>
                     </td>
-                    <td><%=localization.getClientPaymentMenuTableRecipientName()%>
+                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableRecipientName()%>
                     </td>
-                    <td><%=localization.getClientPaymentMenuTableStatus()%>
+                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableStatus()%>
                     </td>
-                    <td></td>
+                    <td class="last_col"></td>
                 </tr>
                 <c:forEach var="payment" items="${listOfPayment}">
                     <tr>
@@ -120,9 +128,9 @@
                         <td>${payment.getRecipientCardNumber()}</td>
                         <td>${payment.getRecipientName()}</td>
                         <td>${payment.getStatusName()}</td>
-                        <td>
-                            <button name="blocButton "
-                                    class="block_card"><%=localization.getClientPaymentMenuButtonRepeat()%></button>
+                        <td class="block_card_section">
+                            <button name="blocButton ${payment.getId()}"
+                                    class="block_card">${payment.getButtonNameByStatus(localization)}</button>
                         </td>
                     </tr>
                 </c:forEach>

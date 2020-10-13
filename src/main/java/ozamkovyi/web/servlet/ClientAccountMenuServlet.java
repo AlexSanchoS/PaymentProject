@@ -2,6 +2,7 @@ package ozamkovyi.web.servlet;
 
 import ozamkovyi.db.dao.BankAccountDao;
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.dao.CurrencyDao;
 import ozamkovyi.db.entity.*;
 import ozamkovyi.web.Localization;
 
@@ -42,6 +43,8 @@ public class ClientAccountMenuServlet extends HttpServlet {
                 session.setAttribute("countAccount", BankAccountDao.getCountBankAccountByUser((Client) currentUser));
                 ArrayList<BankAccount> listOfBankAccount = BankAccountDao.getAccountList((Client) currentUser, pageNumber, sortType);
                 session.setAttribute("listOfBankAccount", listOfBankAccount);
+                ArrayList<Currency> listOfCurrencyForNewAccount = CurrencyDao.getAllCurrency();
+                session.setAttribute("listOfCurrencyForNewAccount", listOfCurrencyForNewAccount);
                 getServletContext().getRequestDispatcher("/jsp/clientAccountMenu.jsp").forward(req, resp);
 
             } else {
@@ -129,10 +132,6 @@ public class ClientAccountMenuServlet extends HttpServlet {
             resp.sendRedirect("/clientPaymentMenu");
         }
 
-        if (req.getParameter("add_account")!=null){
-            resp.sendRedirect("/addAccount");
-        }
-
         ArrayList<BankAccount> listOfBankAccount = (ArrayList<BankAccount>) session.getAttribute("listOfBankAccount");
         for (BankAccount bankAccount : listOfBankAccount) {
             if (req.getParameter("blocButton " + bankAccount.getNumber()) != null) {
@@ -152,6 +151,18 @@ public class ClientAccountMenuServlet extends HttpServlet {
                 }
                 BankAccountDao.addToBalance(bankAccount, amount);
                 resp.sendRedirect("/clientAccountMenu");
+            }
+        }
+
+        if (req.getParameter("add_account")!=null){
+            ArrayList<Currency> listOfCurrency = (ArrayList<Currency>) session.getAttribute("listOfCurrencyForNewAccount");
+            for (Currency currency : listOfCurrency) {
+                String selectOption = req.getParameter("currencyForNewAccount");
+                if (selectOption.equals(currency.getName())) {
+                    Client client = (Client)session.getAttribute("currentUser");
+                    BankAccountDao.addNewAccount(currency, client);
+                    resp.sendRedirect("/clientAccountMenu");
+                }
             }
         }
 

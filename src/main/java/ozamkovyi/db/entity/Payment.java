@@ -1,6 +1,8 @@
 package ozamkovyi.db.entity;
 
+import ozamkovyi.db.Fields;
 import ozamkovyi.web.CalendarProcessing;
+import ozamkovyi.web.Localization;
 
 import java.util.Calendar;
 
@@ -123,6 +125,14 @@ public class Payment extends Entity {
 
     public double getDoubleAmount(){
         return ((double) amount)/100;
+    }
+
+    public String getButtonNameByStatus(Localization localization){
+        if (statusName.equals(Fields.PAYMENT_STATUS__PREPARED)){
+            return localization.getClientPaymentMenuButtonConfirm();
+        }else{
+            return localization.getClientPaymentMenuButtonRepeat();
+        }
     }
 
     @Override

@@ -1,5 +1,8 @@
-package ozamkovyi.db;
+package ozamkovyi.db.dao;
 
+import ozamkovyi.db.DBManager;
+import ozamkovyi.db.EntityMapper;
+import ozamkovyi.db.Fields;
 import ozamkovyi.db.entity.Client;
 import ozamkovyi.db.entity.Payment;
 import ozamkovyi.web.CalendarProcessing;
@@ -197,6 +200,14 @@ public class PaymentDao {
             Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + " and " +
             Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID + " = ?";
 
+    private static final String SQL_UPDATE_PAYMENT_STATUS =
+            "update "+Fields.TABLE__PAYMENT+" set "+Fields.PAYMENT__PAYMENT_STATUS_ID+ " = ? where "+
+                    Fields.PAYMENT__ID+" = ?";
+
+    private static final String SQL_GET_PAYMENT_STATUS_ID_BY_NAME =
+            "SELECT " +Fields.PAYMENT_STATUS__ID+ " FROM "+
+                    Fields.TABLE__PAYMENT_STATUS+ " WHERE "+Fields.PAYMENT_STATUS__STATUS+" =?";
+
 
     private static void setRecipientCardNumberAndName(Payment payment) {
         PreparedStatement pstmt = null;
@@ -335,6 +346,48 @@ public class PaymentDao {
             }
         }
         return rez;
+    }
+
+    private static int getPaymentStatusIdByName(String status){
+        int rez = 0;
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        DBManager dbManager = DBManager.getInstance();
+        ResultSet rs = null;
+        try {
+            con = dbManager.getConnection();
+            pstmt = con.prepareStatement(SQL_GET_PAYMENT_STATUS_ID_BY_NAME);
+            pstmt.setString(1, status);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                rez = rs.getInt(1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return rez;
+    }
+
+    public static void updatePaymentStatus(Payment payment, String newStatus){
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        DBManager dbManager = DBManager.getInstance();
+        ResultSet rs = null;
+        try {
+            con = dbManager.getConnection();
+            int paymentStatusId = getPaymentStatusIdByName(newStatus);
+            pstmt = con.prepareStatement(SQL_UPDATE_PAYMENT_STATUS);
+            pstmt.setInt(1, paymentStatusId);
+            pstmt.setInt(2, payment.getId());
+            pstmt.executeUpdate();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            dbManager.commitAndClose(con);
+        }
+
+
     }
 
     private static class BankAccountMapper implements EntityMapper<Payment> {

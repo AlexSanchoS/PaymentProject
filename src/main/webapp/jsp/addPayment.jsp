@@ -1,4 +1,7 @@
-<%@ page import="ozamkovyi.web.Localization" %><%--
+<%@ page import="ozamkovyi.web.Localization" %>
+<%@ page import="ozamkovyi.db.entity.Payment" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="ozamkovyi.db.entity.CreditCard" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 06.10.2020
@@ -16,12 +19,12 @@
 <body>
 <%
     Localization localization = (Localization) session.getAttribute("localization");
-    session.setAttribute("currentURL", "/registration");
+    session.setAttribute("currentURL", "/addPayment");
     String engDisable = "disabled";
     String uaDisable = "";
-    if (localization.getLocal().equals("ua")){
-        uaDisable="disabled";
-        engDisable="";
+    if (localization.getLocal().equals("ua")) {
+        uaDisable = "disabled";
+        engDisable = "";
     }
     pageContext.setAttribute("uaDisable", uaDisable);
     pageContext.setAttribute("engDisable", engDisable);
@@ -30,35 +33,40 @@
 
 <form method="get" action="/loginRegistrationLocalization">
     <div class="leng_buttons">
-        <div class="button_eng"><button class="button_l" name="engButton" ${engDisable}>Eng</button></div>
-            <div class="button_ukr"><button class="  button_l" name="uaButton" ${uaDisable}>Ua</button></div>
+        <div class="button_eng">
+            <button class="button_l" name="engButton" ${engDisable}>Eng</button>
+        </div>
+        <div class="button_ukr">
+            <button class="  button_l" name="uaButton" ${uaDisable}>Ua</button>
+        </div>
     </div>
 
 </form>
 
-<form  class="reg_form" action="/registration" method="post">
+<form class="reg_form" action="/addPayment" method="post">
+
     <div class="input_area">
-        <label for="POST-login"><%=localization.getRegistrationLoginLabel()%>
+        <label><%=localization.getClientPaymentMenuTableSender()%>
         </label>
-        <input class="area" id="POST-login" type="text" name="login">
+        <div class="add_select">
+            <select name="currencyForNewAccount" id="sort1">
+                <option>${currentPayment.getSenderCardNumber()}</option>
+            </select>
+        </div>
     </div>
     <div class="input_area">
-        <label for="POST-password"><%=localization.getRegistrationPasswordLabel()%>
+        <label for="POST-password"><%=localization.getClientPaymentMenuTableRecipient()%>
         </label>
-        <input class="area" id="POST-password" type="password" name="password">
+        <input class="area" id="POST-password" type="text" name="recipientCardNumber"
+               value="${currentPayment.getRecipientCardNumber()}">
     </div>
     <div class="input_area">
-        <label for="POST-name"><%=localization.getRegistrationNameLabel()%>
+        <label for="POST-date"><%=localization.getClientPaymentMenuTableAmount()%>
         </label>
-        <input class="area" id="POST-name" type="text" name="name">
+        <input class="area" id="POST-date" type="number" step="any" name="amount" value="${currentPayment.getAmount()}">
     </div>
     <div class="input_area">
-        <label for="POST-date"><%=localization.getRegistrationDateOfBirthLabel()%>
-        </label>
-        <input class="area" id="POST-date" type="date" name="date">
-    </div>
-    <div class="input_area">
-        <button class="form_button" name="registrationButton"><%=localization.getRegistrationRegistrationButton()%>
+        <button class="form_button" name="pay">pay
         </button>
     </div>
 

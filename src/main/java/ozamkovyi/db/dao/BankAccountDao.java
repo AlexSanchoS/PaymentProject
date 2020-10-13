@@ -5,6 +5,9 @@ import ozamkovyi.db.EntityMapper;
 import ozamkovyi.db.Fields;
 import ozamkovyi.db.entity.BankAccount;
 import ozamkovyi.db.entity.Client;
+import ozamkovyi.db.entity.CreditCard;
+import ozamkovyi.db.entity.Currency;
+import ozamkovyi.web.CalendarProcessing;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -131,7 +134,8 @@ public class BankAccountDao {
             " SET " + Fields.BANK_ACCOUNT__BALANCE + " =? WHERE " + Fields.BANK_ACCOUNT__NUMBER + " =?";
 
     private static final String SQL_GET_ALL_ACCOUNT_NUMBER_AND_CURRENCY =
-            "select " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
+            "select " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID + ", " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
                     Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + " from " +
                     Fields.TABLE__BANK_ACCOUNT + " join " + Fields.TABLE__CURRENCY + " join " +
@@ -143,6 +147,17 @@ public class BankAccountDao {
                     Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__ID + " and " +
                     Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS + " = '" +
                     Fields.ACCOUNT_STATUS__UNBLOCKED + "'";
+
+    private static final String SQL_IS_NUMBER_ALREADY_EXISTING =
+            "select COUNT(" + Fields.BANK_ACCOUNT__BALANCE + ") from " +
+                    Fields.TABLE__BANK_ACCOUNT + " where " + Fields.BANK_ACCOUNT__NUMBER + " = ?";
+
+    private static final String SQL_ADD_NEW_BANK_ACCOUNT =
+            "INSERT INTO  " + Fields.TABLE__BANK_ACCOUNT + " ( " +
+                    Fields.BANK_ACCOUNT__NUMBER + ", " +
+                    Fields.BANK_ACCOUNT__BALANCE + ", " + Fields.BANK_ACCOUNT__CURRENCY_ID + ", " +
+                    Fields.BANK_ACCOUNT__USER_ID + ", " + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " ) " +
+                    " VALUES (?, ?, ?, ?, ?)";
 
 
     public static ArrayList<BankAccount> getAllAccount(Client client) {
@@ -160,6 +175,7 @@ public class BankAccountDao {
                 bankAccount.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
                 bankAccount.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
                 bankAccount.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                bankAccount.setUserId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID));
                 listOfBankAccount.add(bankAccount);
             }
         } catch (SQLException throwables) {
@@ -297,7 +313,9 @@ public class BankAccountDao {
             pstmt = con.prepareStatement(SQL_CHANGE_STATUS_ID_FOR_BANK_ACCOUNT);
             pstmt.setInt(1, newStatusId);
             pstmt.setString(2, bankAccount.getNumber());
-            System.out.println(pstmt);
+            if (newStatus.equals(Fields.ACCOUNT_STATUS__BLOCKED)){
+                CreditCardDao.blockAllCardForAccount(bankAccount);
+            }
             pstmt.executeUpdate();
 
         } catch (SQLException throwables) {
@@ -355,6 +373,63 @@ public class BankAccountDao {
             }
         }
         return rez;
+    }
+
+    private static String generatorNewCardNumber() {
+        String re = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        int rez = 10;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_IS_NUMBER_ALREADY_EXISTING);
+            while (rez != 0) {
+                re = CreditCard.generatorCardNumber();
+                pstmt.setString(1, re);
+                rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    rez = rs.getInt(1);
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+        return re;
+    }
+
+    public static void addNewAccount(Currency currency, Client client){
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        DBManager dbManager = DBManager.getInstance();
+        ResultSet rs = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            int newStatusId = getStatusIdByStatus(Fields.ACCOUNT_STATUS__EXPECTATION);
+            String newAccountNumber = generatorNewCardNumber();
+            pstmt = con.prepareStatement(SQL_ADD_NEW_BANK_ACCOUNT);
+            String newValidity = CalendarProcessing.getValidityForNewCard();
+            pstmt.setString(1, newAccountNumber);
+            pstmt.setInt(2, 0);
+            pstmt.setInt(3, currency.getId());
+            pstmt.setInt(4, client.getId());
+            pstmt.setInt(5, newStatusId);
+            System.out.println(pstmt);
+            pstmt.executeUpdate();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            dbManager.commitAndClose(con);
+        }
     }
 
     private static class BankAccountMapper implements EntityMapper<BankAccount> {

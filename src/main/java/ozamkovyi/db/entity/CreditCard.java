@@ -125,10 +125,11 @@ public class CreditCard extends Entity {
     }
 
     public static String generatorCardNumber(){
-        StringBuilder sb = new StringBuilder(FIRST_PART_FOR_CARD_NUMBER);
+        StringBuilder sb = new StringBuilder();
+        sb.append(FIRST_PART_FOR_CARD_NUMBER);
         Random random = new Random();
-        for (int i = 0; i < 14; i++) {
-            sb.append((random.nextInt(10)-1));
+        for (int i = 0; i < 10; i++) {
+            sb.append((random.nextInt(9)));
         }
         return sb.toString();
     }

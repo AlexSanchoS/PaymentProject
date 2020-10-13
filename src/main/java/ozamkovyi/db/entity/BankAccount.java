@@ -3,6 +3,8 @@ package ozamkovyi.db.entity;
 import ozamkovyi.db.Fields;
 import ozamkovyi.web.Localization;
 
+import java.util.Random;
+
 public class BankAccount extends Entity{
 
     private String number;
@@ -102,6 +104,15 @@ public class BankAccount extends Entity{
         sb.append(number+" ");
         sb.append(currencyName+" ");
         sb.append(getBalanceDouble());
+        return sb.toString();
+    }
+
+    public static String generatorCardNumber(){
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 20; i++) {
+            sb.append((random.nextInt(9)));
+        }
         return sb.toString();
     }
 

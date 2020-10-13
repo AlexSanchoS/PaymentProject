@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Profile</title>
-    <link rel="stylesheet" href="./../style/styleForClientHomepage.css">
+    <link rel="stylesheet" href="./../style/styleForClientHomepage1.css">
 </head>
 <body>
 <%
@@ -20,38 +20,45 @@
     Client client = (Client) session.getAttribute("currentUser");
     String engDisable = "disabled";
     String uaDisable = "";
-    if (localization.getLocal().equals("ua")){
-        uaDisable="disabled";
-        engDisable="";
+    if (localization.getLocal().equals("ua")) {
+        uaDisable = "disabled";
+        engDisable = "";
     }
     pageContext.setAttribute("uaDisable", uaDisable);
     pageContext.setAttribute("engDisable", engDisable);
 %>
 <form method="get" action="/clientLocalization">
-    <div class="leng_buttons">
-        <button name="engButton" ${engDisable}>Eng</button>
-        <button name="uaButton" ${uaDisable}>Ua</button>
-    </div>
-    <div class="exit">
-        <button name = "logOut" class="exit_button" name="logOut"><%=localization.getClientHomepageLogOutButton()%>
-        </button>
+    <div class="standart_buttons">
+        <div class="leng_buttons">
+            <div class="button_eng">
+                <button class="button_l" name="engButton" ${engDisable}>Eng</button>
+            </div>
+            <div class="button_ukr">
+                <button class="button_l" name="uaButton" ${uaDisable}>Ua</
+                >
+            </div>
+        </div>
+        <div class="exit">
+            <button class="exit_button" name="logOut"><%=localization.getClientHomepageLogOutButton()%>
+            </button>
+        </div>
     </div>
 </form>
 
 <form action="/clientHomepage" method="post">
 
-
-    <div><%=client.getName()%>
+    <div class="content">
+        <div class="name"><%=client.getName()%>
+        </div>
+        <div class="buttons">
+            <button class="button" name="buttonMyCard"><%=localization.getClientHomepageMyCardsButton()%>
+            </button>
+            <button class="button" name="buttonMyAccount"><%=localization.getClientHomepageMyAccountButton()%>
+            </button>
+            <button class="button" name="buttonMyPayment"><%=localization.getClientHomepageMyPaymentButton()%>
+            </button>
+        </div>
     </div>
-    <div class="buttons">
-        <button class="button" name="buttonMyCard"><%=localization.getClientHomepageMyCardsButton()%>
-        </button>
-        <button class="button" name="buttonMyAccount"><%=localization.getClientHomepageMyAccountButton()%>
-        </button>
-        <button class="button" name="buttonMyPayment"><%=localization.getClientHomepageMyPaymentButton()%>
-        </button>
-    </div>
-
 </form>
 
 </body>

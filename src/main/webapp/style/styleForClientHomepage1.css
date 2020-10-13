@@ -1,0 +1,100 @@
+body{
+    padding-left: 5%;
+    background-color: rgba(237, 237, 237, 1);
+
+}
+
+.button_ukr{
+    display: inline;
+    background-image: url(ukr.webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.button_eng{
+    display: inline;
+    background-image: url(eng.svg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.standart_buttons{
+    text-align: end;
+    position: absolute;
+    top: 5%;
+    right: 10%;
+}
+
+
+
+.button_l{
+    width: 50px;
+    color: black;
+    background-color: rgba(255,255,255,0.6);
+}
+
+
+.button_ukr{
+    display: inline;
+    background-image: url(ukr.webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.button_eng{
+    display: inline;
+    background-image: url(eng.svg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.standart_buttons{
+    text-align: end;
+    position: absolute;
+    top: 5%;
+    right: 10%;
+}
+
+
+.exit_button{
+    width: 120px;
+    padding: 18%;
+    margin-top: 20%;
+    border-radius: 7%;
+    color: white;
+    border: none;
+    background-color: rgba(27, 93, 125, 1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.buttons{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.button{
+    width: 130px;
+    height: 50px;
+    text-align: center;
+    color: white;
+    border: none;
+    background-color: rgba(27, 93, 125, 1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+
+}
+.name{
+    font-size: 20px;
+    line-height: 60px;
+    margin: 0 auto;
+    color: rgba(47, 66, 72, 1);
+}

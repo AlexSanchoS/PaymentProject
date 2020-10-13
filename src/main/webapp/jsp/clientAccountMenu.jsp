@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>clientCardMenu</title>
-    <link rel="stylesheet" href="../style/styleForClientAccountMenu.css">
+    <link rel="stylesheet" href="../style/styleForClientAccountMenu1.css">
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
@@ -44,8 +44,12 @@
 <form method="get" action="/clientLocalization">
     <div class="standart_buttons">
         <div class="leng_buttons">
-            <button name="engButton" ${engDisable}>Eng</button>
-            <button name="uaButton" ${uaDisable}>Ua</button>
+            <div class="button_eng">
+                <button class="button_l" name="engButton" ${engDisable}>Eng</button>
+            </div>
+            <div class="button_ukr">
+                <button class="  button_l" name="uaButton" ${uaDisable}>Ua</button>
+            </div>
         </div>
 
         <div class="exit">
@@ -58,20 +62,31 @@
 
 <form action="/clientAccountMenu" method="post">
     <div class="content">
-        <nav class="nav_section">
-            <button name="buttonMyCard" class="navigation"><%=localization.getClientHomepageMyCardsButton()%>
+        <div class="buttons">
+            <button name="buttonMyCard" class="button"><%=localization.getClientHomepageMyCardsButton()%>
             </button>
             <button name="buttonMyAccount" disabled="true"
-                    class="navigation"><%=localization.getClientHomepageMyAccountButton()%>
+                    class="button"><%=localization.getClientHomepageMyAccountButton()%>
             </button>
-            <button name="buttonMyPayment" class="navigation"><%=localization.getClientHomepageMyPaymentButton()%>
+            <button name="buttonMyPayment" class="button"><%=localization.getClientHomepageMyPaymentButton()%>
             </button>
-        </nav>
+        </div>
+
         <div class="main_content">
 
             <div class="table_top">
-                <button name="add_account" class="add_card"><%=localization.getClientAccountMenuButtonNewAccount()%>
-                </button>
+                <div class="add">
+                    <button name="add_account" class="add_card"><%=localization.getClientAccountMenuButtonNewAccount()%>
+                    </button>
+                    <div class="add_select">
+                        <select name="currencyForNewAccount" id="sort1">
+                            <option></option>
+                            <c:forEach var="currency" items="${listOfCurrencyForNewAccount}">
+                                <option>${currency.getName()}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
                 <div class="sort_section">
                     <div class="sort_title"><%=localization.getClientAccountMenuTableSort()%>
                     </div>
@@ -90,17 +105,17 @@
             </div>
             <table>
                 <tr>
-                    <td><%=localization.getClientAccountMenuTableNumber()%>
+                    <td class="head_of_table"><%=localization.getClientAccountMenuTableNumber()%>
                     </td>
-                    <td><%=localization.getClientAccountMenuTableCurrency()%>
+                    <td class="head_of_table"><%=localization.getClientAccountMenuTableCurrency()%>
                     </td>
-                    <td><%=localization.getClientAccountMenuTableBalance()%>
+                    <td class="head_of_table"><%=localization.getClientAccountMenuTableBalance()%>
                     </td>
-                    <td><%=localization.getClientAccountMenuTableAmount()%>
+                    <td class="head_of_table"><%=localization.getClientAccountMenuTableAmount()%>
                     </td>
-                    <td>
+                    <td class="last_col">
                     </td>
-                    <td></td>
+                    <td class="last_col"></td>
                 </tr>
                 <c:forEach var="bankAccount" items="${listOfBankAccount}">
 
@@ -111,12 +126,12 @@
                         <td>
                             <input type="number" step="any" min="0" name="amount ${bankAccount.getNumber()}">
                         </td>
-                        <td>
+                        <td class="block_card_section">
                             <button name="replenishButton ${bankAccount.getNumber()}"
                                     class="block_card"><%=localization.getClientAccountMenuButtonReplenish()%>
                             </button>
                         </td>
-                        <td>
+                        <td class="block_card_section">
                             <button name="blocButton ${bankAccount.getNumber()}"
                                     class="block_card" ${bankAccount.getDisable()}>${bankAccount.getButtonBloc(localization)}</button>
                         </td>

@@ -1,6 +1,7 @@
 package ozamkovyi.web.servlet;
 
-import ozamkovyi.db.PaymentDao;
+import ozamkovyi.db.Fields;
+import ozamkovyi.db.dao.PaymentDao;
 import ozamkovyi.db.entity.*;
 import ozamkovyi.web.Localization;
 
@@ -38,7 +39,6 @@ public class ClientPaymentMenuServlet extends HttpServlet {
                     pageNumber = (int) page;
                     sortType = (int) session.getAttribute("sortType");
                 }
-
                 session.setAttribute("countPayment", PaymentDao.getCountPaymentByUser((Client) currentUser));
                 ArrayList<Payment> listOfPayment = PaymentDao.getPaymentList((Client) currentUser, pageNumber, sortType);
                 session.setAttribute("listOfPayment", listOfPayment);
@@ -147,6 +147,20 @@ public class ClientPaymentMenuServlet extends HttpServlet {
             session.setAttribute("pageNumber", null);
             session.setAttribute("sortType", null);
             resp.sendRedirect("/clientAccountMenu");
+        }
+
+        ArrayList<Payment> listOfPayment = (ArrayList<Payment>) session.getAttribute("listOfPayment");
+        for (Payment payment : listOfPayment) {
+            System.out.println(payment.getId());
+            if (req.getParameter("blocButton " + payment.getId()) != null) {
+                if (payment.getStatusName().equals(Fields.PAYMENT_STATUS__PREPARED)) {
+                    PaymentDao.updatePaymentStatus(payment, Fields.PAYMENT_STATUS__SENT);
+                    resp.sendRedirect("/clientPaymentMenu");
+                } else {
+                    session.setAttribute("currentPayment", payment);
+                    resp.sendRedirect("/addPayment");
+                }
+            }
         }
 
         if (req.getParameter("add_payment")!=null){

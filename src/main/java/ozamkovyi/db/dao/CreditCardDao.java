@@ -121,6 +121,49 @@ public class CreditCardDao {
             "select COUNT(" + Fields.CREDIT_CARD__ID + ") from " +
                     Fields.TABLE__CREDIT_CARD + " where " + Fields.CREDIT_CARD__NUMBER + " = ?";
 
+    private static final String SQL_GET_ALL_CARD_FOR_ACCOUNT =
+            "select " + Fields.CREDIT_CARD__ID + " from " + Fields.TABLE__CREDIT_CARD + " where " + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER + " = ?";
+
+    private static final String getAllUnblockCreditCard =
+            "SELECT " + Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + ", " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER + " FROM " +
+                    Fields.TABLE__CREDIT_CARD + " join " + Fields.TABLE__CARD_STATUS +
+                    " on " + Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID + " = " +
+                    Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__ID + " and " +
+                    Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS + " = ? and " +
+                    Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID + " = ?";
+
+    public static ArrayList<CreditCard> getAllUnblockCreditCard(Client client) {
+        ArrayList<CreditCard> listOfCreditCard = new ArrayList<>();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(getAllUnblockCreditCard);
+            pstmt.setString(1, Fields.CARD_STATUS__UNBLOCKED);
+            pstmt.setInt(2, client.getId());
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                CreditCard creditCard = new CreditCard();
+                creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
+                creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
+                listOfCreditCard.add(creditCard);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        }
+        return listOfCreditCard;
+    }
+
     private static String generatorNewCardNumber() {
         String re = null;
         PreparedStatement pstmt = null;
@@ -152,6 +195,27 @@ public class CreditCardDao {
         return re;
     }
 
+    public static void blockAllCardForAccount(BankAccount bankAccount) {
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        DBManager dbManager = DBManager.getInstance();
+        ResultSet rs = null;
+        try {
+            con = dbManager.getConnection();
+            pstmt = con.prepareStatement(SQL_GET_ALL_CARD_FOR_ACCOUNT);
+            pstmt.setString(1, bankAccount.getNumber());
+            pstmt.executeUpdate();
+            while (rs.next()) {
+                CreditCard creditCard = new CreditCard();
+                creditCard.setId(rs.getInt(1));
+                blocCard(creditCard);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            dbManager.commitAndClose(con);
+        }
+    }
 
     public static void addNewCard(BankAccount account) {
         PreparedStatement pstmt = null;
@@ -159,6 +223,7 @@ public class CreditCardDao {
         DBManager dbManager = DBManager.getInstance();
         ResultSet rs = null;
         try {
+            con = DBManager.getInstance().getConnection();
             int newStatusId = getIdStatusForCreditCard(Fields.CARD_STATUS__BLOCKED);
             String newCardNumber = generatorNewCardNumber();
             pstmt = con.prepareStatement(SQL_ADD_NEW_CREDIT_CARD);
@@ -168,6 +233,7 @@ public class CreditCardDao {
             pstmt.setString(3, account.getNumber());
             pstmt.setInt(4, account.getUserId());
             pstmt.setInt(5, newStatusId);
+            System.out.println(pstmt);
             pstmt.executeUpdate();
 
         } catch (SQLException throwables) {
@@ -278,6 +344,7 @@ public class CreditCardDao {
         DBManager dbManager = DBManager.getInstance();
         ResultSet rs = null;
         try {
+            con = dbManager.getConnection();
             int newStatusId = getIdStatusForCreditCard(Fields.CARD_STATUS__BLOCKED);
             pstmt = con.prepareStatement(SQL_BLOC_UNBLOCK_CREDIT_CARD);
             pstmt.setInt(1, newStatusId);
@@ -297,15 +364,12 @@ public class CreditCardDao {
         DBManager dbManager = DBManager.getInstance();
         ResultSet rs = null;
         try {
+            con = dbManager.getConnection();
             int newStatusId = getIdStatusForCreditCard(Fields.CARD_STATUS__UNBLOCKED);
-            if (rs.next()) {
-                newStatusId = rs.getInt(1);
-            }
             pstmt = con.prepareStatement(SQL_BLOC_UNBLOCK_CREDIT_CARD);
             pstmt.setInt(1, newStatusId);
             pstmt.setInt(2, card.getId());
             pstmt.executeUpdate();
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {

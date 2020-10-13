@@ -80,7 +80,16 @@
     </servlet-mapping>
 
 
+    <servlet>
+        <servlet-name>addPayment</servlet-name>
+        <servlet-class>ozamkovyi.web.servlet.AddPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>addPayment</servlet-name>
+        <url-pattern>/addPayment</url-pattern>
+    </servlet-mapping>
 
-    clientPaymentMenu
+
+    addPayment
 
 </web-app>
