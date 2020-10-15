@@ -11,13 +11,13 @@
 <head>
     <meta charset="UTF-8">
     <title>clientCardMenu</title>
-    <link rel="stylesheet" href="../style/styleForClientCardMenu6.css">
+    <link rel="stylesheet" href="../style/styleForAdminHomepage6.css">
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
 <%
     Localization localization = (Localization) session.getAttribute("localization");
-    session.setAttribute("currentURL", "/clientCardMenu");
+    session.setAttribute("currentURL", "/allCardsForUser");
     String engDisable = "disabled";
     String uaDisable = "";
     if (localization.getLocal().equals("ua")) {
@@ -60,30 +60,19 @@
 
 </form>
 
-<form action="/clientCardMenu" method="post">
+<form action="/allCardsForUser" method="post">
     <div class="content">
         <div class="buttons">
-            <button name="buttonMyCard" disabled="true"
-                    class="button"><%=localization.getClientHomepageMyCardsButton()%>
+            <button name="buttonUnlockRequests"
+                    class="button"><%=localization.getAllUsersButtonUnlockRequests()%>
             </button>
-            <button name="buttonMyAccount" class="button"><%=localization.getClientHomepageMyAccountButton()%>
-            </button>
-            <button name="buttonMyPayment" class="button"><%=localization.getClientHomepageMyPaymentButton()%>
+            <button name="buttonAllUsers"
+                    class="button"><%=localization.getAllUsersButtonAllUsers()%>
             </button>
         </div>
 
         <div class="main_content">
             <div class="table_top">
-                <div class="add">
-                    <button name="add_card" class="add_card"><%=localization.getClientCardMenuButtonAddCard()%>
-                    </button>
-                        <select class="add_select" name="accountForNewCard" id="sort1">
-                            <option name="accountForNewCard 0"></option>
-                            <c:forEach var="account" items="${listOfAccountForCreditCard}">
-                                <option name="accountForNewCard ${account.getNumber()}">${account.getAccountForNewCard()}</option>
-                            </c:forEach>
-                        </select>
-                </div>
                 <div class="sort_section">
                     <div class="sort_title"><%=localization.getClientCardMenuTableSort()%>
                     </div>

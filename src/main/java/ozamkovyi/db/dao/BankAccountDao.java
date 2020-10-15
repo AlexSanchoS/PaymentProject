@@ -119,9 +119,9 @@ public class BankAccountDao {
     private static final String SQL_GET_COUNT_BANK_ACCOUNT_FOR_UNLOCK =
             "SELECT COUNT(" + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ") " +
                     " FROM " + Fields.TABLE__BANK_ACCOUNT + " join " + Fields.TABLE__ACCOUNT_STATUS + " ON " +
-                    Fields.TABLE__BANK_ACCOUNT+"."+ Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " = "+
-            Fields.TABLE__ACCOUNT_STATUS+"."+Fields.ACCOUNT_STATUS__ID+ " and "+
-            Fields.TABLE__ACCOUNT_STATUS+"."+Fields.ACCOUNT_STATUS__STATUS+ " = '" + Fields.ACCOUNT_STATUS__EXPECTATION+"'";
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " = " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__ID + " and " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS + " = '" + Fields.ACCOUNT_STATUS__EXPECTATION + "'";
 
     private static final String SQL_CHANGE_STATUS_ID_FOR_BANK_ACCOUNT = "UPDATE " + Fields.TABLE__BANK_ACCOUNT +
             " SET " + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " =? WHERE " + Fields.BANK_ACCOUNT__NUMBER + " =?";
@@ -292,13 +292,9 @@ public class BankAccountDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return rez;
     }
@@ -345,13 +341,9 @@ public class BankAccountDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return listOfBankAccount;
     }
@@ -394,13 +386,9 @@ public class BankAccountDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return listOfBankAccount;
     }
@@ -423,13 +411,9 @@ public class BankAccountDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return statusId;
     }
@@ -475,13 +459,9 @@ public class BankAccountDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return statusId;
     }
@@ -525,13 +505,9 @@ public class BankAccountDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return rez;
     }
@@ -556,13 +532,9 @@ public class BankAccountDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return re;
     }
@@ -608,15 +580,21 @@ public class BankAccountDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return rez;
+    }
+
+    private static void close(AutoCloseable forClose) {
+        if (forClose != null) {
+            try {
+                forClose.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static class BankAccountMapper implements EntityMapper<BankAccount> {

@@ -16,7 +16,7 @@ public final class Fields {
 
     public static final String ACCOUNT_STATUS__BLOCKED = "blocked";
     public static final String ACCOUNT_STATUS__UNBLOCKED = "unlocked";
-    public static final String ACCOUNT_STATUS__EXPECTATION = "";
+    public static final String ACCOUNT_STATUS__EXPECTATION = "expectation";
 
     public static final String PAYMENT_STATUS__SENT = "sent";
     public static final String PAYMENT_STATUS__PREPARED = "prepared";
@@ -66,7 +66,7 @@ public final class Fields {
     public static final String PAYMENT__AMOUNT = "amount";
     public static final String PAYMENT__PAYMENT_STATUS_ID = "payment_status_id";
     public static final String PAYMENT__RECIPIENT_CREDIT_CARD = "recipient_credit_card";
-    public static final String PAYMENT__SENDER_CREDIT_CARD = "sender_credit_card";
+    public static final String PAYMENT__SENDER_CREDIT_CARD = "j";
 
 
     public static final String TABLE__ACCOUNT_STATUS = "account_status";

@@ -50,8 +50,6 @@ public class ClientDao {
             " FROM " + Fields.TABLE__CLIENT;
 
 
-
-
     public Client findClientByLoginAndPassword(String login, String password) {
         Client client = null;
         PreparedStatement pstmt = null;
@@ -70,13 +68,9 @@ public class ClientDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return client;
     }
@@ -167,18 +161,14 @@ public class ClientDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return listOfClient;
     }
 
-    public static int getCountClient(){
+    public static int getCountClient() {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -193,34 +183,40 @@ public class ClientDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return rez;
 
     }
 
-     public static void setStatus(Client client, String status){
-         PreparedStatement pstmt = null;
-         Connection con = null;
-         DBManager dbManager = DBManager.getInstance();
-         try {
-             con = dbManager.getConnection();
-             pstmt = con.prepareStatement(SQL__SET_CLIENT_STATUS);
-             pstmt.setString(1, status);
-             pstmt.setInt(2, client.getId());
-             pstmt.executeUpdate();
-         } catch (SQLException throwables) {
-             throwables.printStackTrace();
-         } finally {
-             dbManager.commitAndClose(con);
-         }
-     }
+    public static void setStatus(Client client, String status) {
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        DBManager dbManager = DBManager.getInstance();
+        try {
+            con = dbManager.getConnection();
+            pstmt = con.prepareStatement(SQL__SET_CLIENT_STATUS);
+            pstmt.setString(1, status);
+            pstmt.setInt(2, client.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            dbManager.commitAndClose(con);
+        }
+    }
+
+    private static void close(AutoCloseable forClose) {
+        if (forClose != null) {
+            try {
+                forClose.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     private static class ClientMapper implements EntityMapper<Client> {

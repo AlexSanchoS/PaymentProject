@@ -92,7 +92,7 @@ public class Localization {
 
     public Localization() {
         local = "en";
-        setProperties("C:\\Users\\User\\IdeaProjects\\PaymentProject\\src\\main\\java\\resources_en.properties");
+        setProperties("C:\\Users\\User\\IdeaProjects\\PaymentProject\\src\\main\\resources\\res_en.properties");
     }
 
 
@@ -100,10 +100,10 @@ public class Localization {
         if (local.equals("ua")) {
             this.local = local;
 
-            setProperties("C:\\Users\\User\\IdeaProjects\\PaymentProject\\src\\main\\java\\resources_ru.properties");
+            setProperties("C:\\Users\\User\\IdeaProjects\\PaymentProject\\src\\main\\resources\\res_ua.properties");
         } else {
             this.local = local;
-            setProperties("C:\\Users\\User\\IdeaProjects\\PaymentProject\\src\\main\\java\\resources_en.properties");
+            setProperties("C:\\Users\\User\\IdeaProjects\\PaymentProject\\src\\main\\resources\\res_en.properties");
         }
     }
 

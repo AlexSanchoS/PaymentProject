@@ -1,8 +1,9 @@
-package ozamkovyi.web.servlet.clientServlets;
+package ozamkovyi.web.servlet.adminServlets;
 
-import ozamkovyi.db.dao.BankAccountDao;
-import ozamkovyi.db.dao.CreditCardDao;
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.dao.BankAccountDao;
+import ozamkovyi.db.dao.ClientDao;
+import ozamkovyi.db.dao.CreditCardDao;
 import ozamkovyi.db.entity.*;
 import ozamkovyi.web.Localization;
 
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ClientCardMenuServlet extends HttpServlet {
+public class AllCardsForUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -27,41 +28,35 @@ public class ClientCardMenuServlet extends HttpServlet {
             Localization localization = (Localization) session.getAttribute("localization");
             if (currentUser instanceof Client) {
                 localization.setLocal(((Client) currentUser).getLanguage());
+                getServletContext().getRequestDispatcher("/jsp/clientHomepage.jsp").forward(req, resp);
+
+            } else {
+                localization.setLocal(((Admin) currentUser).getLanguage());
                 Object page = session.getAttribute("pageNumber");
                 int pageNumber = 0;
                 int sortType = 0;
-                ArrayList<CreditCard> listOfCreditCard = null;
                 if (page == null) {
                     session.setAttribute("pageNumber", 1);
                     session.setAttribute("sortType", 1);
-                    System.out.println("page = null");
                     sortType = 1;
                     pageNumber = 1;
-                    listOfCreditCard = CreditCardDao.getCardList((Client) currentUser, pageNumber, sortType);
-                    for (CreditCard creditCard : listOfCreditCard) {
-                        if (!creditCard.isValid()) {
-                            CreditCardDao.blocCard(creditCard);
-                        }
-                    }
-
                 } else {
                     pageNumber = (int) page;
                     sortType = (int) session.getAttribute("sortType");
-                    listOfCreditCard = CreditCardDao.getCardList((Client) currentUser, pageNumber, sortType);
-
                 }
-                session.setAttribute("countCard", CreditCardDao.getCountCardByUser((Client) currentUser));
+                Client currentClient = (Client) session.getAttribute("currentClient");
+                CreditCardDao creditCardDao = new CreditCardDao();
+                session.setAttribute("countCard", creditCardDao.getCountCardByUser(currentClient));
+                ArrayList<CreditCard> listOfCreditCard = creditCardDao.getCardList(currentClient, pageNumber, sortType);
                 session.setAttribute("listOfCreditCard", listOfCreditCard);
-                ArrayList<BankAccount> listOfAccountForCreditCard = BankAccountDao.getAllAccount((Client) currentUser);
+                ArrayList<BankAccount> listOfAccountForCreditCard = BankAccountDao.getAllAccount(currentClient);
                 session.setAttribute("listOfAccountForCreditCard", listOfAccountForCreditCard);
-                getServletContext().getRequestDispatcher("/jsp/clientCardMenu.jsp").forward(req, resp);
-            } else {
-                localization.setLocal(((Admin) currentUser).getLanguage());
-                getServletContext().getRequestDispatcher("/jsp/adminHomepage.jsp").forward(req, resp);
+
+
+                getServletContext().getRequestDispatcher("/jsp/allCardsForUser.jsp").forward(req, resp);
             }
         }
     }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -70,45 +65,47 @@ public class ClientCardMenuServlet extends HttpServlet {
             if (pageNumber != null) {
                 session.setAttribute("pageNumber", (int) pageNumber + 1);
             }
-            resp.sendRedirect("/clientCardMenu");
+            resp.sendRedirect("/allCardsForUser");
         }
         if (req.getParameter("previousPage") != null) {
             Object pageNumber = session.getAttribute("pageNumber");
             if (pageNumber != null) {
                 session.setAttribute("pageNumber", (int) pageNumber - 1);
             }
-            resp.sendRedirect("/clientCardMenu");
+            resp.sendRedirect("/allCardsForUser");
         }
 
         if (req.getParameter("currency") != null) {
             Object sortType = session.getAttribute("sortType");
             if (sortType != null) {
-                int sort = (int) sortType;
-                if (sort == 1) {
+                int sort = (int)sortType;
+                if (sort==1){
                     session.setAttribute("sortType", 2);
-                } else {
+                }
+                else{
                     session.setAttribute("sortType", 1);
                 }
             } else {
                 session.setAttribute("sortType", null);
             }
             session.setAttribute("pageNumber", 1);
-            resp.sendRedirect("/clientCardMenu");
+            resp.sendRedirect("/allCardsForUser");
         }
         if (req.getParameter("balance") != null) {
             Object sortType = session.getAttribute("sortType");
             if (sortType != null) {
-                int sort = (int) sortType;
-                if (sort == 3) {
+                int sort = (int)sortType;
+                if (sort==3){
                     session.setAttribute("sortType", 4);
-                } else {
+                }
+                else{
                     session.setAttribute("sortType", 3);
                 }
             } else {
                 session.setAttribute("sortType", null);
             }
             session.setAttribute("pageNumber", 1);
-            resp.sendRedirect("/clientCardMenu");
+            resp.sendRedirect("/allCardsForUser");
         }
 
         ArrayList<CreditCard> listOfCreditCard = (ArrayList<CreditCard>) session.getAttribute("listOfCreditCard");
@@ -119,31 +116,20 @@ public class ClientCardMenuServlet extends HttpServlet {
                 } else {
                     CreditCardDao.blocCard(creditCard);
                 }
-                resp.sendRedirect("/clientCardMenu");
+                resp.sendRedirect("/allCardsForUser");
             }
         }
 
-        if (req.getParameter("buttonMyAccount") != null) {
+        if (req.getParameter("buttonAllUsers") != null){
             session.setAttribute("pageNumber", null);
             session.setAttribute("sortType", null);
-            resp.sendRedirect("/clientAccountMenu");
+            resp.sendRedirect("/allUsers");
         }
-        if (req.getParameter("buttonMyPayment") != null) {
+        if (req.getParameter("buttonUnlockRequests") != null) {
             session.setAttribute("pageNumber", null);
             session.setAttribute("sortType", null);
-            resp.sendRedirect("/clientPaymentMenu");
-        }
-
-
-        if (req.getParameter("add_card") != null) {
-            ArrayList<BankAccount> listOfAccountForCreditCard = (ArrayList<BankAccount>) session.getAttribute("listOfAccountForCreditCard");
-            for (BankAccount account : listOfAccountForCreditCard) {
-                String selectOption = req.getParameter("accountForNewCard");
-                if (selectOption.equals(account.getAccountForNewCard())) {
-                    CreditCardDao.addNewCard(account);
-                    resp.sendRedirect("/clientCardMenu");
-                }
-            }
+            resp.sendRedirect("/adminHomepage");
         }
     }
+
 }

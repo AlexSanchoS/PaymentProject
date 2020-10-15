@@ -13,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
-    <link rel="stylesheet" href="./../style/styleForRegistration4.css">
+    <link rel="stylesheet" href="./../style/styleForNewPaymen6.css">
 </head>
 
 <body>
@@ -48,7 +48,7 @@
     <div class="input_area">
         <label><%=localization.getClientPaymentMenuTableSender()%>
         </label>
-        <div class="add_select">
+        <div class="area">
             <select name="senderNumber" id="sort1">
                 <option>${currentPayment.getSenderCardNumber()}</option>
             </select>

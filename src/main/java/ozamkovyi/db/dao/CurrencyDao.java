@@ -33,15 +33,22 @@ public class CurrencyDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return listOfCurrency;
     }
+
+    private static void close(AutoCloseable forClose) {
+        if (forClose != null) {
+            try {
+                forClose.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 }

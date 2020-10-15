@@ -36,6 +36,10 @@ public class AdminDao {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } finally {
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return admin;
     }
@@ -57,6 +61,16 @@ public class AdminDao {
         }
     }
 
+
+    private static void close(AutoCloseable forClose) {
+        if (forClose != null) {
+            try {
+                forClose.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private static class AdminMapper implements EntityMapper<Admin> {
 

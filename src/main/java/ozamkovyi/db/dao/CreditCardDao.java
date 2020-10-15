@@ -26,11 +26,15 @@ public class CreditCardDao {
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + ", " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS + ", " +
                     Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS +
                     " FROM " + Fields.TABLE__CREDIT_CARD + " join " + Fields.TABLE__BANK_ACCOUNT +
                     " join " + Fields.TABLE__CURRENCY + " join " + Fields.TABLE__CARD_STATUS +
+                    " join " + Fields.TABLE__ACCOUNT_STATUS +
                     " on " + Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__ID + " = " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " = " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__ID + " and " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER + " = " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " and " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + " = " +
@@ -47,11 +51,15 @@ public class CreditCardDao {
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + ", " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS + ", " +
                     Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS +
                     " FROM " + Fields.TABLE__CREDIT_CARD + " join " + Fields.TABLE__BANK_ACCOUNT +
                     " join " + Fields.TABLE__CURRENCY + " join " + Fields.TABLE__CARD_STATUS +
+                    " join " + Fields.TABLE__ACCOUNT_STATUS +
                     " on " + Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__ID + " = " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " = " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__ID + " and " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER + " = " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " and " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + " = " +
@@ -68,11 +76,15 @@ public class CreditCardDao {
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + ", " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS + ", " +
                     Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS +
                     " FROM " + Fields.TABLE__CREDIT_CARD + " join " + Fields.TABLE__BANK_ACCOUNT +
                     " join " + Fields.TABLE__CURRENCY + " join " + Fields.TABLE__CARD_STATUS +
+                    " join " + Fields.TABLE__ACCOUNT_STATUS +
                     " on " + Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__ID + " = " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " = " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__ID + " and " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER + " = " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " and " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + " = " +
@@ -89,11 +101,15 @@ public class CreditCardDao {
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + ", " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS + ", " +
                     Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS +
                     " FROM " + Fields.TABLE__CREDIT_CARD + " join " + Fields.TABLE__BANK_ACCOUNT +
                     " join " + Fields.TABLE__CURRENCY + " join " + Fields.TABLE__CARD_STATUS +
+                    " join " + Fields.TABLE__ACCOUNT_STATUS +
                     " on " + Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__ID + " = " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID + " and " +
+                    Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID + " = " +
+                    Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__ID + " and " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER + " = " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " and " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + " = " +
@@ -184,13 +200,9 @@ public class CreditCardDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return listOfCreditCard;
     }
@@ -215,13 +227,9 @@ public class CreditCardDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return re;
     }
@@ -290,18 +298,14 @@ public class CreditCardDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return rez;
     }
 
-    public ArrayList<CreditCard> getCardList(Client client, int pageNumber, int sortType) {
+    public static  ArrayList<CreditCard> getCardList(Client client, int pageNumber, int sortType) {
         ArrayList<CreditCard> listOfCreditCard = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -325,7 +329,7 @@ public class CreditCardDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(sort);
-            CreditCardDao.CreditCardMapper mapper = new CreditCardMapper();
+            CreditCardMapper mapper = new CreditCardMapper();
             pstmt.setInt(1, client.getId());
             pstmt.setInt(2, pageNumber * 10 - 10);
             rs = pstmt.executeQuery();
@@ -337,13 +341,9 @@ public class CreditCardDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return listOfCreditCard;
     }
@@ -366,6 +366,11 @@ public class CreditCardDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        finally {
+            close(rs);
+            close(pstmt);
+            close(con);
+        }
         return rez;
     }
 
@@ -387,13 +392,9 @@ public class CreditCardDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return creditCard;
     }
@@ -455,8 +456,22 @@ public class CreditCardDao {
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }finally {
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return rez;
+    }
+
+    private static void close(AutoCloseable forClose) {
+        if (forClose != null) {
+            try {
+                forClose.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -476,6 +491,7 @@ public class CreditCardDao {
                 creditCard.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
                 creditCard.setCurrency(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
                 creditCard.setCardStatusName(rs.getString(Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS));
+                creditCard.setAccountStatusName(rs.getString(Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS));
                 return creditCard;
             } catch (SQLException e) {
                 throw new IllegalStateException(e);

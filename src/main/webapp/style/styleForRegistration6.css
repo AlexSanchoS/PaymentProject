@@ -1,0 +1,61 @@
+body{
+    background-color: rgba(237, 237, 237, 1);
+}
+
+.leng_buttons{
+    position: absolute;
+    top: 2%;
+    right: 10%;
+}
+
+.button_l{
+    width: 50px;
+    color: black;
+    background-color: rgb(255,255,255);
+    opacity: 0.65;
+}
+
+
+.button_ukr{
+    display: inline;
+    background-image: url(ukr.webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 50px;
+}
+
+.button_eng{
+    display: inline;
+    background-image: url(eng.svg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 50px;
+}
+.button_l:disabled{
+    opacity: 0.9;
+}
+
+
+.input_area{
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    color: rgba(47, 66, 72, 1);
+}
+
+.input_area label{
+    width: 7%;
+}
+
+.form_button{
+    height: 50px;
+    border-radius: 7%;
+    background-color: rgba(27, 93, 125, 1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    width: 7%;
+    margin: 1% 6%;
+}

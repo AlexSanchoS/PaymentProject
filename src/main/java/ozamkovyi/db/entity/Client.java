@@ -121,12 +121,13 @@ public class Client extends Entity {
         String name = request.getParameter("name");
         String date = request.getParameter("date");
         Calendar date1 = CalendarProcessing.string2Date(date);
-        Client client = new Client();
-        client.setLogin(login);
-        client.setPassword(password);
-        client.setName(name);
-        client.setDate(date1);
-        client.setLanguage(localization.getLocal());
+        this.setLogin(login);
+        this.setPassword(password);
+        this.setName(name);
+        this.setDate(date1);
+        this.setStatus(Fields.CLIENT_STATUS__UNBLOCK);
+        this.setLanguage(localization.getLocal());
+        System.out.println(this.name);
     }
 
     public boolean clientIsAdults() {

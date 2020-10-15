@@ -29,6 +29,8 @@ public class CreditCard extends Entity {
 
     private String cardStatusName;
 
+    private String accountStatusName;
+
 
     public int getId() {
         return id;
@@ -102,16 +104,32 @@ public class CreditCard extends Entity {
         this.cardStatusName = cardStatusName;
     }
 
-    public String getButtonBloc(Localization localization){
-        if (cardStatusName.equals(Fields.CARD_STATUS__BLOCKED)){
+    public String getAccountStatusName() {
+        return accountStatusName;
+    }
+
+    public String getDisabled() {
+        if ((accountStatusName.equals(Fields.ACCOUNT_STATUS__UNBLOCKED) && isValid())) {
+            return "";
+        } else {
+            return "disabled";
+        }
+    }
+
+    public void setAccountStatusName(String accountStatusName) {
+        this.accountStatusName = accountStatusName;
+    }
+
+    public String getButtonBloc(Localization localization) {
+        if (cardStatusName.equals(Fields.CARD_STATUS__BLOCKED)) {
             return localization.getClientCardMenuButtonUnBloc();
-        }else{
+        } else {
             return localization.getClientCardMenuButtonBloc();
         }
     }
 
-    public double getBalanceDouble(){
-        return ((double) balance)/100;
+    public double getBalanceDouble() {
+        return ((double) balance) / 100;
     }
 
     @Override
@@ -125,7 +143,7 @@ public class CreditCard extends Entity {
                 '}';
     }
 
-    public static String generatorCardNumber(){
+    public static String generatorCardNumber() {
         StringBuilder sb = new StringBuilder();
         sb.append(FIRST_PART_FOR_CARD_NUMBER);
         Random random = new Random();
@@ -135,7 +153,7 @@ public class CreditCard extends Entity {
         return sb.toString();
     }
 
-    public boolean isValid(){
+    public boolean isValid() {
         return CalendarProcessing.isCardValid(this);
     }
 }

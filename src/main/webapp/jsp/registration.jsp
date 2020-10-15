@@ -1,16 +1,11 @@
-<%@ page import="ozamkovyi.web.Localization" %><%--
-  Created by IntelliJ IDEA.
-  User: User
-  Date: 06.10.2020
-  Time: 11:26
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="ozamkovyi.web.Localization" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%request.setCharacterEncoding("UTF-8");%>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
-    <link rel="stylesheet" href="./../style/styleForRegistration4.css">
+    <link rel="stylesheet" href="./../style/styleForRegistration6.css">
 </head>
 
 <body>
@@ -40,22 +35,22 @@
     <div class="input_area">
         <label for="POST-login"><%=localization.getRegistrationLoginLabel()%>
         </label>
-        <input class="area" id="POST-login" type="text" name="login">
+        <input required class="area" id="POST-login" type="text" name="login" pattern="[0-9,A-Z,a-z]{4,}">
     </div>
     <div class="input_area">
         <label for="POST-password"><%=localization.getRegistrationPasswordLabel()%>
         </label>
-        <input class="area" id="POST-password" type="password" name="password">
+        <input required class="area" id="POST-password" type="password" name="password" pattern="[0-9,A-Z,a-z]{4,}">
     </div>
     <div class="input_area">
         <label for="POST-name"><%=localization.getRegistrationNameLabel()%>
         </label>
-        <input class="area" id="POST-name" type="text" name="name">
+        <input required class="area" id="POST-name" type="text" name="name" pattern="[A-ZА-ЯІЇЙ]{1}[a-zа-яіїй]{1,}[ ]{1}[A-ZА-ЯІЇЙ]{1}[a-zа-яіїй]{1,}">
     </div>
     <div class="input_area">
         <label for="POST-date"><%=localization.getRegistrationDateOfBirthLabel()%>
         </label>
-        <input class="area" id="POST-date" type="date" name="date">
+        <input required class="area" id="POST-date" type="date" name="date">
     </div>
     <div class="input_area">
         <button class="form_button" name="registrationButton"><%=localization.getRegistrationRegistrationButton()%>

@@ -19,7 +19,7 @@ public class RegistrationServlet extends HttpServlet {
         Entity currentUser = (Entity) session.getAttribute("currentUser");
         Localization localization = (Localization) session.getAttribute("localization");
         if (currentUser == null) {
-            if (localization==null){
+            if (localization == null) {
                 localization = new Localization();
                 session.setAttribute("localization", localization);
             }
@@ -39,34 +39,18 @@ public class RegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         Localization localization = (Localization) session.getAttribute("localization");
-        if (!allFieldsComplete(req)) {
-            session.setAttribute("wrongRegistrationDate", "true");
+        Client client = new Client();
+        req.setCharacterEncoding("UTF-8");
+        client.createNewClientByRequest(req, localization);
+        if (client.clientIsAdults()) {
+            session.setAttribute("clientNotAdults", "true");
             getServletContext().getRequestDispatcher("/jsp/registration.jsp").forward(req, resp);
         } else {
-            Client client = new Client();
-            client.createNewClientByRequest(req, localization);
-            if (client.clientIsAdults()) {
-                session.setAttribute("clientNotAdults", "true");
-                getServletContext().getRequestDispatcher("/jsp/registration.jsp").forward(req, resp);
-            } else {
-                client.addNewClientToDB();
-                session.setAttribute("currentUser", client);
-                getServletContext().getRequestDispatcher("/jsp/clientHomepage.jsp").forward(req, resp);
-            }
+            client.addNewClientToDB();
+            session.setAttribute("currentUser", client);
+            getServletContext().getRequestDispatcher("/jsp/clientHomepage.jsp").forward(req, resp);
         }
-    }
 
-    private boolean allFieldsComplete(HttpServletRequest request) {
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
-        String name = request.getParameter("name");
-        String date = request.getParameter("date");
-        if (login.isEmpty() || password.isEmpty() || name.isEmpty() || date.isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
     }
-
 
 }

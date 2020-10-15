@@ -21,7 +21,6 @@ body{
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    width: 50px;
 }
 
 .button_eng{
@@ -30,7 +29,6 @@ body{
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    width: 50px;
 }
 
 
@@ -45,22 +43,12 @@ body{
     width: 7%;
 }
 
-.block_card:disabled {
-    opasity: 0.2;
+.area{
+    width: 15%;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
 }
-.button_l:disabled {
-    opasity: 0.2;
-}
-.button_ukr:disabled {
-    opasity: 0.2;
-}
-.block_card_section:disabled{
-    opacity: 0.2;
-}
-.button_eng:disabled {
-    opasity: 0.2;
-}
-
 
 .form_button{
     height: 50px;
@@ -70,5 +58,5 @@ body{
     color: white;
     border: none;
     width: 7%;
-    margin: 2% 3%;
+    margin: 1% 6%;
 }

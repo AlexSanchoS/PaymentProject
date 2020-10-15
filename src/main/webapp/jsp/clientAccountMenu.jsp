@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>clientCardMenu</title>
-    <link rel="stylesheet" href="../style/styleForClientAccountMenu4.css">
+    <link rel="stylesheet" href="../style/styleForClientAccountMenu6.css">
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>

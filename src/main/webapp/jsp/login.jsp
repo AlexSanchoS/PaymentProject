@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>login</title>
-    <link rel="stylesheet" href="../style/styleForLogin4.css">
+    <link rel="stylesheet" href="../style/styleForLogin6.css">
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </head>
 <body>
@@ -37,12 +37,12 @@
     <div class="input_area">
         <label for="POST-name"><%=localization.getLoginLoginLabel()%>
         </label>
-        <input class="area" id="POST-name" type="text" name="loginLabel">
+        <input class="area" id="POST-name" type="text" name="loginLabel" pattern="[0-9,A-Z,a-z]{4,}">
     </div>
     <div class="input_area">
         <label for="POST-password"><%=localization.getLoginPasswordLabel()%>
         </label>
-        <input class="area" id="POST-password" type="password" name="passwordLabel">
+        <input class="area" id="POST-password" type="password" name="passwordLabel" pattern="[0-9,A-Z,a-z]{4,}">
     </div>
     <div class="input_area">
         <button class="form_button" name="loginButton"><%=localization.getLoginLoginButton()%>

@@ -243,13 +243,9 @@ public class PaymentDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
     }
 
@@ -268,13 +264,9 @@ public class PaymentDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
     }
 
@@ -328,13 +320,9 @@ public class PaymentDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return listOfPayment;
     }
@@ -355,13 +343,9 @@ public class PaymentDao {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return rez;
     }
@@ -382,6 +366,10 @@ public class PaymentDao {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }finally {
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return rez;
     }
@@ -402,6 +390,10 @@ public class PaymentDao {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }finally {
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return rez;
     }
@@ -422,6 +414,10 @@ public class PaymentDao {
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }finally {
+            close(rs);
+            close(pstmt);
+            close(con);
         }
         return ++rez;
     }
@@ -466,6 +462,16 @@ public class PaymentDao {
             throwables.printStackTrace();
         } finally {
             dbManager.commitAndClose(con);
+        }
+    }
+
+    private static void close(AutoCloseable forClose) {
+        if (forClose != null) {
+            try {
+                forClose.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

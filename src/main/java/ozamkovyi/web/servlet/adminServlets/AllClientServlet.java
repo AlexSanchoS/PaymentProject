@@ -3,10 +3,8 @@ package ozamkovyi.web.servlet.adminServlets;
 import ozamkovyi.db.Fields;
 import ozamkovyi.db.dao.BankAccountDao;
 import ozamkovyi.db.dao.ClientDao;
-import ozamkovyi.db.entity.Admin;
-import ozamkovyi.db.entity.BankAccount;
-import ozamkovyi.db.entity.Client;
-import ozamkovyi.db.entity.Entity;
+import ozamkovyi.db.dao.CreditCardDao;
+import ozamkovyi.db.entity.*;
 import ozamkovyi.web.Localization;
 
 import javax.servlet.ServletException;
@@ -46,12 +44,9 @@ public class AllClientServlet extends HttpServlet {
                     pageNumber = (int) page;
                     sortType = (int) session.getAttribute("sortType");
                 }
-
                 session.setAttribute("countClient", ClientDao.getCountClient());
                 ArrayList<Client> listOfClient = ClientDao.getListOfClientForAdmin(pageNumber, sortType);
                 session.setAttribute("listOfClient", listOfClient);
-
-
                 getServletContext().getRequestDispatcher("/jsp/allClient.jsp").forward(req, resp);
             }
         }
@@ -109,11 +104,16 @@ public class AllClientServlet extends HttpServlet {
         ArrayList<Client> listOfClient = (ArrayList<Client>) session.getAttribute("listOfClient");
         for (Client client : listOfClient) {
             if (req.getParameter("allAccount " + client.getId()) != null) {
-
-                resp.sendRedirect("/allUsers");
+                session.setAttribute("pageNumber", null);
+                session.setAttribute("sortType", null);
+                session.setAttribute("currentClient", client);
+                resp.sendRedirect("/allAccountsForUser");
             }
             if (req.getParameter("allCard " + client.getId()) != null) {
-                resp.sendRedirect("/allUsers");
+                session.setAttribute("pageNumber", null);
+                session.setAttribute("sortType", null);
+                session.setAttribute("currentClient", client);
+                resp.sendRedirect("/allCardsForUser");
             }
             if (req.getParameter("unblockButton " + client.getId()) != null) {
                 if (client.getStatus().equals(Fields.CLIENT_STATUS__BLOCK)) {

@@ -6,6 +6,8 @@
 
     <display-name>Payment</display-name>
 
+
+
 <!--    <welcome-file-list>-->
 <!--        <welcome-file>login.jsp</welcome-file>-->
 <!--    </welcome-file-list>-->
@@ -105,5 +107,27 @@
         <servlet-name>allUsers</servlet-name>
         <url-pattern>/allUsers</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>allCardsForUser</servlet-name>
+        <servlet-class>ozamkovyi.web.servlet.adminServlets.AllCardsForUserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>allCardsForUser</servlet-name>
+        <url-pattern>/allCardsForUser</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>allAccountsForUser</servlet-name>
+        <servlet-class>ozamkovyi.web.servlet.adminServlets.AllAccountForUserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>allAccountsForUser</servlet-name>
+        <url-pattern>/allAccountsForUser</url-pattern>
+    </servlet-mapping>
+
+
+    allAccountsForUser
+
 
 </web-app>
