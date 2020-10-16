@@ -1,4 +1,4 @@
-package java1.ozamkovyi.db;
+package ozamkovyi.db;
 
 public final class Fields {
 

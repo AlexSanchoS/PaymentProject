@@ -1,6 +1,6 @@
-package java1.ozamkovyi.web;
+package ozamkovyi.web;
 
-import java1.ozamkovyi.db.entity.CreditCard;
+import ozamkovyi.db.entity.CreditCard;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;

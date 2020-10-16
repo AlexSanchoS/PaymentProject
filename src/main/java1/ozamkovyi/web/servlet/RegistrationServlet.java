@@ -1,6 +1,6 @@
-package java1.ozamkovyi.web.servlet;
+package ozamkovyi.web.servlet;
 
-import java1.ozamkovyi.db.entity.Client;
+import ozamkovyi.db.entity.Client;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -15,8 +15,7 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("do get login");
-        req.getServletContext().getRequestDispatcher("/jsp/registration.jsp").forward(req, resp);
+        req.getRequestDispatcher("/jsp/registration.jsp").forward(req, resp);
     }
 
     @Override

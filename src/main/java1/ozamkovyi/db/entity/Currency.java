@@ -1,4 +1,4 @@
-package java1.ozamkovyi.db.entity;
+package ozamkovyi.db.entity;
 
 public class Currency extends Entity{
     private int id;

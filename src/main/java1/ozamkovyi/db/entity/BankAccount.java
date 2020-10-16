@@ -1,6 +1,6 @@
-package java1.ozamkovyi.db.entity;
+package ozamkovyi.db.entity;
 
-import java1.ozamkovyi.db.Fields;
+import ozamkovyi.db.Fields;
 
 import java.util.Random;
 import java.util.ResourceBundle;

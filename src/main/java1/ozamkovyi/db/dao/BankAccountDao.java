@@ -1,13 +1,13 @@
-package java1.ozamkovyi.db.dao;
+package ozamkovyi.db.dao;
 
-import java1.ozamkovyi.db.DBManager;
-import java1.ozamkovyi.db.EntityMapper;
-import java1.ozamkovyi.db.Fields;
-import java1.ozamkovyi.db.entity.BankAccount;
-import java1.ozamkovyi.db.entity.Client;
-import java1.ozamkovyi.db.entity.CreditCard;
-import java1.ozamkovyi.db.entity.Currency;
-import java1.ozamkovyi.web.CalendarProcessing;
+import ozamkovyi.db.DBManager;
+import ozamkovyi.db.EntityMapper;
+import ozamkovyi.db.Fields;
+import ozamkovyi.db.entity.BankAccount;
+import ozamkovyi.db.entity.Client;
+import ozamkovyi.db.entity.CreditCard;
+import ozamkovyi.db.entity.Currency;
+import ozamkovyi.web.CalendarProcessing;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -16,10 +16,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+
+/**
+ * Data access object for BankAccount entity.
+ *
+ * @author O.Zamkovyi
+ *
+ */
 public class BankAccountDao {
 
     private static final Logger logger = Logger.getLogger(BankAccountDao.class);
-
 
     private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT1_LIMIT =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
@@ -247,6 +253,14 @@ public class BankAccountDao {
                     "' ORDER BY " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " DESC limit 10 offset ?";
 
 
+
+    /**
+     * Returns a BankAccount for current User.
+     *
+     * @param client
+     *            Client for search.
+     * @return ArrayList of BankAccount.
+     */
     public static ArrayList<BankAccount> getAllAccount(Client client) {
         ArrayList<BankAccount> listOfBankAccount = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -276,6 +290,13 @@ public class BankAccountDao {
     }
 
 
+    /**
+     * Returns count BankAccounts for current user.
+     *
+     * @param client
+     *            Client for search.
+     * @return count.
+     */
     public static int getCountBankAccountByUser(Client client) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -299,6 +320,19 @@ public class BankAccountDao {
         return rez;
     }
 
+    /**
+     * Returns a BankAccount list for current User
+     * use sort and limit.
+     * used for pagination
+     * Every page has 10 records
+     * @param client
+     *            Client for search.
+     * @param page
+     *             Page number
+     * @param sortType
+     *              Sorting type
+     * @return ArrayList of BankAccount.
+     */
     public static ArrayList<BankAccount> getAccountList(Client client, int page, int sortType) {
         ArrayList<BankAccount> listOfBankAccount = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -348,6 +382,17 @@ public class BankAccountDao {
         return listOfBankAccount;
     }
 
+    /**
+     * Returns a block BankAccount list
+     * use sort and limit.
+     * used for pagination
+     * Every page has 10 records
+     * @param page
+     *             Page number
+     * @param sortType
+     *              Sorting type
+     * @return ArrayList of block BankAccount.
+     */
     public static ArrayList<BankAccount> getAccountListForUnlock(int page, int sortType) {
         ArrayList<BankAccount> listOfBankAccount = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -393,6 +438,12 @@ public class BankAccountDao {
         return listOfBankAccount;
     }
 
+    /**
+     * Return id for bank account status
+     * @param status
+     *            Bank account status.
+     * @return id of status.
+     */
     private static int getStatusIdByStatus(String status) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -418,6 +469,13 @@ public class BankAccountDao {
         return statusId;
     }
 
+    /**
+     * Change status for bank account
+     * @param bankAccount
+     *            Bank account for changing
+     * @param newStatus
+     *             New status for banck account
+     */
     public static void changeStatusFotBankAccount(BankAccount bankAccount, String newStatus) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -442,6 +500,12 @@ public class BankAccountDao {
 
     }
 
+    /**
+     * Return balance for bank account
+     * @param number
+     *            bank account number
+     * @return balance
+     */
     private static int getAccountBalance(String number) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -466,6 +530,13 @@ public class BankAccountDao {
         return statusId;
     }
 
+    /**
+     * Add balance for bank account
+     * @param number
+     *            bank account number
+     * @param amount
+     *             amount for adding
+     */
     public static void addToBalance(String number, double amount) {
         double course = getCourse(number);
         PreparedStatement pstmt = null;
@@ -489,6 +560,12 @@ public class BankAccountDao {
         }
     }
 
+    /**
+     * Get course for current currency
+     * @param number
+     *            bank account number
+     * @return course
+     */
     private static double getCourse(String number) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -512,6 +589,10 @@ public class BankAccountDao {
         return rez;
     }
 
+    /**
+     * Generate new account number for bank account
+     * @return number for bank account
+     */
     private static String generatorNewCardNumber() {
         String re = null;
         PreparedStatement pstmt = null;
@@ -539,6 +620,13 @@ public class BankAccountDao {
         return re;
     }
 
+    /**
+     * Create new account
+     * @param currency
+     *            currency for new account
+     * @param client
+     *              client for new account
+     */
     public static void addNewAccount(Currency currency, Client client) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -565,6 +653,10 @@ public class BankAccountDao {
         }
     }
 
+    /**
+     * @return  count blocked BankAccount
+     *
+     */
     public static int getCountBankAccountForUnlock() {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -587,6 +679,11 @@ public class BankAccountDao {
         return rez;
     }
 
+    /**
+     * Close autoClosable object
+     * @param forClose
+     *          object for closing
+     */
     private static void close(AutoCloseable forClose) {
         if (forClose != null) {
             try {
@@ -597,6 +694,9 @@ public class BankAccountDao {
         }
     }
 
+    /**
+     * Extracts a Admin from the result set row.
+     */
     private static class BankAccountMapper implements EntityMapper<BankAccount> {
 
         @Override

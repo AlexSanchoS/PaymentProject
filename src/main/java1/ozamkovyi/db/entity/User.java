@@ -1,8 +1,10 @@
-package java1.ozamkovyi.db.entity;
+package ozamkovyi.db.entity;
 
 public abstract class User {
     private int id;
     private String login;
+    private String password;
+
 
     public int getId() {
         return id;
@@ -27,6 +29,4 @@ public abstract class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    private String password;
 }

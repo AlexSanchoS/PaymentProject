@@ -1,4 +1,4 @@
-package java1.ozamkovyi.db.entity;
+package ozamkovyi.db.entity;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package java1.ozamkovyi.db.entity;
+package ozamkovyi.db.entity;
 
 public class Admin extends User {
     private String language;

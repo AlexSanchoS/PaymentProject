@@ -1,9 +1,9 @@
-package java1.ozamkovyi.db.entity;
+package ozamkovyi.db.entity;
 
-import java1.ozamkovyi.db.Fields;
-import java1.ozamkovyi.db.dao.CreditCardDao;
-import java1.ozamkovyi.web.CalendarProcessing;
-import java1.ozamkovyi.db.dao.BankAccountDao;
+import ozamkovyi.db.Fields;
+import ozamkovyi.db.dao.CreditCardDao;
+import ozamkovyi.web.CalendarProcessing;
+import ozamkovyi.db.dao.BankAccountDao;
 
 import java.util.Calendar;
 import java.util.ResourceBundle;

@@ -1,4 +1,4 @@
-package java1.ozamkovyi.web.servlet.localizationAndLogOut;
+package ozamkovyi.web.servlet.localizationAndLogOut;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

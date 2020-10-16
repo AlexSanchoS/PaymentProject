@@ -1,4 +1,4 @@
-package java1.ozamkovyi.web.servlet.clientServlets;
+package ozamkovyi.web.servlet.clientServlets;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;

@@ -1,4 +1,4 @@
-package java1.ozamkovyi.db;
+package ozamkovyi.db;
 
 import com.sun.org.slf4j.internal.Logger;
 import com.sun.org.slf4j.internal.LoggerFactory;
@@ -9,6 +9,14 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+/**
+ * DB manager. Works with Apache Derby DB.
+ * Only the required DAO methods are defined!
+ *
+ * @author O.Zamkovyi
+ *
+ */
 
 public class DBManager {
 
@@ -49,6 +57,13 @@ public class DBManager {
         return con;
     }
 
+    /**
+     * Commits and close the given connection.
+     *
+     * @param con
+     *            Connection to be committed and closed.
+     */
+
     public void commitAndClose(Connection con){
         try {
             if (con!=null) {
@@ -59,6 +74,13 @@ public class DBManager {
             throwables.printStackTrace();
         }
     }
+
+    /**
+     * Rollbacks and close the given connection.
+     *
+     * @param con
+     *            Connection to be rollbacked and closed.
+     */
 
     public void rollbackAndClose(Connection con){
         try {

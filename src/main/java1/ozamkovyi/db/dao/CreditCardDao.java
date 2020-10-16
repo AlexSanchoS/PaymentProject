@@ -1,13 +1,13 @@
-package java1.ozamkovyi.db.dao;
+package ozamkovyi.db.dao;
 
-import java1.ozamkovyi.db.EntityMapper;
-import java1.ozamkovyi.web.CalendarProcessing;
+import ozamkovyi.db.EntityMapper;
+import ozamkovyi.web.CalendarProcessing;
 import org.apache.log4j.Logger;
-import java1.ozamkovyi.db.DBManager;
-import java1.ozamkovyi.db.Fields;
-import java1.ozamkovyi.db.entity.BankAccount;
-import java1.ozamkovyi.db.entity.Client;
-import java1.ozamkovyi.db.entity.CreditCard;
+import ozamkovyi.db.DBManager;
+import ozamkovyi.db.Fields;
+import ozamkovyi.db.entity.BankAccount;
+import ozamkovyi.db.entity.Client;
+import ozamkovyi.db.entity.CreditCard;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

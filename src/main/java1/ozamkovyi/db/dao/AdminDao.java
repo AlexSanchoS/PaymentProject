@@ -1,9 +1,9 @@
-package java1.ozamkovyi.db.dao;
+package ozamkovyi.db.dao;
 
-import java1.ozamkovyi.db.DBManager;
-import java1.ozamkovyi.db.EntityMapper;
-import java1.ozamkovyi.db.Fields;
-import java1.ozamkovyi.db.entity.Admin;
+import ozamkovyi.db.DBManager;
+import ozamkovyi.db.EntityMapper;
+import ozamkovyi.db.Fields;
+import ozamkovyi.db.entity.Admin;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +12,13 @@ import java.sql.SQLException;
 import org.apache.log4j.Logger;
 
 public class AdminDao {
+
+    /**
+     * Data access object for Admin entity.
+     *
+     * @author O.Zamkovyi
+     *
+     */
 
     private static final Logger logger = Logger.getLogger(AdminDao.class);
 
@@ -22,6 +29,15 @@ public class AdminDao {
             " UPDATE " + Fields.TABLE__ADMIN + " SET " + Fields.ADMIN__LANGUAGE + " = ? WHERE " + Fields.ADMIN__ID + " =?";
 
 
+    /**
+     * Returns a Admin with the given login and password.
+     *
+     * @param login
+     *            User login.
+     * @param password
+     *             User password.
+     * @return Admin entity.
+     */
     public static Admin findAdminByLoginAndPassword(String login, String password) {
         Admin admin = null;
         PreparedStatement pstmt = null;
@@ -47,6 +63,12 @@ public class AdminDao {
         return admin;
     }
 
+    /**
+     * Update Admin local.
+     *
+     * @param admin
+     *            Admin to update.
+     */
     public static void setAdminLocal(Admin admin) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -65,6 +87,11 @@ public class AdminDao {
     }
 
 
+    /**
+     * Close autoClosable object
+     * @param forClose
+     *          object for closing
+     */
     private static void close(AutoCloseable forClose) {
         if (forClose != null) {
             try {
@@ -75,6 +102,10 @@ public class AdminDao {
         }
     }
 
+
+    /**
+     * Extracts a Admin from the result set row.
+     */
     private static class AdminMapper implements EntityMapper<Admin> {
 
         @Override

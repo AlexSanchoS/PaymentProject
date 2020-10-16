@@ -1,9 +1,9 @@
-package java1.ozamkovyi.web.servlet.localizationAndLogOut;
+package ozamkovyi.web.servlet.localizationAndLogOut;
 
-import java1.ozamkovyi.db.dao.AdminDao;
-import java1.ozamkovyi.db.dao.ClientDao;
-import java1.ozamkovyi.db.entity.Admin;
-import java1.ozamkovyi.db.entity.Client;
+import ozamkovyi.db.dao.AdminDao;
+import ozamkovyi.db.dao.ClientDao;
+import ozamkovyi.db.entity.Admin;
+import ozamkovyi.db.entity.Client;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;

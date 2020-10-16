@@ -1,9 +1,9 @@
-package java1.ozamkovyi.db.dao;
+package ozamkovyi.db.dao;
 
 import org.apache.log4j.Logger;
-import java1.ozamkovyi.db.DBManager;
-import java1.ozamkovyi.db.Fields;
-import java1.ozamkovyi.db.entity.Currency;
+import ozamkovyi.db.DBManager;
+import ozamkovyi.db.Fields;
+import ozamkovyi.db.entity.Currency;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

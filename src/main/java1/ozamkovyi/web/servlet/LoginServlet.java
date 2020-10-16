@@ -1,9 +1,9 @@
-package java1.ozamkovyi.web.servlet;
+package ozamkovyi.web.servlet;
 
-import java1.ozamkovyi.db.dao.AdminDao;
-import java1.ozamkovyi.db.dao.ClientDao;
-import java1.ozamkovyi.db.entity.Admin;
-import java1.ozamkovyi.db.entity.Client;
+import ozamkovyi.db.dao.AdminDao;
+import ozamkovyi.db.dao.ClientDao;
+import ozamkovyi.db.entity.Admin;
+import ozamkovyi.db.entity.Client;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -15,7 +15,8 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getServletContext().getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
+//        System.out.println(req.getParameter("any"));
+        req.getRequestDispatcher("/jsp/login.jsp").forward(req, resp);
     }
 
     @Override

@@ -1,12 +1,12 @@
-package java1.ozamkovyi.web.servlet.clientServlets;
+package ozamkovyi.web.servlet.clientServlets;
 
-import java1.ozamkovyi.db.dao.CreditCardDao;
-import java1.ozamkovyi.db.dao.PaymentDao;
-import java1.ozamkovyi.db.entity.Client;
-import java1.ozamkovyi.db.entity.CreditCard;
-import java1.ozamkovyi.db.entity.Payment;
+import ozamkovyi.db.dao.CreditCardDao;
+import ozamkovyi.db.dao.PaymentDao;
+import ozamkovyi.db.entity.Client;
+import ozamkovyi.db.entity.CreditCard;
+import ozamkovyi.db.entity.Payment;
 
-import java1.ozamkovyi.db.entity.*;
+import ozamkovyi.db.entity.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
