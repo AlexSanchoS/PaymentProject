@@ -1,5 +1,6 @@
 <%@ page import="ozamkovyi.web.Localization" %>
-<%@ page import="ozamkovyi.web.CalendarProcessing" %><%--
+<%@ page import="ozamkovyi.web.CalendarProcessing" %>
+<%@ page import="java.util.ResourceBundle" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 08.10.2020
@@ -16,11 +17,12 @@
 </head>
 <body>
 <%
-    Localization localization = (Localization) session.getAttribute("localization");
+    String locale = (String) session.getAttribute("locale");
+    ResourceBundle bundle = (ResourceBundle) session.getAttribute("resourceBundle");
     session.setAttribute("currentURL", "/clientAccountMenu");
     String engDisable = "disabled";
     String uaDisable = "";
-    if (localization.getLocal().equals("ua")) {
+    if (locale.equals("ua")) {
         uaDisable = "disabled";
         engDisable = "";
     }
@@ -41,7 +43,7 @@
     pageContext.setAttribute("previousDisable", previousDisable);
 %>
 
-<form method="get" action="/clientLocalization">
+<form method="get" action="/userLocalization">
     <div class="standart_buttons">
         <div class="leng_buttons">
             <div class="button_eng">
@@ -53,7 +55,7 @@
         </div>
 
         <div class="exit">
-            <button name="logOut" class="exit_button"><%=localization.getClientCardMenuButtonLogOut()%>
+            <button name="logOut" class="exit_button"><%=bundle.getString("clientAccountMenu_jsp.button.logOut")%>
             </button>
         </div>
     </div>
@@ -63,12 +65,12 @@
 <form action="/clientAccountMenu" method="post">
     <div class="content">
         <div class="buttons">
-            <button name="buttonMyCard" class="button"><%=localization.getClientHomepageMyCardsButton()%>
+            <button name="buttonMyCard" class="button"><%=bundle.getString("clientHomepage_jsp.button.myCards")%>
             </button>
             <button name="buttonMyAccount" disabled="true"
-                    class="button"><%=localization.getClientHomepageMyAccountButton()%>
+                    class="button"><%=bundle.getString("clientHomepage_jsp.button.myAccount")%>
             </button>
-            <button name="buttonMyPayment" class="button"><%=localization.getClientHomepageMyPaymentButton()%>
+            <button name="buttonMyPayment" class="button"><%=bundle.getString("clientHomepage_jsp.button.myPayment")%>
             </button>
         </div>
 
@@ -76,7 +78,7 @@
 
             <div class="table_top">
                 <div class="add">
-                    <button name="add_account" class="add_card"><%=localization.getClientAccountMenuButtonNewAccount()%>
+                    <button name="add_account" class="add_card"><%=bundle.getString("clientAccountMenu_jsp.button.newAccount")%>
                     </button>
                     <div class="add_select">
                         <select name="currencyForNewAccount" id="sort1">
@@ -88,30 +90,30 @@
                     </div>
                 </div>
                 <div class="sort_section">
-                    <div class="sort_title"><%=localization.getClientAccountMenuTableSort()%>
+                    <div class="sort_title"><%=bundle.getString("clientAccountMenu_jsp.label.sort")%>
                     </div>
                     <div class="sort_section-cards">
                         <button name="sortByNumber"
-                                class="sort_card"><%=localization.getClientAccountMenuSortByNumber()%>
+                                class="sort_card"><%=bundle.getString("clientAccountMenu_jsp.button.sort.byNumber")%>
                         </button>
                         <button name="sortByCurrency"
-                                class="sort_card"><%=localization.getClientAccountMenuSortByCurrency()%>
+                                class="sort_card"><%=bundle.getString("clientAccountMenu_jsp.button.sort.byCurrency")%>
                         </button>
                         <button name="sortByBalance"
-                                class="sort_card"><%=localization.getClientAccountMenuSortByBalance()%>
+                                class="sort_card"><%=bundle.getString("clientAccountMenu_jsp.button.sort.byBalance")%>
                         </button>
                     </div>
                 </div>
             </div>
             <table>
                 <tr>
-                    <td class="head_of_table"><%=localization.getClientAccountMenuTableNumber()%>
+                    <td class="head_of_table"><%=bundle.getString("clientAccountMenu_jsp.table.number")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientAccountMenuTableCurrency()%>
+                    <td class="head_of_table"><%=bundle.getString("clientAccountMenu_jsp.table.currency")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientAccountMenuTableBalance()%>
+                    <td class="head_of_table"><%=bundle.getString("clientAccountMenu_jsp.table.balance")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientAccountMenuTableAmount()%>
+                    <td class="head_of_table"><%=bundle.getString("clientAccountMenu_jsp.table.amount")%>
                     </td>
                     <td class="last_col">
                     </td>
@@ -128,12 +130,12 @@
                         </td>
                         <td class="block_card_section">
                             <button ${bankAccount.getDisableRefill()} name="replenishButton ${bankAccount.getNumber()}"
-                                    class="block_card"><%=localization.getClientAccountMenuButtonReplenish()%>
+                                    class="block_card"><%=bundle.getString("clientAccountMenu_jsp.button.replenish")%>
                             </button>
                         </td>
                         <td class="block_card_section">
                             <button name="blocButton ${bankAccount.getNumber()}"
-                                    class="block_card" ${bankAccount.getDisable()}>${bankAccount.getButtonBloc(localization)}</button>
+                                    class="block_card" ${bankAccount.getDisable()}>${bankAccount.getButtonBloc(resourceBundle)}</button>
                         </td>
                     </tr>
                 </c:forEach>

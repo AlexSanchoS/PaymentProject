@@ -1,5 +1,4 @@
-<%@ page import="ozamkovyi.web.Localization" %>
-<%@ page import="ozamkovyi.web.CalendarProcessing" %><%--
+<%@ page import="java.util.ResourceBundle" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 08.10.2020
@@ -16,11 +15,12 @@
 </head>
 <body>
 <%
-    Localization localization = (Localization) session.getAttribute("localization");
+    String locale = (String) session.getAttribute("locale");
+    ResourceBundle bundle = (ResourceBundle) session.getAttribute("resourceBundle");
     session.setAttribute("currentURL", "/clientPaymentMenu");
     String engDisable = "disabled";
     String uaDisable = "";
-    if (localization.getLocal().equals("ua")) {
+    if (locale.equals("ua")) {
         uaDisable = "disabled";
         engDisable = "";
     }
@@ -43,7 +43,7 @@
     pageContext.setAttribute("previousDisable", previousDisable);
 %>
 
-<form method="get" action="/clientLocalization">
+<form method="get" action="/userLocalization">
     <div class="standart_buttons">
         <div class="leng_buttons">
             <div class="button_eng">
@@ -55,7 +55,7 @@
         </div>
 
         <div class="exit">
-            <button name="logOut" class="exit_button"><%=localization.getClientCardMenuButtonLogOut()%>
+            <button name="logOut" class="exit_button"><%=bundle.getString("clientPaymentMenu_jsp.button.logOut")%>
             </button>
         </div>
     </div>
@@ -65,13 +65,13 @@
 <form action="/clientPaymentMenu" method="post">
     <div class="content">
         <div class="buttons">
-            <button name="buttonMyCard" class="button"><%=localization.getClientHomepageMyCardsButton()%>
+            <button name="buttonMyCard" class="button"><%=bundle.getString("clientHomepage_jsp.button.myCards")%>
             </button>
             <button name="buttonMyAccount"
-                    class="button"><%=localization.getClientHomepageMyAccountButton()%>
+                    class="button"><%=bundle.getString("clientHomepage_jsp.button.myAccount")%>
             </button>
             <button name="buttonMyPayment" disabled="true"
-                    class="button"><%=localization.getClientHomepageMyPaymentButton()%>
+                    class="button"><%=bundle.getString("clientHomepage_jsp.button.myPayment")%>
             </button>
         </div>
 
@@ -79,43 +79,43 @@
 
             <div class="table_top">
                 <div class="add">
-                    <button name="add_payment" class="add_card"><%=localization.getClientPaymentMenuButtonNewPayment()%>
+                    <button name="add_payment" class="add_card"><%=bundle.getString("clientPaymentMenu_jsp.button.newPayment")%>
                     </button>
                 </div>
                 <div class="sort_section">
-                    <div class="sort_title"><%=localization.getClientAccountMenuTableSort()%>
+                    <div class="sort_title"><%=bundle.getString("clientAccountMenu_jsp.label.sort")%>
                     </div>
                     <div class="sort_section-cards">
                         <button name="sortByNumber"
-                                class="sort_card"><%=localization.getClientPaymentMenuButtonSortByNumber()%>
+                                class="sort_card"><%=bundle.getString("clientPaymentMenu_jsp.button.sortByNumber")%>
                         </button>
                         <button name="sortByDate"
-                                class="sort_card"><%=localization.getClientPaymentMenuButtonSortByDate()%>
+                                class="sort_card"><%=bundle.getString("clientPaymentMenu_jsp.button.sortByDate")%>
                         </button>
                         <button name="sortByAmount"
-                                class="sort_card"><%=localization.getClientPaymentMenuButtonSortByAmount()%>
+                                class="sort_card"><%=bundle.getString("clientPaymentMenu_jsp.button.sortByAmount")%>
                         </button>
                         <button name="sortByStatus"
-                                class="sort_card"><%=localization.getClientPaymentMenuButtonSortByStatus()%>
+                                class="sort_card"><%=bundle.getString("clientPaymentMenu_jsp.button.sortByStatus")%>
                         </button>
                     </div>
                 </div>
             </div>
             <table>
                 <tr>
-                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableNumber()%>
+                    <td class="head_of_table"><%=bundle.getString("clientPaymentMenu_jsp.table.number")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableDate()%>
+                    <td class="head_of_table"><%=bundle.getString("clientPaymentMenu_jsp.table.date")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableAmount()%>
+                    <td class="head_of_table"><%=bundle.getString("clientPaymentMenu_jsp.table.amount")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableSender()%>
+                    <td class="head_of_table"><%=bundle.getString("clientPaymentMenu_jsp.table.sender")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableRecipient()%>
+                    <td class="head_of_table"><%=bundle.getString("clientPaymentMenu_jsp.table.recipient")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableRecipientName()%>
+                    <td class="head_of_table"><%=bundle.getString("clientPaymentMenu_jsp.table.recipientName")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientPaymentMenuTableStatus()%>
+                    <td class="head_of_table"><%=bundle.getString("clientPaymentMenu_jsp.table.status")%>
                     </td>
                     <td class="last_col"></td>
                 </tr>
@@ -130,7 +130,7 @@
                         <td>${payment.getStatusName()}</td>
                         <td class="block_card_section">
                             <button name="blocButton ${payment.getId()}"
-                                    class="block_card">${payment.getButtonNameByStatus(localization)}</button>
+                                    class="block_card">${payment.getButtonNameByStatus(resourceBundle)}</button>
                         </td>
                     </tr>
                 </c:forEach>

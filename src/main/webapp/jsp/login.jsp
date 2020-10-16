@@ -1,4 +1,4 @@
-<%@ page import="ozamkovyi.web.Localization" %>
+<%@ page import="java.util.ResourceBundle" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -9,11 +9,12 @@
 </head>
 <body>
 <%
-    Localization localization = (Localization) session.getAttribute("localization");
+    String locale = (String) session.getAttribute("locale");
+    ResourceBundle bundle = (ResourceBundle) session.getAttribute("resourceBundle");
     session.setAttribute("currentURL", "/login");
     String engDisable = "disabled";
     String uaDisable = "";
-    if (localization.getLocal().equals("ua")) {
+    if (locale.equals("ua")) {
         uaDisable = "disabled";
         engDisable = "";
     }
@@ -22,7 +23,7 @@
 
 %>
 
-<form method="get" action="/loginRegistrationLocalization">
+<form method="get" action="/notUserLocalization">
     <div class="leng_buttons">
         <div class="button_eng">
             <button class="button_l" name="engButton" ${engDisable}>Eng</button>
@@ -35,24 +36,23 @@
 </form>
 <form class="reg_form" method="post" action="/login">
     <div class="input_area">
-        <label for="POST-name"><%=localization.getLoginLoginLabel()%>
+        <label for="POST-name"><%=bundle.getString("login_jsp.label.login")%>
         </label>
         <input class="area" id="POST-name" type="text" name="loginLabel" pattern="[0-9,A-Z,a-z]{4,}">
     </div>
     <div class="input_area">
-        <label for="POST-password"><%=localization.getLoginPasswordLabel()%>
+        <label for="POST-password"><%=bundle.getString("login_jsp.label.password")%>
         </label>
         <input class="area" id="POST-password" type="password" name="passwordLabel" pattern="[0-9,A-Z,a-z]{4,}">
     </div>
     <div class="input_area">
-        <button class="form_button" name="loginButton"><%=localization.getLoginLoginButton()%>
+        <button class="form_button" name="loginButton"><%=bundle.getString("login_jsp.button.login")%>
         </button>
-        <button class="form_button" name="RegistrationButton"><%=localization.getLoginRegistrationButton()%>
+        <button class="form_button" name="RegistrationButton"><%=bundle.getString("login_jsp.button.registration")%>
         </button>
     </div>
     <%
         if (session.getAttribute("wrongLogin") == "true") {
-            pageContext.setAttribute("myVariable", localization.getWrongLogin());
 //            out.write("\n" + localization.getWrongLogin());
             session.setAttribute("wrongLogin", "false");
         }

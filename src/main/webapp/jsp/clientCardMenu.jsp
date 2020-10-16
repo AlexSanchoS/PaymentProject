@@ -1,5 +1,5 @@
-<%@ page import="ozamkovyi.web.Localization" %>
-<%@ page import="ozamkovyi.web.CalendarProcessing" %><%--
+<%@ page import="ozamkovyi.web.CalendarProcessing" %>
+<%@ page import="java.util.ResourceBundle" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 08.10.2020
@@ -16,11 +16,12 @@
 </head>
 <body>
 <%
-    Localization localization = (Localization) session.getAttribute("localization");
+    String locale = (String) session.getAttribute("locale");
+    ResourceBundle bundle = (ResourceBundle) session.getAttribute("resourceBundle");
     session.setAttribute("currentURL", "/clientCardMenu");
     String engDisable = "disabled";
     String uaDisable = "";
-    if (localization.getLocal().equals("ua")) {
+    if (locale.equals("ua")) {
         uaDisable = "disabled";
         engDisable = "";
     }
@@ -41,7 +42,7 @@
     pageContext.setAttribute("previousDisable", previousDisable);
 %>
 
-<form method="get" action="/clientLocalization">
+<form method="get" action="/userLocalization">
     <div class="standart_buttons">
         <div class="leng_buttons">
             <div class="button_eng">
@@ -53,7 +54,7 @@
         </div>
 
         <div class="exit">
-            <button name="logOut" class="exit_button"><%=localization.getClientCardMenuButtonLogOut()%>
+            <button name="logOut" class="exit_button"><%=bundle.getString("clientAccountMenu_jsp.button.logOut")%>
             </button>
         </div>
     </div>
@@ -64,18 +65,18 @@
     <div class="content">
         <div class="buttons">
             <button name="buttonMyCard" disabled="true"
-                    class="button"><%=localization.getClientHomepageMyCardsButton()%>
+                    class="button"><%=bundle.getString("clientHomepage_jsp.button.myCards")%>
             </button>
-            <button name="buttonMyAccount" class="button"><%=localization.getClientHomepageMyAccountButton()%>
+            <button name="buttonMyAccount" class="button"><%=bundle.getString("clientHomepage_jsp.button.myAccount")%>
             </button>
-            <button name="buttonMyPayment" class="button"><%=localization.getClientHomepageMyPaymentButton()%>
+            <button name="buttonMyPayment" class="button"><%=bundle.getString("clientHomepage_jsp.button.myPayment")%>
             </button>
         </div>
 
         <div class="main_content">
             <div class="table_top">
                 <div class="add">
-                    <button name="add_card" class="add_card"><%=localization.getClientCardMenuButtonAddCard()%>
+                    <button name="add_card" class="add_card"><%=bundle.getString("clientCardMenu_jsp.button.addCard")%>
                     </button>
                         <select class="add_select" name="accountForNewCard" id="sort1">
                             <option name="accountForNewCard 0"></option>
@@ -85,25 +86,25 @@
                         </select>
                 </div>
                 <div class="sort_section">
-                    <div class="sort_title"><%=localization.getClientCardMenuTableSort()%>
+                    <div class="sort_title"><%=bundle.getString("clientCardMenu_jsp.label.sort")%>
                     </div>
                     <div class="sort_section-cards">
-                        <button name="currency" class="sort_card"><%=localization.getClientCardMenuSortByCurrency()%>
+                        <button name="currency" class="sort_card"><%=bundle.getString("clientCardMenu_jsp.sort.byCurrency")%>
                         </button>
-                        <button name="balance" class="sort_card"><%=localization.getClientCardMenuSortByBalance()%>
+                        <button name="balance" class="sort_card"><%=bundle.getString("clientCardMenu_jsp.sort.byBalance")%>
                         </button>
                     </div>
                 </div>
             </div>
             <table>
                 <tr>
-                    <td class="head_of_table"><%=localization.getClientCardMenuTableNumber()%>
+                    <td class="head_of_table"><%=bundle.getString("clientCardMenu_jsp.table.number")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientCardMenuTableValidity()%>
+                    <td class="head_of_table"><%=bundle.getString("clientCardMenu_jsp.table.validity")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientCardMenuTableCurrency()%>
+                    <td class="head_of_table"><%=bundle.getString("clientCardMenu_jsp.table.currency")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getClientCardMenuTableBalance()%>
+                    <td class="head_of_table"><%=bundle.getString("clientCardMenu_jsp.table.balance")%>
                     </td>
                     <td class="last_col"></td>
                 </tr>
@@ -116,7 +117,7 @@
                         <td>${creditCard.getBalanceDouble()}</td>
                         <td class="block_card_section">
                             <button ${creditCard.getDisabled()} name="blocButton ${creditCard.getId()}"
-                                    class="block_card">${creditCard.getButtonBloc(localization)}</button>
+                                    class="block_card">${creditCard.getButtonBloc(resourceBundle)}</button>
                         </td>
                     </tr>
                 </c:forEach>

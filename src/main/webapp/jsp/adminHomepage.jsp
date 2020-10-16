@@ -1,5 +1,4 @@
-<%@ page import="ozamkovyi.web.Localization" %>
-<%@ page import="ozamkovyi.web.CalendarProcessing" %><%--
+<%@ page import="java.util.ResourceBundle" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 08.10.2020
@@ -16,11 +15,12 @@
 </head>
 <body>
 <%
-    Localization localization = (Localization) session.getAttribute("localization");
+    String locale = (String) session.getAttribute("locale");
+    ResourceBundle bundle = (ResourceBundle) session.getAttribute("resourceBundle");
     session.setAttribute("currentURL", "/adminHomepage");
     String engDisable = "disabled";
     String uaDisable = "";
-    if (localization.getLocal().equals("ua")) {
+    if (locale.equals("ua")) {
         uaDisable = "disabled";
         engDisable = "";
     }
@@ -41,7 +41,7 @@
     pageContext.setAttribute("previousDisable", previousDisable);
 %>
 
-<form method="get" action="/clientLocalization">
+<form method="get" action="/userLocalization">
     <div class="standart_buttons">
         <div class="leng_buttons">
             <div class="button_eng">
@@ -53,7 +53,7 @@
         </div>
 
         <div class="exit">
-            <button name="logOut" class="exit_button"><%=localization.getClientCardMenuButtonLogOut()%>
+            <button name="logOut" class="exit_button"><%=bundle.getString("clientCardMenu_jsp.button.logOut")%>
             </button>
         </div>
     </div>
@@ -64,34 +64,34 @@
     <div class="content">
         <div class="buttons">
             <button name="buttonUnlockRequests" disabled="true"
-                    class="button"><%=localization.getUnlockRequestsButtonUnlockRequests()%>
+                    class="button"><%=bundle.getString("adminHomepage_jsp.button.unlockRequests")%>
             </button>
-            <button name="buttonAllUsers" class="button"><%=localization.getUnlockRequestsButtonAllUsers()%>
+            <button name="buttonAllUsers" class="button"><%=bundle.getString("adminHomepage_jsp.button.allUsers")%>
             </button>
         </div>
 
         <div class="main_content">
             <div class="table_top">
                 <div class="sort_section">
-                    <div class="sort_title"><%=localization.getClientCardMenuTableSort()%>
+                    <div class="sort_title"><%=bundle.getString("clientCardMenu_jsp.label.sort")%>
                     </div>
                     <div class="sort_section-cards">
-                        <button name="sortByName" class="sort_card"><%=localization.getUnlockRequestsButtonSortByName()%>
+                        <button name="sortByName" class="sort_card"><%=bundle.getString("adminHomepage_jsp.button.sortByName")%>
                         </button>
-                        <button name="sortByNumber" class="sort_card"><%=localization.getUnlockRequestsButtonSortByNumber()%>
+                        <button name="sortByNumber" class="sort_card"><%=bundle.getString("adminHomepage_jsp.button.sortByNumber")%>
                         </button>
                     </div>
                 </div>
             </div>
             <table>
                 <tr>
-                    <td class="head_of_table"><%=localization.getUnlockRequestsTableNumber()%>
+                    <td class="head_of_table"><%=bundle.getString("adminHomepage_jsp.table.number")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getUnlockRequestsTableBalance()%>
+                    <td class="head_of_table"><%=bundle.getString("adminHomepage_jsp.table.balance")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getUnlockRequestsTableCurrency()%>
+                    <td class="head_of_table"><%=bundle.getString("adminHomepage_jsp.table.currency")%>
                     </td>
-                    <td class="head_of_table"><%=localization.getUnlockRequestsTableName()%>
+                    <td class="head_of_table"><%=bundle.getString("adminHomepage_jsp.table.name")%>
                     </td>
                     <td class="last_col"></td>
                 </tr>
@@ -104,7 +104,7 @@
                         <td>${account.getClientName()}</td>
                         <td class="block_card_section">
                             <button name="unblockButton ${account.getNumber()}"
-                                    class="block_card"><%=localization.getUnlockRequestsButtonUnlock()%></button>
+                                    class="block_card"><%=bundle.getString("adminHomepage_jsp.button.unblock")%></button>
                         </td>
                     </tr>
                 </c:forEach>
