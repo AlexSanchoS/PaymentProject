@@ -1,10 +1,8 @@
 package ozamkovyi.web.servlet.adminServlets;
 
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.bean.BankAccountBean;
 import ozamkovyi.db.dao.BankAccountDao;
-import ozamkovyi.db.entity.BankAccount;
-
-import ozamkovyi.db.entity.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class AdminHomepageRequestServlet extends HttpServlet {
+public class AdminHomepageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -31,8 +29,8 @@ public class AdminHomepageRequestServlet extends HttpServlet {
             sortType = (int) session.getAttribute("sortType");
         }
 
-        session.setAttribute("countAccount", BankAccountDao.getCountBankAccountForUnlock());
-        ArrayList<BankAccount> listOfBankAccountForUnlock = BankAccountDao.getAccountListForUnlock(pageNumber, sortType);
+        session.setAttribute("countAccount", new BankAccountDao().getCountBankAccountForUnlock());
+        ArrayList<BankAccountBean> listOfBankAccountForUnlock = new BankAccountDao().getAccountListForUnlock(pageNumber, sortType);
         session.setAttribute("listOfBankAccountForUnlock", listOfBankAccountForUnlock);
         getServletContext().getRequestDispatcher("/jsp/adminHomepage.jsp").forward(req, resp);
     }
@@ -71,6 +69,7 @@ public class AdminHomepageRequestServlet extends HttpServlet {
             session.setAttribute("pageNumber", 1);
             resp.sendRedirect("/adminHomepage");
         }
+
         if (req.getParameter("sortByNumber") != null) {
             Object sortType = session.getAttribute("sortType");
             if (sortType != null) {
@@ -87,10 +86,10 @@ public class AdminHomepageRequestServlet extends HttpServlet {
             resp.sendRedirect("/adminHomepage");
         }
 
-        ArrayList<BankAccount> listOfBankAccountForUnlock = (ArrayList<BankAccount>) session.getAttribute("listOfBankAccountForUnlock");
-        for (BankAccount bankAccount : listOfBankAccountForUnlock) {
+        ArrayList<BankAccountBean> listOfBankAccountForUnlock = (ArrayList<BankAccountBean>) session.getAttribute("listOfBankAccountForUnlock");
+        for (BankAccountBean bankAccount : listOfBankAccountForUnlock) {
             if (req.getParameter("unblockButton " + bankAccount.getNumber()) != null) {
-                BankAccountDao.changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__UNBLOCKED);
+                new BankAccountDao().changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__UNBLOCKED);
                 resp.sendRedirect("/adminHomepage");
             }
         }

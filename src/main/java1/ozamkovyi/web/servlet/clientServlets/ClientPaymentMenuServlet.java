@@ -1,9 +1,8 @@
 package ozamkovyi.web.servlet.clientServlets;
 
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.bean.PaymentBean;
 import ozamkovyi.db.dao.PaymentDao;
-import ozamkovyi.db.entity.Client;
-import ozamkovyi.db.entity.Payment;
 
 import ozamkovyi.db.entity.*;
 
@@ -32,8 +31,8 @@ public class ClientPaymentMenuServlet extends HttpServlet {
             pageNumber = (int) page;
             sortType = (int) session.getAttribute("sortType");
         }
-        session.setAttribute("countPayment", PaymentDao.getCountPaymentByUser(currentUser));
-        ArrayList<Payment> listOfPayment = PaymentDao.getPaymentList(currentUser, pageNumber, sortType);
+        session.setAttribute("countPayment", new PaymentDao().getCountPaymentByUser(currentUser));
+        ArrayList<PaymentBean> listOfPayment = new PaymentDao().getPaymentList(currentUser, pageNumber, sortType);
         session.setAttribute("listOfPayment", listOfPayment);
         getServletContext().getRequestDispatcher("/jsp/clientPaymentMenu.jsp").forward(req, resp);
     }
@@ -132,14 +131,14 @@ public class ClientPaymentMenuServlet extends HttpServlet {
             resp.sendRedirect("/clientAccountMenu");
         }
 
-        ArrayList<Payment> listOfPayment = (ArrayList<Payment>) session.getAttribute("listOfPayment");
-        for (Payment payment : listOfPayment) {
+        ArrayList<PaymentBean> listOfPayment = (ArrayList<PaymentBean>) session.getAttribute("listOfPayment");
+        for (PaymentBean payment : listOfPayment) {
             if (req.getParameter("blocButton " + payment.getId()) != null) {
                 if (payment.getStatusName().equals(Fields.PAYMENT_STATUS__PREPARED)) {
                     if (payment.transactionIfValid()) {
-                        PaymentDao.updatePaymentStatus(payment, Fields.PAYMENT_STATUS__SENT);
+                        new PaymentDao().updatePaymentStatus(payment, Fields.PAYMENT_STATUS__SENT);
                     } else {
-                        PaymentDao.updatePaymentStatus(payment, Fields.PAYMENT_STATUS__REJECTED);
+                        new PaymentDao().updatePaymentStatus(payment, Fields.PAYMENT_STATUS__REJECTED);
                     }
                     resp.sendRedirect("/clientPaymentMenu");
                 } else {

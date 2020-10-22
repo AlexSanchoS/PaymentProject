@@ -3,9 +3,11 @@ package ozamkovyi.db.dao;
 import ozamkovyi.db.DBManager;
 import ozamkovyi.db.EntityMapper;
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.bean.BankAccountBean;
+import ozamkovyi.db.bean.ClientBean;
+import ozamkovyi.db.bean.CreditCardBean;
 import ozamkovyi.db.entity.BankAccount;
 import ozamkovyi.db.entity.Client;
-import ozamkovyi.db.entity.CreditCard;
 import ozamkovyi.db.entity.Currency;
 import ozamkovyi.web.CalendarProcessing;
 import org.apache.log4j.Logger;
@@ -261,8 +263,8 @@ public class BankAccountDao {
      *            Client for search.
      * @return ArrayList of BankAccount.
      */
-    public static ArrayList<BankAccount> getAllAccount(Client client) {
-        ArrayList<BankAccount> listOfBankAccount = new ArrayList<>();
+    public ArrayList<BankAccountBean> getAllAccount(Client client) {
+        ArrayList<BankAccountBean> listOfBankAccount = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -272,12 +274,12 @@ public class BankAccountDao {
             pstmt.setInt(1, client.getId());
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                BankAccount bankAccount = new BankAccount();
-                bankAccount.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
-                bankAccount.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
-                bankAccount.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
-                bankAccount.setUserId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID));
-                listOfBankAccount.add(bankAccount);
+                BankAccountBean bankAccountBean = new BankAccountBean();
+                bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
+                bankAccountBean.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
+                bankAccountBean.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                bankAccountBean.setUserId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID));
+                listOfBankAccount.add(bankAccountBean);
             }
         } catch (SQLException throwables) {
             logger.error("Can't get bank account", throwables);
@@ -297,7 +299,7 @@ public class BankAccountDao {
      *            Client for search.
      * @return count.
      */
-    public static int getCountBankAccountByUser(Client client) {
+    public int getCountBankAccountByUser(Client client) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -333,12 +335,11 @@ public class BankAccountDao {
      *              Sorting type
      * @return ArrayList of BankAccount.
      */
-    public static ArrayList<BankAccount> getAccountList(Client client, int page, int sortType) {
-        ArrayList<BankAccount> listOfBankAccount = new ArrayList<>();
+    public ArrayList<BankAccountBean> getAccountList(Client client, int page, int sortType) {
+        ArrayList<BankAccountBean> listOfBankAccount = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
-        BankAccount bankAccount = null;
         String sort = null;
         switch (sortType) {
             case 1:
@@ -369,8 +370,14 @@ public class BankAccountDao {
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                bankAccount = mapper.mapRow(rs);
-                listOfBankAccount.add(bankAccount);
+                BankAccountBean bankAccountBean = new BankAccountBean();
+                bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
+                bankAccountBean.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                bankAccountBean.setCurrencyId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID));
+                bankAccountBean.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
+                bankAccountBean.setAccountStatusName(rs.getString(Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS));
+                bankAccountBean.setAccountStatusId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID));
+                listOfBankAccount.add(bankAccountBean);
             }
         } catch (SQLException throwables) {
             logger.error("Can't get bank account list", throwables);
@@ -393,8 +400,8 @@ public class BankAccountDao {
      *              Sorting type
      * @return ArrayList of block BankAccount.
      */
-    public static ArrayList<BankAccount> getAccountListForUnlock(int page, int sortType) {
-        ArrayList<BankAccount> listOfBankAccount = new ArrayList<>();
+    public ArrayList<BankAccountBean> getAccountListForUnlock(int page, int sortType) {
+        ArrayList<BankAccountBean> listOfBankAccount = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -421,12 +428,12 @@ public class BankAccountDao {
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                BankAccount bankAccount = new BankAccount();
-                bankAccount.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
-                bankAccount.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
-                bankAccount.setClientName(rs.getString(Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME));
-                bankAccount.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
-                listOfBankAccount.add(bankAccount);
+                BankAccountBean bankAccountBean = new BankAccountBean();
+                bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
+                bankAccountBean.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                bankAccountBean.setClientName(rs.getString(Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME));
+                bankAccountBean.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
+                listOfBankAccount.add(bankAccountBean);
             }
         } catch (SQLException throwables) {
             logger.error("Can't get bank account list for unlock", throwables);
@@ -438,13 +445,15 @@ public class BankAccountDao {
         return listOfBankAccount;
     }
 
+    ///!!!!!!!!
+    ////nead to move in other class
     /**
      * Return id for bank account status
      * @param status
      *            Bank account status.
      * @return id of status.
      */
-    private static int getStatusIdByStatus(String status) {
+    private int getStatusIdByStatus(String status) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -471,12 +480,12 @@ public class BankAccountDao {
 
     /**
      * Change status for bank account
-     * @param bankAccount
+     * @param bankAccountBean
      *            Bank account for changing
      * @param newStatus
      *             New status for banck account
      */
-    public static void changeStatusFotBankAccount(BankAccount bankAccount, String newStatus) {
+    public void changeStatusFotBankAccount(BankAccountBean bankAccountBean, String newStatus) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -486,9 +495,9 @@ public class BankAccountDao {
             int newStatusId = getStatusIdByStatus(newStatus);
             pstmt = con.prepareStatement(SQL_CHANGE_STATUS_ID_FOR_BANK_ACCOUNT);
             pstmt.setInt(1, newStatusId);
-            pstmt.setString(2, bankAccount.getNumber());
+            pstmt.setString(2, bankAccountBean.getNumber());
             if (newStatus.equals(Fields.ACCOUNT_STATUS__BLOCKED)) {
-                CreditCardDao.blockAllCardForAccount(bankAccount);
+                new CreditCardDao().blockAllCardForAccount(bankAccountBean);
             }
             pstmt.executeUpdate();
 
@@ -506,7 +515,7 @@ public class BankAccountDao {
      *            bank account number
      * @return balance
      */
-    private static int getAccountBalance(String number) {
+    private int getAccountBalance(String number) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -537,7 +546,7 @@ public class BankAccountDao {
      * @param amount
      *             amount for adding
      */
-    public static void addToBalance(String number, double amount) {
+    public void addToBalance(String number, double amount) {
         double course = getCourse(number);
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -566,7 +575,7 @@ public class BankAccountDao {
      *            bank account number
      * @return course
      */
-    private static double getCourse(String number) {
+    private double getCourse(String number) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -593,7 +602,7 @@ public class BankAccountDao {
      * Generate new account number for bank account
      * @return number for bank account
      */
-    private static String generatorNewCardNumber() {
+    private String generatorNewCardNumber() {
         String re = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -603,7 +612,7 @@ public class BankAccountDao {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_IS_NUMBER_ALREADY_EXISTING);
             while (rez != 0) {
-                re = CreditCard.generatorCardNumber();
+                re = CreditCardBean.generatorCardNumber();
                 pstmt.setString(1, re);
                 rs = pstmt.executeQuery();
                 if (rs.next()) {
@@ -627,7 +636,7 @@ public class BankAccountDao {
      * @param client
      *              client for new account
      */
-    public static void addNewAccount(Currency currency, Client client) {
+    public void addNewAccount(Currency currency, ClientBean client) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -657,7 +666,7 @@ public class BankAccountDao {
      * @return  count blocked BankAccount
      *
      */
-    public static int getCountBankAccountForUnlock() {
+    public int getCountBankAccountForUnlock() {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -684,7 +693,7 @@ public class BankAccountDao {
      * @param forClose
      *          object for closing
      */
-    private static void close(AutoCloseable forClose) {
+    private void close(AutoCloseable forClose) {
         if (forClose != null) {
             try {
                 forClose.close();
@@ -706,8 +715,7 @@ public class BankAccountDao {
                 bankAccount.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
                 bankAccount.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
                 bankAccount.setCurrencyId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID));
-                bankAccount.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
-                bankAccount.setAccountStatusName(rs.getString(Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS));
+                bankAccount.setUserId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID));
                 bankAccount.setAccountStatusId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID));
                 return bankAccount;
             } catch (SQLException e) {

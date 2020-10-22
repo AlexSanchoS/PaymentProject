@@ -1,6 +1,6 @@
 package ozamkovyi.web;
 
-import ozamkovyi.db.entity.CreditCard;
+import ozamkovyi.db.bean.CreditCardBean;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -112,7 +112,7 @@ public class CalendarProcessing {
         return fullDate2String(calendar);
     }
 
-    public static boolean isCardValid(CreditCard creditCard){
+    public static boolean isCardValid(CreditCardBean creditCard){
         Calendar calendar = Calendar.getInstance();
         int creditCardYear =creditCard.getValidity().get(Calendar.YEAR);
         int creditCardMouth =creditCard.getValidity().get(Calendar.MONTH);

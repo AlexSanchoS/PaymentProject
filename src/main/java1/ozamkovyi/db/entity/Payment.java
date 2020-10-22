@@ -1,37 +1,22 @@
 package ozamkovyi.db.entity;
 
-import ozamkovyi.db.Fields;
-import ozamkovyi.db.dao.CreditCardDao;
-import ozamkovyi.web.CalendarProcessing;
-import ozamkovyi.db.dao.BankAccountDao;
-
 import java.util.Calendar;
-import java.util.ResourceBundle;
 
 public class Payment extends Entity {
 
-    private int id;
+    protected int id;
 
-    private int number;
+    protected int number;
 
-    private Calendar date;
+    protected Calendar date;
 
-    private double amount;
+    protected double amount;
 
-    private int paymentStatusId;
+    protected int paymentStatusId;
 
-    private int recipientCardId;
+    protected int recipientCardId;
 
-    private int senderCardId;
-
-    private String statusName;
-
-    private String recipientCardNumber;
-
-    private String recipientName;
-
-    private String senderCardNumber;
-
+    protected int senderCardId;
 
     public Calendar getDate() {
         return date;
@@ -89,75 +74,4 @@ public class Payment extends Entity {
         this.number = number;
     }
 
-    public String getStatusName() {
-        return statusName;
-    }
-
-    public void setStatusName(String statusName) {
-        this.statusName = statusName;
-    }
-
-    public String getRecipientCardNumber() {
-        return recipientCardNumber;
-    }
-
-    public void setRecipientCardNumber(String recipientCardNumber) {
-        this.recipientCardNumber = recipientCardNumber;
-    }
-
-    public String getRecipientName() {
-        return recipientName;
-    }
-
-    public void setRecipientName(String recipientName) {
-        this.recipientName = recipientName;
-    }
-
-    public String getSenderCardNumber() {
-        return senderCardNumber;
-    }
-
-    public void setSenderCardNumber(String senderCardNumber) {
-        this.senderCardNumber = senderCardNumber;
-    }
-
-    public String getStringDate(){
-        return CalendarProcessing.fullDate2String(date);
-    }
-
-
-    public String getButtonNameByStatus(ResourceBundle bundle){
-        if (statusName.equals(Fields.PAYMENT_STATUS__PREPARED)){
-            return bundle.getString("clientPaymentMenu_jsp.button.confirm");
-        }else{
-            return bundle.getString("clientPaymentMenu_jsp.button.repeat");
-        }
-    }
-
-    public boolean transactionIfValid(){
-        CreditCard senderCreditCard = CreditCardDao.getCardById(senderCardId);
-        CreditCard recipientCreditCard =CreditCardDao.getCardById(recipientCardId);
-        if (!senderCreditCard.isValid()||!recipientCreditCard.isValid()){
-            return false;
-        }
-        int senderCardBalance = CreditCardDao.getUAHBalance(senderCardId);
-        if (senderCardBalance<amount*100){
-            return false;
-        }
-        BankAccountDao.addToBalance(senderCreditCard.getBankAccountNumber(), amount*(-1));
-        BankAccountDao.addToBalance(recipientCreditCard.getBankAccountNumber(), amount);
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Payment{" +
-                "number=" + number +
-                ", date=" + date +
-                ", amount=" + amount +
-                ", paymentStatusId=" + paymentStatusId +
-                ", recipientAccountNumber=" + recipientCardId +
-                ", senderAccountNumber=" + senderCardId +
-                '}';
-    }
 }

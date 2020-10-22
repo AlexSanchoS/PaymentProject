@@ -1,12 +1,10 @@
 package ozamkovyi.web.servlet.adminServlets;
 
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.bean.BankAccountBean;
+import ozamkovyi.db.bean.ClientBean;
 import ozamkovyi.db.dao.BankAccountDao;
 import ozamkovyi.db.dao.ClientDao;
-import ozamkovyi.db.entity.BankAccount;
-import ozamkovyi.db.entity.Client;
-
-import ozamkovyi.db.entity.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,8 +31,8 @@ public class AllClientServlet extends HttpServlet {
             pageNumber = (int) page;
             sortType = (int) session.getAttribute("sortType");
         }
-        session.setAttribute("countClient", ClientDao.getCountClient());
-        ArrayList<Client> listOfClient = ClientDao.getListOfClientForAdmin(pageNumber, sortType);
+        session.setAttribute("countClient", new ClientDao().getCountClient());
+        ArrayList<ClientBean> listOfClient = new ClientDao().getListOfClientForAdmin(pageNumber, sortType);
         session.setAttribute("listOfClient", listOfClient);
         getServletContext().getRequestDispatcher("/jsp/allClient.jsp").forward(req, resp);
     }
@@ -88,8 +86,8 @@ public class AllClientServlet extends HttpServlet {
             resp.sendRedirect("/adminAllUsers");
         }
 
-        ArrayList<Client> listOfClient = (ArrayList<Client>) session.getAttribute("listOfClient");
-        for (Client client : listOfClient) {
+        ArrayList<ClientBean> listOfClient = (ArrayList<ClientBean>) session.getAttribute("listOfClient");
+        for (ClientBean client : listOfClient) {
             if (req.getParameter("allAccount " + client.getId()) != null) {
                 session.setAttribute("pageNumber", null);
                 session.setAttribute("sortType", null);
@@ -102,19 +100,20 @@ public class AllClientServlet extends HttpServlet {
                 session.setAttribute("currentClient", client);
                 resp.sendRedirect("/adminAllCardsForUser");
             }
+
             if (req.getParameter("unblockButton " + client.getId()) != null) {
                 if (client.getStatus().equals(Fields.CLIENT_STATUS__BLOCK)) {
-                    ArrayList<BankAccount> listOfAcc = BankAccountDao.getAccountList(client, 1, 1);
-                    for (BankAccount account : listOfAcc) {
-                        BankAccountDao.changeStatusFotBankAccount(account, Fields.ACCOUNT_STATUS__EXPECTATION);
+                    ArrayList<BankAccountBean> listOfAcc = new BankAccountDao().getAccountList(client, 1, 1);
+                    for (BankAccountBean account : listOfAcc) {
+                        new BankAccountDao().changeStatusFotBankAccount(account, Fields.ACCOUNT_STATUS__EXPECTATION);
                     }
-                    ClientDao.setStatus(client, Fields.CLIENT_STATUS__UNBLOCK);
+                    new ClientDao().setStatus(client, Fields.CLIENT_STATUS__UNBLOCK);
                 } else {
-                    ArrayList<BankAccount> listOfAcc = BankAccountDao.getAccountList(client, 1, 1);
-                    for (BankAccount account : listOfAcc) {
-                        BankAccountDao.changeStatusFotBankAccount(account, Fields.ACCOUNT_STATUS__BLOCKED);
+                    ArrayList<BankAccountBean> listOfAcc = new BankAccountDao().getAccountList(client, 1, 1);
+                    for (BankAccountBean account : listOfAcc) {
+                        new BankAccountDao().changeStatusFotBankAccount(account, Fields.ACCOUNT_STATUS__BLOCKED);
                     }
-                    ClientDao.setStatus(client, Fields.CLIENT_STATUS__BLOCK);
+                    new ClientDao().setStatus(client, Fields.CLIENT_STATUS__BLOCK);
                 }
                 resp.sendRedirect("/adminAllUsers");
             }

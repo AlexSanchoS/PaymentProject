@@ -1,9 +1,9 @@
 package ozamkovyi.db.entity;
 
 public class Currency extends Entity{
-    private int id;
-    private String name;
-    private float course;
+    protected int id;
+    protected String name;
+    protected float course;
 
     public int getId() {
         return id;

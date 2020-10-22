@@ -63,7 +63,7 @@ public class UserLocalizationAndLogOutServlet extends HttpServlet {
                     session.setAttribute("resourceBundle", resourceBundle);
                     admin.setLanguage("ua");
                 }
-                AdminDao.setAdminLocal(admin);
+                new AdminDao().setAdminLocal(admin);
             }
             resp.sendRedirect((String) session.getAttribute("currentURL"));
         }

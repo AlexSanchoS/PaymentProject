@@ -6,18 +6,15 @@ import ozamkovyi.web.CalendarProcessing;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
-import java.util.ResourceBundle;
 
 public class Client extends User {
 
     public static final int ADULTS_AGE = 18;
 
-    private String name;
-    private Calendar date;
-    private String language;
-    private String status;
-    private int accountCount;
-    private int creditCardCount;
+    protected String name;
+    protected Calendar date;
+    protected String language;
+    protected String status;
 
 
     public String getName() {
@@ -27,7 +24,6 @@ public class Client extends User {
     public void setName(String name) {
         this.name = name;
     }
-
 
     public String getLanguage() {
         return language;
@@ -45,48 +41,12 @@ public class Client extends User {
         this.date = date;
     }
 
-    public int getAccountCount() {
-        return accountCount;
-    }
-
-    public void setAccountCount(int accountCount) {
-        this.accountCount = accountCount;
-    }
-
-
-    public int getCreditCardCount() {
-        return creditCardCount;
-    }
-
-    public void setCreditCardCount(int creditCardCount) {
-        this.creditCardCount = creditCardCount;
-    }
-
     public String getStatus() {
         return status;
     }
 
-    public String getBlocButton(ResourceBundle bundle) {
-        if (status.equals(Fields.CLIENT_STATUS__BLOCK)) {
-            return bundle.getString("allUsers_jsp.button.unblock");
-        } else {
-            return bundle.getString("allUsers_jsp.button.block");
-        }
-    }
-
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "Client{" +
-                "login='" + super.getLogin() + '\'' +
-                ", password='" + super.getPassword() + '\'' +
-                ", name='" + name + '\'' +
-                ", date=" + date +
-                ", language=" + language +
-                '}';
     }
 
     public void createNewClientByRequest(HttpServletRequest request, String locale) {
@@ -101,12 +61,24 @@ public class Client extends User {
         this.setDate(date1);
         this.setStatus(Fields.CLIENT_STATUS__UNBLOCK);
         this.setLanguage(locale);
-        System.out.println(this.name);
+    }
+
+    public boolean isUnblock() {
+        status = new ClientDao().getClientStatus(this);
+        if (status.equals(Fields.CLIENT_STATUS__UNBLOCK)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void addNewClientToDB() {
+        new ClientDao().addNewClientToDB(this);
     }
 
     public boolean clientIsAdults() {
         Calendar cal = Calendar.getInstance();
-        int year = getDate().get(Calendar.YEAR) - cal.get(Calendar.YEAR);
+        int year = cal.get(Calendar.YEAR)-getDate().get(Calendar.YEAR);
         if (year > Client.ADULTS_AGE) {
             return true;
         } else {
@@ -129,17 +101,5 @@ public class Client extends User {
         return true;
     }
 
-    public void addNewClientToDB() {
-        ClientDao clientDao = new ClientDao();
-        clientDao.addNewClientToDB(this);
-    }
 
-    public boolean isUnblock() {
-        status = ClientDao.getClientStatus(this);
-        if (status.equals(Fields.CLIENT_STATUS__UNBLOCK)) {
-            return true;
-        }else{
-            return false;
-        }
-    }
 }

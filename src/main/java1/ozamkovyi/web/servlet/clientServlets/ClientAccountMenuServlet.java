@@ -1,9 +1,9 @@
 package ozamkovyi.web.servlet.clientServlets;
 
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.bean.BankAccountBean;
+import ozamkovyi.db.bean.ClientBean;
 import ozamkovyi.db.dao.CurrencyDao;
-import ozamkovyi.db.entity.BankAccount;
-import ozamkovyi.db.entity.Client;
 import ozamkovyi.db.entity.Currency;
 import ozamkovyi.db.dao.BankAccountDao;
 
@@ -35,10 +35,10 @@ public class ClientAccountMenuServlet extends HttpServlet {
             pageNumber = (int) page;
             sortType = (int) session.getAttribute("sortType");
         }
-        session.setAttribute("countAccount", BankAccountDao.getCountBankAccountByUser(currentUser));
-        ArrayList<BankAccount> listOfBankAccount = BankAccountDao.getAccountList(currentUser, pageNumber, sortType);
+        session.setAttribute("countAccount", new BankAccountDao().getCountBankAccountByUser(currentUser));
+        ArrayList<BankAccountBean> listOfBankAccount = new BankAccountDao().getAccountList(currentUser, pageNumber, sortType);
         session.setAttribute("listOfBankAccount", listOfBankAccount);
-        ArrayList<Currency> listOfCurrencyForNewAccount = CurrencyDao.getAllCurrency();
+        ArrayList<Currency> listOfCurrencyForNewAccount = new CurrencyDao().getAllCurrency();
         session.setAttribute("listOfCurrencyForNewAccount", listOfCurrencyForNewAccount);
         getServletContext().getRequestDispatcher("/jsp/clientAccountMenu.jsp").forward(req, resp);
 
@@ -120,13 +120,13 @@ public class ClientAccountMenuServlet extends HttpServlet {
             resp.sendRedirect("/clientPaymentMenu");
         }
 
-        ArrayList<BankAccount> listOfBankAccount = (ArrayList<BankAccount>) session.getAttribute("listOfBankAccount");
-        for (BankAccount bankAccount : listOfBankAccount) {
+        ArrayList<BankAccountBean> listOfBankAccount = (ArrayList<BankAccountBean>) session.getAttribute("listOfBankAccount");
+        for (BankAccountBean bankAccount : listOfBankAccount) {
             if (req.getParameter("blocButton " + bankAccount.getNumber()) != null) {
                 if (bankAccount.getAccountStatusName().equals(Fields.ACCOUNT_STATUS__BLOCKED)) {
-                    BankAccountDao.changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__EXPECTATION);
+                    new BankAccountDao().changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__EXPECTATION);
                 } else {
-                    BankAccountDao.changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__BLOCKED);
+                    new BankAccountDao().changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__BLOCKED);
                 }
                 resp.sendRedirect("/clientAccountMenu");
             }
@@ -137,7 +137,7 @@ public class ClientAccountMenuServlet extends HttpServlet {
                 if (amountOdj != null) {
                     amount = Double.parseDouble((String) amountOdj);
                 }
-                BankAccountDao.addToBalance(bankAccount.getNumber(), amount);
+                new BankAccountDao().addToBalance(bankAccount.getNumber(), amount);
                 resp.sendRedirect("/clientAccountMenu");
             }
         }
@@ -147,8 +147,8 @@ public class ClientAccountMenuServlet extends HttpServlet {
             for (Currency currency : listOfCurrency) {
                 String selectOption = req.getParameter("currencyForNewAccount");
                 if (selectOption.equals(currency.getName())) {
-                    Client client = (Client) session.getAttribute("currentUser");
-                    BankAccountDao.addNewAccount(currency, client);
+                    ClientBean client = (ClientBean) session.getAttribute("currentUser");
+                    new BankAccountDao().addNewAccount(currency, client);
                     resp.sendRedirect("/clientAccountMenu");
                 }
             }

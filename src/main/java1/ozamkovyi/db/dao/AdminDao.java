@@ -38,13 +38,17 @@ public class AdminDao {
      *             User password.
      * @return Admin entity.
      */
-    public static Admin findAdminByLoginAndPassword(String login, String password) {
+    public Admin findAdminByLoginAndPassword(String login, String password) {
         Admin admin = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
+            if (con==null){
+                logger.error("Connection is null");
+                return admin;
+            }
             pstmt = con.prepareStatement(SQL__FIND_ADMIN_BY_LOGIN_AND_PASSWORD);
             AdminMapper mapper = new AdminMapper();
             pstmt.setString(1, login);
@@ -69,7 +73,7 @@ public class AdminDao {
      * @param admin
      *            Admin to update.
      */
-    public static void setAdminLocal(Admin admin) {
+    public void setAdminLocal(Admin admin) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -92,7 +96,7 @@ public class AdminDao {
      * @param forClose
      *          object for closing
      */
-    private static void close(AutoCloseable forClose) {
+    private void close(AutoCloseable forClose) {
         if (forClose != null) {
             try {
                 forClose.close();

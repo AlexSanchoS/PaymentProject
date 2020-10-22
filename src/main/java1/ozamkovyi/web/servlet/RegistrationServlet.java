@@ -1,5 +1,6 @@
 package ozamkovyi.web.servlet;
 
+
 import ozamkovyi.db.entity.Client;
 
 import javax.servlet.ServletException;
@@ -10,8 +11,6 @@ public class RegistrationServlet extends HttpServlet {
 
 
     private final int COOKIE_MAX_AGE = 10 * 60;
-
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -24,9 +23,9 @@ public class RegistrationServlet extends HttpServlet {
         Client client = new Client();
         req.setCharacterEncoding("UTF-8");
         client.createNewClientByRequest(req, (String) session.getAttribute("locale"));
-        if (client.clientIsAdults()) {
+        if (!client.clientIsAdults()) {
             session.setAttribute("clientNotAdults", "true");
-            getServletContext().getRequestDispatcher("/jsp/registration.jsp").forward(req, resp);
+            req.getRequestDispatcher("/jsp/registration.jsp").forward(req, resp);
         } else {
             client.addNewClientToDB();
             session.setAttribute("currentUser", client);

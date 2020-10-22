@@ -1,11 +1,11 @@
-package ozamkovyi.web.servlet;
+package ozamkovyi.web.filters;
 
 
+import ozamkovyi.db.entity.Client;
 import ozamkovyi.db.entity.User;
 import ozamkovyi.db.dao.AdminDao;
 import ozamkovyi.db.dao.ClientDao;
 import ozamkovyi.db.entity.Admin;
-import ozamkovyi.db.entity.Client;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -68,10 +68,10 @@ public class AuthenticationFilter implements Filter {
                     }
                 }
                 if ((login != null) && (password != null)) {
-                    currentUser = ClientDao.findClientByLoginAndPassword(login, password);
+                    currentUser = new ClientDao().findClientByLoginAndPassword(login, password);
                     session.setAttribute("currentUser", currentUser);
                     if (currentUser == null) {
-                        currentUser = AdminDao.findAdminByLoginAndPassword(login, password);
+                        currentUser = new AdminDao().findAdminByLoginAndPassword(login, password);
                         session.setAttribute("currentUser", currentUser);
 
                     }

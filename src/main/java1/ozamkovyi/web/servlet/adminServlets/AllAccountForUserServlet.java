@@ -1,10 +1,9 @@
 package ozamkovyi.web.servlet.adminServlets;
 
+import ozamkovyi.db.bean.BankAccountBean;
 import ozamkovyi.db.dao.CurrencyDao;
 import ozamkovyi.db.Fields;
 import ozamkovyi.db.dao.BankAccountDao;
-import ozamkovyi.db.entity.BankAccount;
-import ozamkovyi.db.entity.Client;
 import ozamkovyi.db.entity.Currency;
 
 import ozamkovyi.db.entity.*;
@@ -35,10 +34,10 @@ public class AllAccountForUserServlet extends HttpServlet {
             sortType = (int) session.getAttribute("sortType");
         }
         Client currentClient = (Client) session.getAttribute("currentClient");
-        session.setAttribute("countAccount", BankAccountDao.getCountBankAccountByUser(currentClient));
-        ArrayList<BankAccount> listOfBankAccount = BankAccountDao.getAccountList(currentClient, pageNumber, sortType);
+        session.setAttribute("countAccount", new BankAccountDao().getCountBankAccountByUser(currentClient));
+        ArrayList<BankAccountBean> listOfBankAccount = new BankAccountDao().getAccountList(currentClient, pageNumber, sortType);
         session.setAttribute("listOfBankAccount", listOfBankAccount);
-        ArrayList<Currency> listOfCurrencyForNewAccount = CurrencyDao.getAllCurrency();
+        ArrayList<Currency> listOfCurrencyForNewAccount = new CurrencyDao().getAllCurrency();
         session.setAttribute("listOfCurrencyForNewAccount", listOfCurrencyForNewAccount);
 
 
@@ -111,13 +110,13 @@ public class AllAccountForUserServlet extends HttpServlet {
         }
 
 
-        ArrayList<BankAccount> listOfBankAccount = (ArrayList<BankAccount>) session.getAttribute("listOfBankAccount");
-        for (BankAccount bankAccount : listOfBankAccount) {
+        ArrayList<BankAccountBean> listOfBankAccount = (ArrayList<BankAccountBean>) session.getAttribute("listOfBankAccount");
+        for (BankAccountBean bankAccount : listOfBankAccount) {
             if (req.getParameter("blocButton " + bankAccount.getNumber()) != null) {
                 if (bankAccount.getAccountStatusName().equals(Fields.ACCOUNT_STATUS__BLOCKED)) {
-                    BankAccountDao.changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__EXPECTATION);
+                    new BankAccountDao().changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__EXPECTATION);
                 } else {
-                    BankAccountDao.changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__BLOCKED);
+                    new BankAccountDao().changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__BLOCKED);
                 }
                 resp.sendRedirect("/allAccountsForUser");
             }
@@ -128,7 +127,7 @@ public class AllAccountForUserServlet extends HttpServlet {
                 if (amountOdj != null) {
                     amount = Double.parseDouble((String) amountOdj);
                 }
-                BankAccountDao.addToBalance(bankAccount.getNumber(), amount);
+                new BankAccountDao().addToBalance(bankAccount.getNumber(), amount);
                 resp.sendRedirect("/allAccountsForUser");
             }
         }

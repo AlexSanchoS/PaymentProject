@@ -1,11 +1,10 @@
 package ozamkovyi.web.servlet.clientServlets;
 
+import ozamkovyi.db.bean.BankAccountBean;
+import ozamkovyi.db.bean.CreditCardBean;
 import ozamkovyi.db.dao.CreditCardDao;
 import ozamkovyi.db.dao.BankAccountDao;
 import ozamkovyi.db.Fields;
-import ozamkovyi.db.entity.BankAccount;
-import ozamkovyi.db.entity.Client;
-import ozamkovyi.db.entity.CreditCard;
 
 import ozamkovyi.db.entity.*;
 
@@ -26,29 +25,29 @@ public class ClientCardMenuServlet extends HttpServlet {
         Object page = session.getAttribute("pageNumber");
         int pageNumber = 0;
         int sortType = 0;
-        ArrayList<CreditCard> listOfCreditCard = null;
+        ArrayList<CreditCardBean> listOfCreditCard = null;
         if (page == null) {
             session.setAttribute("pageNumber", 1);
             session.setAttribute("sortType", 1);
             System.out.println("page = null");
             sortType = 1;
             pageNumber = 1;
-            listOfCreditCard = CreditCardDao.getCardList(currentUser, pageNumber, sortType);
-            for (CreditCard creditCard : listOfCreditCard) {
+            listOfCreditCard = new CreditCardDao().getCardList(currentUser, pageNumber, sortType);
+            for (CreditCardBean creditCard : listOfCreditCard) {
                 if (!creditCard.isValid()) {
-                    CreditCardDao.blocCard(creditCard);
+                    new CreditCardDao().blocCard(creditCard);
                 }
             }
         } else {
             pageNumber = (int) page;
             sortType = (int) session.getAttribute("sortType");
-            listOfCreditCard = CreditCardDao.getCardList(currentUser, pageNumber, sortType);
+            listOfCreditCard = new CreditCardDao().getCardList(currentUser, pageNumber, sortType);
         }
 
-        session.setAttribute("countCard", CreditCardDao.getCountCardByUser(currentUser));
+        session.setAttribute("countCard", new CreditCardDao().getCountCardByUser(currentUser));
         session.setAttribute("listOfCreditCard", listOfCreditCard);
         listOfCreditCard.get(0).getButtonBloc((ResourceBundle) session.getAttribute("resourceBundle"));
-        ArrayList<BankAccount> listOfAccountForCreditCard = BankAccountDao.getAllAccount(currentUser);
+        ArrayList<BankAccountBean> listOfAccountForCreditCard = new BankAccountDao().getAllAccount(currentUser);
         session.setAttribute("listOfAccountForCreditCard", listOfAccountForCreditCard);
         getServletContext().getRequestDispatcher("/jsp/clientCardMenu.jsp").forward(req, resp);
 
@@ -104,13 +103,13 @@ public class ClientCardMenuServlet extends HttpServlet {
             resp.sendRedirect("/clientCardMenu");
         }
 
-        ArrayList<CreditCard> listOfCreditCard = (ArrayList<CreditCard>) session.getAttribute("listOfCreditCard");
-        for (CreditCard creditCard : listOfCreditCard) {
+        ArrayList<CreditCardBean> listOfCreditCard = (ArrayList<CreditCardBean>) session.getAttribute("listOfCreditCard");
+        for (CreditCardBean creditCard : listOfCreditCard) {
             if (req.getParameter("blocButton " + creditCard.getId()) != null) {
                 if (creditCard.getCardStatusName().equals(Fields.CARD_STATUS__BLOCKED)) {
-                    CreditCardDao.unblockCard(creditCard);
+                    new CreditCardDao().unblockCard(creditCard);
                 } else {
-                    CreditCardDao.blocCard(creditCard);
+                    new CreditCardDao().blocCard(creditCard);
                 }
                 resp.sendRedirect("/clientCardMenu");
             }
@@ -129,11 +128,11 @@ public class ClientCardMenuServlet extends HttpServlet {
 
 
         if (req.getParameter("add_card") != null) {
-            ArrayList<BankAccount> listOfAccountForCreditCard = (ArrayList<BankAccount>) session.getAttribute("listOfAccountForCreditCard");
-            for (BankAccount account : listOfAccountForCreditCard) {
+            ArrayList<BankAccountBean> listOfAccountForCreditCard = (ArrayList<BankAccountBean>) session.getAttribute("listOfAccountForCreditCard");
+            for (BankAccountBean account : listOfAccountForCreditCard) {
                 String selectOption = req.getParameter("accountForNewCard");
                 if (selectOption.equals(account.getAccountForNewCard())) {
-                    CreditCardDao.addNewCard(account);
+                    new CreditCardDao().addNewCard(account);
                     resp.sendRedirect("/clientCardMenu");
                 }
             }

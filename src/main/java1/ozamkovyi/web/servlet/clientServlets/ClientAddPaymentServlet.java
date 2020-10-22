@@ -1,10 +1,8 @@
 package ozamkovyi.web.servlet.clientServlets;
 
+import ozamkovyi.db.bean.PaymentBean;
 import ozamkovyi.db.dao.CreditCardDao;
 import ozamkovyi.db.dao.PaymentDao;
-import ozamkovyi.db.entity.Client;
-import ozamkovyi.db.entity.CreditCard;
-import ozamkovyi.db.entity.Payment;
 
 import ozamkovyi.db.entity.*;
 
@@ -22,12 +20,12 @@ public class ClientAddPaymentServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Client currentUser = (Client) session.getAttribute("currentUser");
         if (session.getAttribute("currentPayment") == null) {
-            ArrayList<CreditCard> listOfCreditCard = CreditCardDao.getAllUnblockCreditCard( currentUser);
+            ArrayList<CreditCard> listOfCreditCard = new CreditCardDao().getAllUnblockCreditCard( currentUser);
             session.setAttribute("listOfCreditCard", listOfCreditCard);
             getServletContext().getRequestDispatcher("/jsp/addNewPayment.jsp").forward(req, resp);
         } else {
-            ((Payment) session.getAttribute("currentPayment")).getSenderCardNumber();
-            getServletContext().getRequestDispatcher("/jsp/addPayment.jsp").forward(req, resp);
+            ((PaymentBean) session.getAttribute("currentPayment")).getSenderCardNumber();
+            req.getRequestDispatcher("/jsp/addPayment.jsp").forward(req, resp);
         }
 
     }
@@ -40,7 +38,7 @@ public class ClientAddPaymentServlet extends HttpServlet {
         String recipientCardNumber = req.getParameter("recipientCardNumber");
         double amount = Double.parseDouble(req.getParameter("amount"));
         Client client = (Client) session.getAttribute("currentUser");
-        PaymentDao.createNewPayment(client, senderNumber, recipientCardNumber, amount);
+        new PaymentDao().createNewPayment(client, senderNumber, recipientCardNumber, amount);
         session.setAttribute("currentPayment", null);
         resp.sendRedirect("/clientPaymentMenu");
 

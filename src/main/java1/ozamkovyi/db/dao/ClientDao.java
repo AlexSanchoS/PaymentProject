@@ -2,11 +2,11 @@ package ozamkovyi.db.dao;
 
 import ozamkovyi.db.DBManager;
 import ozamkovyi.db.EntityMapper;
+import ozamkovyi.db.bean.ClientBean;
+import ozamkovyi.db.entity.Client;
 import ozamkovyi.web.CalendarProcessing;
 import org.apache.log4j.Logger;
 import ozamkovyi.db.Fields;
-import ozamkovyi.db.entity.BankAccount;
-import ozamkovyi.db.entity.Client;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class ClientDao {
             " FROM " + Fields.TABLE__CLIENT + " WHERE " + Fields.CLIENT__ID + " = ?";
 
 
-    public static Client findClientByLoginAndPassword(String login, String password) {
+    public Client findClientByLoginAndPassword(String login, String password) {
         Client client = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -128,12 +128,11 @@ public class ClientDao {
         }
     }
 
-    public static ArrayList<Client> getListOfClientForAdmin(int page, int sortType) {
-        ArrayList<Client> listOfClient = new ArrayList<>();
+    public ArrayList<ClientBean> getListOfClientForAdmin(int page, int sortType) {
+        ArrayList<ClientBean> listOfClient = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
-        BankAccount bankAccount = null;
         String sort = null;
         switch (sortType) {
             case 1:
@@ -156,12 +155,12 @@ public class ClientDao {
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                Client client = new Client();
+                ClientBean client = new ClientBean();
                 client.setId(rs.getInt(Fields.CLIENT__ID));
                 client.setName(rs.getString(Fields.CLIENT__NAME));
                 client.setStatus(rs.getString(Fields.CLIENT__STATUS));
-                client.setCreditCardCount(CreditCardDao.getCountCardByUser(client));
-                client.setAccountCount(BankAccountDao.getCountBankAccountByUser(client));
+                client.setCreditCardCount(new CreditCardDao().getCountCardByUser(client));
+                client.setAccountCount(new BankAccountDao().getCountBankAccountByUser(client));
                 listOfClient.add(client);
             }
         } catch (SQLException throwables) {
@@ -174,7 +173,7 @@ public class ClientDao {
         return listOfClient;
     }
 
-    public static int getCountClient() {
+    public int getCountClient() {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -197,7 +196,7 @@ public class ClientDao {
 
     }
 
-    public static void setStatus(Client client, String status) {
+    public void setStatus(Client client, String status) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -214,7 +213,7 @@ public class ClientDao {
         }
     }
 
-    private static void close(AutoCloseable forClose) {
+    private void close(AutoCloseable forClose) {
         if (forClose != null) {
             try {
                 forClose.close();
@@ -224,7 +223,7 @@ public class ClientDao {
         }
     }
 
-    public static String getClientStatus(Client client) {
+    public String getClientStatus(Client client) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;

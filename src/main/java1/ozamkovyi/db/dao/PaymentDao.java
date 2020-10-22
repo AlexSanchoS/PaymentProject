@@ -3,6 +3,7 @@ package ozamkovyi.db.dao;
 import ozamkovyi.db.DBManager;
 import ozamkovyi.db.EntityMapper;
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.bean.PaymentBean;
 import ozamkovyi.db.entity.Client;
 import ozamkovyi.db.entity.Payment;
 import ozamkovyi.web.CalendarProcessing;
@@ -230,7 +231,7 @@ public class PaymentDao {
                     Fields.CREDIT_CARD__NUMBER + " = ?";
 
 
-    private static void getRecipientCardNumberAndName(Payment payment) {
+    private void getRecipientCardNumberAndName(PaymentBean payment) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -252,7 +253,7 @@ public class PaymentDao {
         }
     }
 
-    private static void getSenderCardNumber(Payment payment) {
+    private void getSenderCardNumber(PaymentBean payment) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -273,12 +274,11 @@ public class PaymentDao {
         }
     }
 
-    public static ArrayList<Payment> getPaymentList(Client client, int page, int sortType) {
-        ArrayList<Payment> listOfPayment = new ArrayList<>();
+    public ArrayList<PaymentBean> getPaymentList(Client client, int page, int sortType) {
+        ArrayList<PaymentBean> listOfPayment = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
-        Payment payment = null;
         String sort = null;
         switch (sortType) {
             case 1:
@@ -309,14 +309,22 @@ public class PaymentDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(sort);
-            BankAccountMapper mapper = new BankAccountMapper();
             pstmt.setInt(1, client.getId());
             pstmt.setInt(2, page * 10 - 10);
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                payment = mapper.mapRow(rs);
-                listOfPayment.add(payment);
+                PaymentBean payment = new PaymentBean();
+                Calendar calendar = CalendarProcessing.string2FullDate(rs.getString(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE));
+                payment.setId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID));
+                payment.setNumber(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER));
+                payment.setDate(calendar);
+                payment.setAmount(rs.getDouble(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__AMOUNT));
+                payment.setPaymentStatusId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID));
+                payment.setSenderCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD));
+                payment.setRecipientCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD));
+                payment.setRecipientCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD));
+                payment.setStatusName(rs.getString(Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS));
                 getRecipientCardNumberAndName(payment);
                 getSenderCardNumber(payment);
             }
@@ -330,7 +338,7 @@ public class PaymentDao {
         return listOfPayment;
     }
 
-    public static int getCountPaymentByUser(Client client) {
+    public int getCountPaymentByUser(Client client) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -353,7 +361,7 @@ public class PaymentDao {
         return rez;
     }
 
-    private static int getPaymentStatusIdByName(String status) {
+    private int getPaymentStatusIdByName(String status) {
         int rez = 0;
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -377,7 +385,7 @@ public class PaymentDao {
         return rez;
     }
 
-    private static int getCreditCardIdByNumber(String number) {
+    private int getCreditCardIdByNumber(String number) {
         int rez = 0;
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -401,7 +409,7 @@ public class PaymentDao {
         return rez;
     }
 
-    private static int getNewPaymentNumber(Client client) {
+    private int getNewPaymentNumber(Client client) {
         int rez = 0;
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -425,7 +433,7 @@ public class PaymentDao {
         return ++rez;
     }
 
-    public static void createNewPayment(Client client, String senderNumber, String recipientNumber, double amount) {
+    public void createNewPayment(Client client, String senderNumber, String recipientNumber, double amount) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -449,7 +457,7 @@ public class PaymentDao {
         }
     }
 
-    public static void updatePaymentStatus(Payment payment, String newStatus) {
+    public void updatePaymentStatus(PaymentBean payment, String newStatus) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -468,7 +476,7 @@ public class PaymentDao {
         }
     }
 
-    private static void close(AutoCloseable forClose) {
+    private void close(AutoCloseable forClose) {
         if (forClose != null) {
             try {
                 forClose.close();
@@ -478,7 +486,7 @@ public class PaymentDao {
         }
     }
 
-    private static class BankAccountMapper implements EntityMapper<Payment> {
+    private static class PaymentMapper implements EntityMapper<Payment> {
 
         @Override
         public Payment mapRow(ResultSet rs) {
@@ -492,8 +500,6 @@ public class PaymentDao {
                 payment.setPaymentStatusId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID));
                 payment.setSenderCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD));
                 payment.setRecipientCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD));
-                payment.setRecipientCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD));
-                payment.setStatusName(rs.getString(Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS));
 
                 return payment;
             } catch (SQLException e) {

@@ -19,7 +19,7 @@ public class CurrencyDao {
     private static final String SQL_GET_ALL_CURRENCY = "SELECT " + Fields.CURRENCY__NAME + ", " +
             Fields.CURRENCY__ID + " FROM " + Fields.TABLE__CURRENCY;
 
-    public static ArrayList<Currency> getAllCurrency() {
+    public ArrayList<Currency> getAllCurrency() {
         ArrayList<Currency> listOfCurrency = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;

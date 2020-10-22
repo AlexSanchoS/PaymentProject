@@ -1,13 +1,11 @@
 package ozamkovyi.web.servlet.adminServlets;
 
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.bean.BankAccountBean;
+import ozamkovyi.db.bean.ClientBean;
+import ozamkovyi.db.bean.CreditCardBean;
 import ozamkovyi.db.dao.BankAccountDao;
 import ozamkovyi.db.dao.CreditCardDao;
-import ozamkovyi.db.entity.BankAccount;
-import ozamkovyi.db.entity.Client;
-import ozamkovyi.db.entity.CreditCard;
-
-import ozamkovyi.db.entity.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,12 +31,12 @@ public class AllCardsForUserServlet extends HttpServlet {
             pageNumber = (int) page;
             sortType = (int) session.getAttribute("sortType");
         }
-        Client currentClient = (Client) session.getAttribute("currentClient");
+        ClientBean currentClient = (ClientBean) session.getAttribute("currentClient");
         CreditCardDao creditCardDao = new CreditCardDao();
         session.setAttribute("countCard", creditCardDao.getCountCardByUser(currentClient));
-        ArrayList<CreditCard> listOfCreditCard = creditCardDao.getCardList(currentClient, pageNumber, sortType);
+        ArrayList<CreditCardBean> listOfCreditCard = creditCardDao.getCardList(currentClient, pageNumber, sortType);
         session.setAttribute("listOfCreditCard", listOfCreditCard);
-        ArrayList<BankAccount> listOfAccountForCreditCard = BankAccountDao.getAllAccount(currentClient);
+        ArrayList<BankAccountBean> listOfAccountForCreditCard = new BankAccountDao().getAllAccount(currentClient);
         session.setAttribute("listOfAccountForCreditCard", listOfAccountForCreditCard);
 
 
@@ -94,13 +92,13 @@ public class AllCardsForUserServlet extends HttpServlet {
             resp.sendRedirect("/allCardsForUser");
         }
 
-        ArrayList<CreditCard> listOfCreditCard = (ArrayList<CreditCard>) session.getAttribute("listOfCreditCard");
-        for (CreditCard creditCard : listOfCreditCard) {
+        ArrayList<CreditCardBean> listOfCreditCard = (ArrayList<CreditCardBean>) session.getAttribute("listOfCreditCard");
+        for (CreditCardBean creditCard : listOfCreditCard) {
             if (req.getParameter("blocButton " + creditCard.getId()) != null) {
                 if (creditCard.getCardStatusName().equals(Fields.CARD_STATUS__BLOCKED)) {
-                    CreditCardDao.unblockCard(creditCard);
+                    new CreditCardDao().unblockCard(creditCard);
                 } else {
-                    CreditCardDao.blocCard(creditCard);
+                    new CreditCardDao().blocCard(creditCard);
                 }
                 resp.sendRedirect("/allCardsForUser");
             }

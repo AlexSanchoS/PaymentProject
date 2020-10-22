@@ -1,13 +1,14 @@
 package ozamkovyi.db.dao;
 
 import ozamkovyi.db.EntityMapper;
+import ozamkovyi.db.bean.BankAccountBean;
+import ozamkovyi.db.bean.CreditCardBean;
+import ozamkovyi.db.entity.Client;
+import ozamkovyi.db.entity.CreditCard;
 import ozamkovyi.web.CalendarProcessing;
 import org.apache.log4j.Logger;
 import ozamkovyi.db.DBManager;
 import ozamkovyi.db.Fields;
-import ozamkovyi.db.entity.BankAccount;
-import ozamkovyi.db.entity.Client;
-import ozamkovyi.db.entity.CreditCard;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -184,7 +185,7 @@ public class CreditCardDao {
                     Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__ID + " and " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + " = ?";
 
-    public static ArrayList<CreditCard> getAllUnblockCreditCard(Client client) {
+    public ArrayList<CreditCard> getAllUnblockCreditCard(Client client) {
         ArrayList<CreditCard> listOfCreditCard = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -211,7 +212,7 @@ public class CreditCardDao {
         return listOfCreditCard;
     }
 
-    private static String generatorNewCardNumber() {
+    private String generatorNewCardNumber() {
         String re = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -221,7 +222,7 @@ public class CreditCardDao {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_IS_NUMBER_ALREADY_EXISTING);
             while (rez != 0) {
-                re = CreditCard.generatorCardNumber();
+                re = CreditCardBean.generatorCardNumber();
                 pstmt.setString(1, re);
                 rs = pstmt.executeQuery();
                 if (rs.next()) {
@@ -238,7 +239,7 @@ public class CreditCardDao {
         return re;
     }
 
-    public static void blockAllCardForAccount(BankAccount bankAccount) {
+    public void blockAllCardForAccount(BankAccountBean bankAccount) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -249,7 +250,7 @@ public class CreditCardDao {
             pstmt.setString(1, bankAccount.getNumber());
             pstmt.executeUpdate();
             while (rs.next()) {
-                CreditCard creditCard = new CreditCard();
+                CreditCardBean creditCard = new CreditCardBean();
                 creditCard.setId(rs.getInt(1));
                 blocCard(creditCard);
             }
@@ -260,7 +261,7 @@ public class CreditCardDao {
         }
     }
 
-    public static void addNewCard(BankAccount account) {
+    public void addNewCard(BankAccountBean account) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -286,7 +287,7 @@ public class CreditCardDao {
         }
     }
 
-    public static int  getCountCardByUser(Client client) {
+    public int  getCountCardByUser(Client client) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -309,12 +310,11 @@ public class CreditCardDao {
         return rez;
     }
 
-    public static  ArrayList<CreditCard> getCardList(Client client, int pageNumber, int sortType) {
-        ArrayList<CreditCard> listOfCreditCard = new ArrayList<>();
+    public ArrayList<CreditCardBean> getCardList(Client client, int pageNumber, int sortType) {
+        ArrayList<CreditCardBean> listOfCreditCard = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
-        CreditCard creditCard = null;
         String sort = null;
         switch (sortType) {
             case 1:
@@ -339,7 +339,15 @@ public class CreditCardDao {
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                creditCard = mapper.mapRow(rs);
+                CreditCardBean creditCard = new CreditCardBean();
+                Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
+                creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
+                creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
+                creditCard.setValidity(date);
+                creditCard.setBankAccountNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER));
+                creditCard.setUserId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID));
+                creditCard.setCardStatusId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID));
+                creditCard.setCardStatusName(rs.getString(Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS));
                 creditCard.setAccountStatusName(rs.getString(Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS));
                 listOfCreditCard.add(creditCard);
             }
@@ -353,7 +361,7 @@ public class CreditCardDao {
         return listOfCreditCard;
     }
 
-    private static int getIdStatusForCreditCard(String value) {
+    private int getIdStatusForCreditCard(String value) {
         int rez = 0;
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -379,11 +387,11 @@ public class CreditCardDao {
         return rez;
     }
 
-    public static CreditCard getCardById(int id) {
+    public CreditCardBean getCardById(int id) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
-        CreditCard creditCard = null;
+        CreditCardBean creditCard = null;
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_CREDIT_CARD_BY_ID);
@@ -392,7 +400,16 @@ public class CreditCardDao {
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                creditCard = mapper.mapRow(rs);
+                Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
+                creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
+                creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
+                creditCard.setValidity(date);
+                creditCard.setBankAccountNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER));
+                creditCard.setUserId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID));
+                creditCard.setCardStatusId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID));
+                creditCard.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                creditCard.setCurrency(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
+                creditCard.setCardStatusName(rs.getString(Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS));
             }
         } catch (SQLException throwables) {
             logger.error("Can't get credit card by id", throwables);
@@ -404,7 +421,7 @@ public class CreditCardDao {
         return creditCard;
     }
 
-    public static void blocCard(CreditCard card) {
+    public void blocCard(CreditCardBean card) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -424,7 +441,7 @@ public class CreditCardDao {
         }
     }
 
-    public static void unblockCard(CreditCard card) {
+    public void unblockCard(CreditCardBean card) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -444,7 +461,7 @@ public class CreditCardDao {
 
     }
 
-    public static int getUAHBalance(int id) {
+    public int getUAHBalance(int id) {
         int rez = 0;
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -469,7 +486,7 @@ public class CreditCardDao {
         return rez;
     }
 
-    private static void close(AutoCloseable forClose) {
+    private void close(AutoCloseable forClose) {
         if (forClose != null) {
             try {
                 forClose.close();
@@ -485,17 +502,14 @@ public class CreditCardDao {
         @Override
         public CreditCard mapRow(ResultSet rs) {
             try {
-                Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
                 CreditCard creditCard = new CreditCard();
+                Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
                 creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
                 creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
                 creditCard.setValidity(date);
                 creditCard.setBankAccountNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER));
                 creditCard.setUserId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID));
                 creditCard.setCardStatusId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID));
-                creditCard.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
-                creditCard.setCurrency(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
-                creditCard.setCardStatusName(rs.getString(Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS));
 
                 return creditCard;
             } catch (SQLException e) {
