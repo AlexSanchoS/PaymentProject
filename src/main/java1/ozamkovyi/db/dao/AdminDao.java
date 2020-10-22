@@ -110,7 +110,7 @@ public class AdminDao {
     /**
      * Extracts a Admin from the result set row.
      */
-    private static class AdminMapper implements EntityMapper<Admin> {
+    static class AdminMapper implements EntityMapper<Admin> {
 
         @Override
         public Admin mapRow(ResultSet rs) {

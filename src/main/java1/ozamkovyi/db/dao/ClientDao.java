@@ -151,14 +151,12 @@ public class ClientDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(sort);
+            ClientBeanMapper mapper = new ClientBeanMapper();
             pstmt.setInt(1, page * 10 - 10);
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                ClientBean client = new ClientBean();
-                client.setId(rs.getInt(Fields.CLIENT__ID));
-                client.setName(rs.getString(Fields.CLIENT__NAME));
-                client.setStatus(rs.getString(Fields.CLIENT__STATUS));
+                ClientBean client = mapper.mapRowForListOfClientForAdmin(rs);
                 client.setCreditCardCount(new CreditCardDao().getCountCardByUser(client));
                 client.setAccountCount(new BankAccountDao().getCountBankAccountByUser(client));
                 listOfClient.add(client);
@@ -248,7 +246,7 @@ public class ClientDao {
     }
 
 
-    private static class ClientMapper implements EntityMapper<Client> {
+    static class ClientMapper implements EntityMapper<Client> {
 
         @Override
         public Client mapRow(ResultSet rs) {
@@ -260,6 +258,40 @@ public class ClientDao {
                 client.setName(rs.getString(Fields.CLIENT__NAME));
                 client.setDate(CalendarProcessing.string2Date(rs.getString(Fields.CLIENT__DATE_OF_BIRTH)));
                 client.setLanguage(rs.getString(Fields.CLIENT__LANGUAGE));
+                client.setStatus(rs.getString(Fields.CLIENT__STATUS));
+                return client;
+            } catch (SQLException e) {
+                logger.error("Can't map client", e);
+                throw new IllegalStateException(e);
+            }
+        }
+    }
+
+    static class ClientBeanMapper implements EntityMapper<ClientBean> {
+
+        @Override
+        public ClientBean mapRow(ResultSet rs) {
+            try {
+                ClientBean client = new ClientBean();
+                client.setId(rs.getInt(Fields.CLIENT__ID));
+                client.setLogin(rs.getString(Fields.CLIENT__LOGIN));
+                client.setPassword(rs.getString(Fields.CLIENT__PASSWORD));
+                client.setName(rs.getString(Fields.CLIENT__NAME));
+                client.setDate(CalendarProcessing.string2Date(rs.getString(Fields.CLIENT__DATE_OF_BIRTH)));
+                client.setLanguage(rs.getString(Fields.CLIENT__LANGUAGE));
+                client.setStatus(rs.getString(Fields.CLIENT__STATUS));
+                return client;
+            } catch (SQLException e) {
+                logger.error("Can't map client", e);
+                throw new IllegalStateException(e);
+            }
+        }
+
+        public ClientBean mapRowForListOfClientForAdmin(ResultSet rs) {
+            try {
+                ClientBean client = new ClientBean();
+                client.setId(rs.getInt(Fields.CLIENT__ID));
+                client.setName(rs.getString(Fields.CLIENT__NAME));
                 client.setStatus(rs.getString(Fields.CLIENT__STATUS));
                 return client;
             } catch (SQLException e) {

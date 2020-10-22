@@ -16,7 +16,6 @@ public class UserLocalizationAndLogOutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         Object us = session.getAttribute("currentUser");
-        ClientDao clientDao = new ClientDao();
         if (req.getParameter("logOut") != null) {
             Cookie cookieOk = new Cookie("ok", "");
             Cookie cookieLogin = new Cookie("login", "");
@@ -33,7 +32,6 @@ public class UserLocalizationAndLogOutServlet extends HttpServlet {
             session.invalidate();
             resp.sendRedirect("/login");
         } else {
-
             if (us instanceof Client) {
                 Client user = (Client) us;
                 if (req.getParameter("engButton") != null) {
@@ -48,7 +46,7 @@ public class UserLocalizationAndLogOutServlet extends HttpServlet {
                     session.setAttribute("resourceBundle", resourceBundle);
                     user.setLanguage("ua");
                 }
-                clientDao.setClientLocal(user);
+                new ClientDao().setClientLocal(user);
             } else {
                 Admin admin = (Admin) us;
                 if (req.getParameter("engButton") != null) {

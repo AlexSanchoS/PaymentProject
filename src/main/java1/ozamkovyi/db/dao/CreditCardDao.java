@@ -195,11 +195,10 @@ public class CreditCardDao {
             pstmt = con.prepareStatement(getAllUnblockCreditCard);
             pstmt.setString(1, Fields.CARD_STATUS__UNBLOCKED);
             pstmt.setInt(2, client.getId());
+            CreditCardMapper mapper = new CreditCardMapper();
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                CreditCard creditCard = new CreditCard();
-                creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
-                creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
+                CreditCard creditCard = mapper.mapRowForGetAllUnblockCreditCard(rs);
                 listOfCreditCard.add(creditCard);
             }
         } catch (SQLException throwables) {
@@ -287,7 +286,7 @@ public class CreditCardDao {
         }
     }
 
-    public int  getCountCardByUser(Client client) {
+    public int getCountCardByUser(Client client) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -333,22 +332,13 @@ public class CreditCardDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(sort);
-            CreditCardMapper mapper = new CreditCardMapper();
+            CreditCardBeanMapper mapper = new CreditCardBeanMapper();
             pstmt.setInt(1, client.getId());
             pstmt.setInt(2, pageNumber * 10 - 10);
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                CreditCardBean creditCard = new CreditCardBean();
-                Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
-                creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
-                creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
-                creditCard.setValidity(date);
-                creditCard.setBankAccountNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER));
-                creditCard.setUserId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID));
-                creditCard.setCardStatusId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID));
-                creditCard.setCardStatusName(rs.getString(Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS));
-                creditCard.setAccountStatusName(rs.getString(Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS));
+                CreditCardBean creditCard = mapper.mapRowForGetCardList(rs);
                 listOfCreditCard.add(creditCard);
             }
         } catch (SQLException throwables) {
@@ -378,8 +368,7 @@ public class CreditCardDao {
 
         } catch (SQLException throwables) {
             logger.error("Can't status id for credit card", throwables);
-        }
-        finally {
+        } finally {
             close(rs);
             close(pstmt);
             close(con);
@@ -395,21 +384,12 @@ public class CreditCardDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_CREDIT_CARD_BY_ID);
-            CreditCardMapper mapper = new CreditCardMapper();
+            CreditCardBeanMapper mapper = new CreditCardBeanMapper();
             pstmt.setInt(1, id);
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
-                creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
-                creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
-                creditCard.setValidity(date);
-                creditCard.setBankAccountNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER));
-                creditCard.setUserId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID));
-                creditCard.setCardStatusId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID));
-                creditCard.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
-                creditCard.setCurrency(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
-                creditCard.setCardStatusName(rs.getString(Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS));
+                creditCard = mapper.mapRowForGetCardById(rs);
             }
         } catch (SQLException throwables) {
             logger.error("Can't get credit card by id", throwables);
@@ -478,7 +458,7 @@ public class CreditCardDao {
 
         } catch (SQLException throwables) {
             logger.error("Can't UAH balance for credit card", throwables);
-        }finally {
+        } finally {
             close(rs);
             close(pstmt);
             close(con);
@@ -497,7 +477,7 @@ public class CreditCardDao {
     }
 
 
-    private static class CreditCardMapper implements EntityMapper<CreditCard> {
+    static class CreditCardMapper implements EntityMapper<CreditCard> {
 
         @Override
         public CreditCard mapRow(ResultSet rs) {
@@ -511,6 +491,80 @@ public class CreditCardDao {
                 creditCard.setUserId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID));
                 creditCard.setCardStatusId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID));
 
+                return creditCard;
+            } catch (SQLException e) {
+                logger.error("Can't map credit card", e);
+                throw new IllegalStateException(e);
+            }
+        }
+
+        public CreditCard mapRowForGetAllUnblockCreditCard(ResultSet rs) {
+            try {
+                CreditCardBean creditCard = new CreditCardBean();
+                creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
+                creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
+                return creditCard;
+            } catch (SQLException e) {
+                logger.error("Can't map credit card", e);
+                throw new IllegalStateException(e);
+            }
+        }
+
+    }
+
+    static class CreditCardBeanMapper implements EntityMapper<CreditCardBean> {
+
+        @Override
+        public CreditCardBean mapRow(ResultSet rs) {
+            try {
+                CreditCardBean creditCard = new CreditCardBean();
+                Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
+                creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
+                creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
+                creditCard.setValidity(date);
+                creditCard.setBankAccountNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER));
+                creditCard.setUserId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID));
+                creditCard.setCardStatusId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID));
+                return creditCard;
+            } catch (SQLException e) {
+                logger.error("Can't map credit card", e);
+                throw new IllegalStateException(e);
+            }
+        }
+
+        public CreditCardBean mapRowForGetCardById(ResultSet rs) {
+            try {
+                CreditCardBean creditCard = new CreditCardBean();
+                Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
+                creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
+                creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
+                creditCard.setValidity(date);
+                creditCard.setBankAccountNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER));
+                creditCard.setUserId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID));
+                creditCard.setCardStatusId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID));
+                creditCard.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                creditCard.setCurrency(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
+                creditCard.setCardStatusName(rs.getString(Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS));
+                return creditCard;
+            } catch (SQLException e) {
+                logger.error("Can't map credit card", e);
+                throw new IllegalStateException(e);
+            }
+        }
+
+
+        public CreditCardBean mapRowForGetCardList(ResultSet rs) {
+            try {
+                CreditCardBean creditCard = new CreditCardBean();
+                Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
+                creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
+                creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
+                creditCard.setValidity(date);
+                creditCard.setBankAccountNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER));
+                creditCard.setUserId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID));
+                creditCard.setCardStatusId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID));
+                creditCard.setCardStatusName(rs.getString(Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS));
+                creditCard.setAccountStatusName(rs.getString(Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS));
                 return creditCard;
             } catch (SQLException e) {
                 logger.error("Can't map credit card", e);

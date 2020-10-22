@@ -271,14 +271,11 @@ public class BankAccountDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_ALL_ACCOUNT_NUMBER_AND_CURRENCY);
+            BankAccountBeanMapper mapper = new BankAccountBeanMapper();
             pstmt.setInt(1, client.getId());
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                BankAccountBean bankAccountBean = new BankAccountBean();
-                bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
-                bankAccountBean.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
-                bankAccountBean.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
-                bankAccountBean.setUserId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID));
+                BankAccountBean bankAccountBean = mapper.mapRowForGetAllAccount(rs);
                 listOfBankAccount.add(bankAccountBean);
             }
         } catch (SQLException throwables) {
@@ -364,19 +361,13 @@ public class BankAccountDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(sort);
-            BankAccountMapper mapper = new BankAccountMapper();
             pstmt.setInt(1, client.getId());
+            BankAccountBeanMapper mapper = new BankAccountBeanMapper();
             pstmt.setInt(2, page * 10 - 10);
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                BankAccountBean bankAccountBean = new BankAccountBean();
-                bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
-                bankAccountBean.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
-                bankAccountBean.setCurrencyId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID));
-                bankAccountBean.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
-                bankAccountBean.setAccountStatusName(rs.getString(Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS));
-                bankAccountBean.setAccountStatusId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID));
+                BankAccountBean bankAccountBean = mapper.mapRowForGetAccountList(rs);
                 listOfBankAccount.add(bankAccountBean);
             }
         } catch (SQLException throwables) {
@@ -423,16 +414,12 @@ public class BankAccountDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(sort);
-            BankAccountMapper mapper = new BankAccountMapper();
+            BankAccountBeanMapper mapper = new BankAccountBeanMapper();
             pstmt.setInt(1, page * 10 - 10);
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                BankAccountBean bankAccountBean = new BankAccountBean();
-                bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
-                bankAccountBean.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
-                bankAccountBean.setClientName(rs.getString(Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME));
-                bankAccountBean.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
+                BankAccountBean bankAccountBean = mapper.mapRowForGetAccountListForUnlock(rs);
                 listOfBankAccount.add(bankAccountBean);
             }
         } catch (SQLException throwables) {
@@ -706,7 +693,7 @@ public class BankAccountDao {
     /**
      * Extracts a Admin from the result set row.
      */
-    private static class BankAccountMapper implements EntityMapper<BankAccount> {
+    static class BankAccountMapper implements EntityMapper<BankAccount> {
 
         @Override
         public BankAccount mapRow(ResultSet rs) {
@@ -718,6 +705,66 @@ public class BankAccountDao {
                 bankAccount.setUserId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID));
                 bankAccount.setAccountStatusId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID));
                 return bankAccount;
+            } catch (SQLException e) {
+                logger.error("Can't map bank account", e);
+                throw new IllegalStateException(e);
+            }
+        }
+    }
+
+
+    static class BankAccountBeanMapper implements EntityMapper<BankAccountBean> {
+        @Override
+        public BankAccountBean mapRow(ResultSet rs) {
+            try {
+                BankAccountBean bankAccount = new BankAccountBean();
+                bankAccount.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
+                bankAccount.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                bankAccount.setCurrencyId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID));
+                bankAccount.setUserId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID));
+                bankAccount.setAccountStatusId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID));
+                return bankAccount;
+            } catch (SQLException e) {
+                logger.error("Can't map bank account", e);
+                throw new IllegalStateException(e);
+            }
+        }
+        public BankAccountBean mapRowForGetAllAccount(ResultSet rs) {
+            try {
+                BankAccountBean bankAccountBean = new BankAccountBean();
+                bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
+                bankAccountBean.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
+                bankAccountBean.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                bankAccountBean.setUserId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID));
+                return bankAccountBean;
+            } catch (SQLException e) {
+                logger.error("Can't map bank account", e);
+                throw new IllegalStateException(e);
+            }
+        }
+        public BankAccountBean mapRowForGetAccountList(ResultSet rs) {
+            try {
+                BankAccountBean bankAccountBean = new BankAccountBean();
+                bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
+                bankAccountBean.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                bankAccountBean.setCurrencyId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID));
+                bankAccountBean.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
+                bankAccountBean.setAccountStatusName(rs.getString(Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS));
+                bankAccountBean.setAccountStatusId(rs.getInt(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__ACCOUNT_STATUS_ID));
+                return bankAccountBean;
+            } catch (SQLException e) {
+                logger.error("Can't map bank account", e);
+                throw new IllegalStateException(e);
+            }
+        }
+        public BankAccountBean mapRowForGetAccountListForUnlock(ResultSet rs) {
+            try {
+                BankAccountBean bankAccountBean = new BankAccountBean();
+                bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
+                bankAccountBean.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                bankAccountBean.setClientName(rs.getString(Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME));
+                bankAccountBean.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
+                return bankAccountBean;
             } catch (SQLException e) {
                 logger.error("Can't map bank account", e);
                 throw new IllegalStateException(e);

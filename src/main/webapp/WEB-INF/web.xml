@@ -13,7 +13,7 @@
 
     <filter>
         <filter-name>filter</filter-name>
-        <filter-class>ozamkovyi.web.filters.AuthenticationFilter</filter-class>
+        <filter-class>ozamkovyi.web.filter.AuthenticationFilter</filter-class>
         <init-param>
             <param-name>active</param-name>
             <param-value>true</param-value>

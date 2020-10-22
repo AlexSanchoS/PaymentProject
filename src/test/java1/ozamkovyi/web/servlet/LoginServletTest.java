@@ -66,7 +66,7 @@ public class LoginServletTest {
         final HttpServletResponse response = mock(HttpServletResponse.class);
         final RequestDispatcher dispatcher = mock(RequestDispatcher.class);
 
-        when(request.getRequestDispatcher(path)).thenReturn(dispatcher); //var... args => OngoingStubbing<T> thenReturn(T value, T... values);
+        when(request.getRequestDispatcher(path)).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 
@@ -95,8 +95,6 @@ public class LoginServletTest {
     public void shouldRedirectToAdminHomepage() throws ServletException, IOException {
         LoginServlet servlet = new LoginServlet();
         servlet.doPost(mockRequest, mockResponse);
-
-        //verify(mockRequest, times(1)).getSession();
         verify(mockResponse).sendRedirect("/adminHomepage");
     }
 }

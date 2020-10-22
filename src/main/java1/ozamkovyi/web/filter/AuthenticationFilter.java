@@ -1,4 +1,4 @@
-package ozamkovyi.web.filters;
+package ozamkovyi.web.filter;
 
 
 import ozamkovyi.db.entity.Client;
@@ -34,7 +34,6 @@ public class AuthenticationFilter implements Filter {
             checkForLoginOrRegistration(request, response, resp, session, currentUser, chain);
             return;
         }
-
         if (requestURI.contains("registration")) {
             checkForLoginOrRegistration(request, response, resp, session, currentUser, chain);
             return;
