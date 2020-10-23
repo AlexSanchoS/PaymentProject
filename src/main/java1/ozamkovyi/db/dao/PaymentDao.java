@@ -312,21 +312,13 @@ public class PaymentDao {
             pstmt.setInt(1, client.getId());
             pstmt.setInt(2, page * 10 - 10);
             rs = pstmt.executeQuery();
+            PaymentBeanMapper mapper = new PaymentBeanMapper();
 
             while (rs.next()) {
-                PaymentBean payment = new PaymentBean();
-                Calendar calendar = CalendarProcessing.string2FullDate(rs.getString(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE));
-                payment.setId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID));
-                payment.setNumber(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER));
-                payment.setDate(calendar);
-                payment.setAmount(rs.getDouble(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__AMOUNT));
-                payment.setPaymentStatusId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID));
-                payment.setSenderCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD));
-                payment.setRecipientCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD));
-                payment.setRecipientCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD));
-                payment.setStatusName(rs.getString(Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS));
+                PaymentBean payment = mapper.mapRowForGetPaymentList(rs);
                 getRecipientCardNumberAndName(payment);
                 getSenderCardNumber(payment);
+                listOfPayment.add(payment);
             }
         } catch (SQLException throwables) {
             logger.error("Can't get list of payment", throwables);
@@ -486,7 +478,7 @@ public class PaymentDao {
         }
     }
 
-    private static class PaymentMapper implements EntityMapper<Payment> {
+    static class PaymentMapper implements EntityMapper<Payment> {
 
         @Override
         public Payment mapRow(ResultSet rs) {
@@ -507,5 +499,49 @@ public class PaymentDao {
                 throw new IllegalStateException(e);
             }
         }
+    }
+
+    static class PaymentBeanMapper implements EntityMapper<PaymentBean> {
+
+        @Override
+        public PaymentBean mapRow(ResultSet rs) {
+            try {
+                PaymentBean payment = new PaymentBean();
+                Calendar calendar = CalendarProcessing.string2FullDate(rs.getString(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE));
+                payment.setId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID));
+                payment.setNumber(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER));
+                payment.setDate(calendar);
+                payment.setAmount(rs.getDouble(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__AMOUNT));
+                payment.setPaymentStatusId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID));
+                payment.setSenderCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD));
+                payment.setRecipientCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD));
+
+                return payment;
+            } catch (SQLException e) {
+                logger.error("Can't map payment", e);
+                throw new IllegalStateException(e);
+            }
+        }
+
+        public PaymentBean mapRowForGetPaymentList(ResultSet rs) {
+            try {
+                PaymentBean payment = new PaymentBean();
+                Calendar calendar = CalendarProcessing.string2FullDate(rs.getString(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE));
+                payment.setId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID));
+                payment.setNumber(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER));
+                payment.setDate(calendar);
+                payment.setAmount(rs.getDouble(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__AMOUNT));
+                payment.setPaymentStatusId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID));
+                payment.setSenderCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD));
+                payment.setRecipientCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD));
+                payment.setStatusName(rs.getString(Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS));
+
+                return payment;
+            } catch (SQLException e) {
+                logger.error("Can't map payment", e);
+                throw new IllegalStateException(e);
+            }
+        }
+
     }
 }

@@ -2,6 +2,7 @@ package ozamkovyi.db.dao;
 
 import org.apache.log4j.Logger;
 import ozamkovyi.db.DBManager;
+import ozamkovyi.db.EntityMapper;
 import ozamkovyi.db.Fields;
 import ozamkovyi.db.entity.Currency;
 
@@ -51,6 +52,22 @@ public class CurrencyDao {
             } catch (Exception e) {
                 logger.error("Can't close autoCloseable object", e);
             }
+        }
+    }
+
+    static class CurrencyMapper implements EntityMapper<Currency> {
+
+        @Override
+        public Currency mapRow(ResultSet rs) {
+            Currency currency = new Currency();
+            try {
+                currency.setId(rs.getInt(Fields.CURRENCY__ID));
+                currency.setName(rs.getString(Fields.CURRENCY__NAME));
+                currency.setCourse(rs.getFloat(Fields.CURRENCY__COURSE));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return currency;
         }
     }
 
