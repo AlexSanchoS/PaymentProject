@@ -429,7 +429,6 @@ public class PaymentDao {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
-        ResultSet rs = null;
         try {
             con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_CREATE_NEW_PAYMENT);
@@ -453,7 +452,6 @@ public class PaymentDao {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
-        ResultSet rs = null;
         try {
             con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_UPDATE_PAYMENT_STATUS);

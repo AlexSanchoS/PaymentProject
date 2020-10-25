@@ -1,10 +1,7 @@
 package ozamkovyi.web.servlet.adminServlets;
 
-import ozamkovyi.db.bean.BankAccountBean;
-import ozamkovyi.db.bean.ClientBean;
 import ozamkovyi.db.dao.CurrencyDao;
-import ozamkovyi.db.Fields;
-import ozamkovyi.db.dao.BankAccountDao;
+import ozamkovyi.db.entity.Currency;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class AllAccountForUserServlet extends HttpServlet {
+public class AdminExchangeRateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -30,13 +27,10 @@ public class AllAccountForUserServlet extends HttpServlet {
             pageNumber = (int) page;
             sortType = (int) session.getAttribute("sortType");
         }
-        ClientBean currentClient = (ClientBean) session.getAttribute("currentClient");
-        session.setAttribute("countAccount", new BankAccountDao().getCountBankAccountByUser(currentClient));
-        session.setAttribute("listOfCurrencyForNewAccount", new CurrencyDao().getAllCurrency());
-        session.setAttribute("listOfBankAccount", new BankAccountDao().getAccountList(currentClient, pageNumber, sortType));
-        getServletContext().getRequestDispatcher("/jsp/allAccountForUser.jsp").forward(req, resp);
+        session.setAttribute("countCurrency", new CurrencyDao().getCountCurrency());
+        session.setAttribute("listOfCurrency", new CurrencyDao().getAllCurrencyForChange(pageNumber, sortType));
+        getServletContext().getRequestDispatcher("/jsp/adminExchangeRate.jsp").forward(req, resp);
     }
-
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -46,17 +40,17 @@ public class AllAccountForUserServlet extends HttpServlet {
             if (pageNumber != null) {
                 session.setAttribute("pageNumber", (int) pageNumber + 1);
             }
-            resp.sendRedirect("/allAccountsForUser");
+            resp.sendRedirect("/adminExchangeRate");
         }
         if (req.getParameter("previousPage") != null) {
             Object pageNumber = session.getAttribute("pageNumber");
             if (pageNumber != null) {
                 session.setAttribute("pageNumber", (int) pageNumber - 1);
             }
-            resp.sendRedirect("/allAccountsForUser");
+            resp.sendRedirect("/adminExchangeRate");
         }
 
-        if (req.getParameter("sortByNumber") != null) {
+        if (req.getParameter("sortByName") != null) {
             Object sortType = session.getAttribute("sortType");
             if (sortType != null) {
                 int sort = (int) sortType;
@@ -69,9 +63,9 @@ public class AllAccountForUserServlet extends HttpServlet {
                 session.setAttribute("sortType", null);
             }
             session.setAttribute("pageNumber", 1);
-            resp.sendRedirect("/allAccountsForUser");
+            resp.sendRedirect("/adminExchangeRate");
         }
-        if (req.getParameter("sortByCurrency") != null) {
+        if (req.getParameter("sortByRate") != null) {
             Object sortType = session.getAttribute("sortType");
             if (sortType != null) {
                 int sort = (int) sortType;
@@ -84,62 +78,35 @@ public class AllAccountForUserServlet extends HttpServlet {
                 session.setAttribute("sortType", null);
             }
             session.setAttribute("pageNumber", 1);
-            resp.sendRedirect("/allAccountsForUser");
-        }
-        if (req.getParameter("sortByBalance") != null) {
-            Object sortType = session.getAttribute("sortType");
-            if (sortType != null) {
-                int sort = (int) sortType;
-                if (sort == 5) {
-                    session.setAttribute("sortType", 6);
-                } else {
-                    session.setAttribute("sortType", 5);
-                }
-            } else {
-                session.setAttribute("sortType", null);
-            }
-            session.setAttribute("pageNumber", 1);
-            resp.sendRedirect("/allAccountsForUser");
+            resp.sendRedirect("/adminExchangeRate");
         }
 
 
-        ArrayList<BankAccountBean> listOfBankAccount = (ArrayList<BankAccountBean>) session.getAttribute("listOfBankAccount");
-        for (BankAccountBean bankAccount : listOfBankAccount) {
-            if (req.getParameter("blocButton " + bankAccount.getNumber()) != null) {
-                if (bankAccount.getAccountStatusName().equals(Fields.ACCOUNT_STATUS__BLOCKED)) {
-                    new BankAccountDao().changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__EXPECTATION);
-                } else {
-                    new BankAccountDao().changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__BLOCKED);
-                }
-                resp.sendRedirect("/allAccountsForUser");
-            }
-
-            if (req.getParameter("replenishButton " + bankAccount.getNumber()) != null) {
-                Object amountOdj = req.getParameter("amount " + bankAccount.getNumber());
+        ArrayList<Currency> listOfCurrency = (ArrayList<Currency>) session.getAttribute("listOfCurrency");
+        for (Currency currency : listOfCurrency) {
+            if (req.getParameter("change " + currency.getId()) != null) {
+                Object amountOdj = req.getParameter("amount " + currency.getId());
                 double amount = 0;
                 if (amountOdj != null) {
+                    System.out.println("null");
                     amount = Double.parseDouble((String) amountOdj);
                 }
-                new BankAccountDao().addToBalance(bankAccount.getNumber(), amount);
-                resp.sendRedirect("/allAccountsForUser");
+                System.out.println(amount);
+                new CurrencyDao().changeRate(currency.getId(), (float) amount);
+                resp.sendRedirect("/adminExchangeRate");
             }
         }
 
-        if (req.getParameter("buttonAllUsers") != null) {
-            session.setAttribute("pageNumber", null);
-            session.setAttribute("sortType", null);
-            resp.sendRedirect("/adminAllUsers");
-        }
+
         if (req.getParameter("buttonUnlockRequests") != null) {
             session.setAttribute("pageNumber", null);
             session.setAttribute("sortType", null);
             resp.sendRedirect("/adminHomepage");
         }
-        if (req.getParameter("buttonExchangeRate") != null) {
+        if (req.getParameter("buttonAllUsers") != null) {
             session.setAttribute("pageNumber", null);
             session.setAttribute("sortType", null);
-            resp.sendRedirect("/adminExchangeRate");
+            resp.sendRedirect("/adminAllUsers");
         }
-
     }
 }

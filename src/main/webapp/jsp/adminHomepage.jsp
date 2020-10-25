@@ -68,6 +68,9 @@
             </button>
             <button name="buttonAllUsers" class="button"><%=bundle.getString("adminHomepage_jsp.button.allUsers")%>
             </button>
+            <button name="buttonExchangeRate"
+                    class="button"><%=bundle.getString("adminHomepage_jsp.button.exchangeRate")%>
+            </button>
         </div>
 
         <div class="main_content">
@@ -85,6 +88,7 @@
             </div>
             <table>
                 <tr>
+                    <td class="checkbox_t"></td>
                     <td class="head_of_table"><%=bundle.getString("adminHomepage_jsp.table.number")%>
                     </td>
                     <td class="head_of_table"><%=bundle.getString("adminHomepage_jsp.table.balance")%>
@@ -98,6 +102,7 @@
                 <c:forEach var="account" items="${listOfBankAccountForUnlock}">
 
                     <tr class="line">
+                        <td class="checkbox_t"><input name = "check ${account.getNumber()}" type="checkbox"></td>
                         <td>${account.getNumber()}</td>
                         <td>${account.getBalanceDouble()}</td>
                         <td>${account.getCurrencyName()}</td>
@@ -108,8 +113,10 @@
                         </td>
                     </tr>
                 </c:forEach>
-
             </table>
+
+            <div class="block_bottom" ><button class="block_card_bottom" name = "groupBlockButton"><%=bundle.getString("adminHomepage_jsp.button.unblock")%></button></div>
+
             <div class="bottom_buttons">
                 <button name="previousPage" class="bottom_button" ${previousDisable}>&#60;&#60;</button>
                 <button name="nextPage" class="bottom_button" ${nextDisable}>&#62;&#62;</button>

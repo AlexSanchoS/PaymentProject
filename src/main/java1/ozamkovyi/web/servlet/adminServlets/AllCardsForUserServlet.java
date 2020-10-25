@@ -32,14 +32,9 @@ public class AllCardsForUserServlet extends HttpServlet {
             sortType = (int) session.getAttribute("sortType");
         }
         ClientBean currentClient = (ClientBean) session.getAttribute("currentClient");
-        CreditCardDao creditCardDao = new CreditCardDao();
-        session.setAttribute("countCard", creditCardDao.getCountCardByUser(currentClient));
-        ArrayList<CreditCardBean> listOfCreditCard = creditCardDao.getCardList(currentClient, pageNumber, sortType);
-        session.setAttribute("listOfCreditCard", listOfCreditCard);
-        ArrayList<BankAccountBean> listOfAccountForCreditCard = new BankAccountDao().getAllAccount(currentClient);
-        session.setAttribute("listOfAccountForCreditCard", listOfAccountForCreditCard);
-
-
+        session.setAttribute("countCard", new CreditCardDao().getCountCardByUser(currentClient));
+        session.setAttribute("listOfCreditCard", new CreditCardDao().getCardList(currentClient, pageNumber, sortType));
+        session.setAttribute("listOfAccountForCreditCard", new BankAccountDao().getAllAccount(currentClient));
         getServletContext().getRequestDispatcher("/jsp/allCardsForUser.jsp").forward(req, resp);
     }
 
@@ -113,6 +108,11 @@ public class AllCardsForUserServlet extends HttpServlet {
             session.setAttribute("pageNumber", null);
             session.setAttribute("sortType", null);
             resp.sendRedirect("/adminHomepage");
+        }
+        if (req.getParameter("buttonExchangeRate") != null) {
+            session.setAttribute("pageNumber", null);
+            session.setAttribute("sortType", null);
+            resp.sendRedirect("/adminExchangeRate");
         }
     }
 

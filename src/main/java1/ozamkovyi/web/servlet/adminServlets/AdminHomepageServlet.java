@@ -28,10 +28,8 @@ public class AdminHomepageServlet extends HttpServlet {
             pageNumber = (int) page;
             sortType = (int) session.getAttribute("sortType");
         }
-
         session.setAttribute("countAccount", new BankAccountDao().getCountBankAccountForUnlock());
-        ArrayList<BankAccountBean> listOfBankAccountForUnlock = new BankAccountDao().getAccountListForUnlock(pageNumber, sortType);
-        session.setAttribute("listOfBankAccountForUnlock", listOfBankAccountForUnlock);
+        session.setAttribute("listOfBankAccountForUnlock", new BankAccountDao().getAccountListForUnlock(pageNumber, sortType));
         getServletContext().getRequestDispatcher("/jsp/adminHomepage.jsp").forward(req, resp);
     }
 
@@ -86,6 +84,16 @@ public class AdminHomepageServlet extends HttpServlet {
             resp.sendRedirect("/adminHomepage");
         }
 
+        if (req.getParameter("groupBlockButton") != null) {
+            ArrayList<BankAccountBean> listOfBankAccountForUnlock = (ArrayList<BankAccountBean>) session.getAttribute("listOfBankAccountForUnlock");
+            for (BankAccountBean bankAccount : listOfBankAccountForUnlock) {
+                if (req.getParameter("check " + bankAccount.getNumber()) != null) {
+                    new BankAccountDao().changeStatusFotBankAccount(bankAccount, Fields.ACCOUNT_STATUS__UNBLOCKED);
+                }
+            }
+            resp.sendRedirect("/adminHomepage");
+        }
+
         ArrayList<BankAccountBean> listOfBankAccountForUnlock = (ArrayList<BankAccountBean>) session.getAttribute("listOfBankAccountForUnlock");
         for (BankAccountBean bankAccount : listOfBankAccountForUnlock) {
             if (req.getParameter("unblockButton " + bankAccount.getNumber()) != null) {
@@ -98,6 +106,11 @@ public class AdminHomepageServlet extends HttpServlet {
             session.setAttribute("pageNumber", null);
             session.setAttribute("sortType", null);
             resp.sendRedirect("/adminAllUsers");
+        }
+        if (req.getParameter("buttonExchangeRate") != null) {
+            session.setAttribute("pageNumber", null);
+            session.setAttribute("sortType", null);
+            resp.sendRedirect("/adminExchangeRate");
         }
     }
 }

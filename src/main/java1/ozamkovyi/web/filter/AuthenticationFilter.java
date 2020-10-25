@@ -53,7 +53,7 @@ public class AuthenticationFilter implements Filter {
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) {
             Cookie[] cookies = req.getCookies();
-            if (cookies.length > 1) {
+            if (cookies!=null) {
                 String login = null;
                 String password = null;
                 for (Cookie cookie : cookies) {

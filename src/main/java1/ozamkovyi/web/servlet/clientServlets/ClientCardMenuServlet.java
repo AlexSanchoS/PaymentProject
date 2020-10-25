@@ -1,6 +1,7 @@
 package ozamkovyi.web.servlet.clientServlets;
 
 import ozamkovyi.db.bean.BankAccountBean;
+import ozamkovyi.db.bean.ClientBean;
 import ozamkovyi.db.bean.CreditCardBean;
 import ozamkovyi.db.dao.CreditCardDao;
 import ozamkovyi.db.dao.BankAccountDao;
@@ -21,7 +22,7 @@ public class ClientCardMenuServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Client currentUser = (Client) session.getAttribute("currentUser");
+        ClientBean currentUser = (ClientBean) session.getAttribute("currentUser");
         Object page = session.getAttribute("pageNumber");
         int pageNumber = 0;
         int sortType = 0;

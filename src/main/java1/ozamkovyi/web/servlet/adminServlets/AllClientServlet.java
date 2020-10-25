@@ -32,8 +32,7 @@ public class AllClientServlet extends HttpServlet {
             sortType = (int) session.getAttribute("sortType");
         }
         session.setAttribute("countClient", new ClientDao().getCountClient());
-        ArrayList<ClientBean> listOfClient = new ClientDao().getListOfClientForAdmin(pageNumber, sortType);
-        session.setAttribute("listOfClient", listOfClient);
+        session.setAttribute("listOfClient", new ClientDao().getListOfClientForAdmin(pageNumber, sortType));
         getServletContext().getRequestDispatcher("/jsp/allClient.jsp").forward(req, resp);
     }
 
@@ -123,6 +122,11 @@ public class AllClientServlet extends HttpServlet {
             session.setAttribute("pageNumber", null);
             session.setAttribute("sortType", null);
             resp.sendRedirect("/adminHomepage");
+        }
+        if (req.getParameter("buttonExchangeRate") != null) {
+            session.setAttribute("pageNumber", null);
+            session.setAttribute("sortType", null);
+            resp.sendRedirect("/adminExchangeRate");
         }
     }
 }

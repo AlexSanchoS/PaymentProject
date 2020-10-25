@@ -296,7 +296,7 @@ public class BankAccountDao {
      *            Client for search.
      * @return count.
      */
-    public int getCountBankAccountByUser(Client client) {
+    public int getCountBankAccountByUser(ClientBean client) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -332,7 +332,7 @@ public class BankAccountDao {
      *              Sorting type
      * @return ArrayList of BankAccount.
      */
-    public ArrayList<BankAccountBean> getAccountList(Client client, int page, int sortType) {
+    public ArrayList<BankAccountBean> getAccountList(ClientBean client, int page, int sortType) {
         ArrayList<BankAccountBean> listOfBankAccount = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -476,7 +476,6 @@ public class BankAccountDao {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
-        ResultSet rs = null;
         try {
             con = dbManager.getConnection();
             int newStatusId = getStatusIdByStatus(newStatus);
@@ -538,7 +537,6 @@ public class BankAccountDao {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
-        ResultSet rs = null;
         try {
             con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_CHANGE_BALANCE_FOR_BANK_ACCOUNT);

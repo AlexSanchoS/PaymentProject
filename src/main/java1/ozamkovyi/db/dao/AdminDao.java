@@ -45,10 +45,6 @@ public class AdminDao {
         Connection con = null;
         try {
             con = DBManager.getInstance().getConnection();
-            if (con==null){
-                logger.error("Connection is null");
-                return admin;
-            }
             pstmt = con.prepareStatement(SQL__FIND_ADMIN_BY_LOGIN_AND_PASSWORD);
             AdminMapper mapper = new AdminMapper();
             pstmt.setString(1, login);

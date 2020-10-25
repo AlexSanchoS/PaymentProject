@@ -67,6 +67,23 @@ public class AllCardsForUserServletTest {
     }
 
     @Test
+    public void shouldRedirectToAdminExchangeRate() throws ServletException, IOException {
+        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        HttpSession session = mock(HttpSession.class);
+        ArrayList<CreditCardBean> listOfBankAccountForUnlock = new ArrayList<>();
+
+        when(request.getSession()).thenReturn(session);
+        when(request.getParameter("buttonExchangeRate")).thenReturn("ok");
+        when(session.getAttribute("listOfCreditCard")).thenReturn(listOfBankAccountForUnlock);
+        servlet.doPost(request, response);
+
+        verify(response, times(1)).sendRedirect("/adminExchangeRate");
+    }
+
+    @Test
     public void shouldRedirectToAdminHomepage() throws ServletException, IOException {
         AllCardsForUserServlet servlet = new AllCardsForUserServlet();
 

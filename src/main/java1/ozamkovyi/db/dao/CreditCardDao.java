@@ -2,6 +2,7 @@ package ozamkovyi.db.dao;
 
 import ozamkovyi.db.EntityMapper;
 import ozamkovyi.db.bean.BankAccountBean;
+import ozamkovyi.db.bean.ClientBean;
 import ozamkovyi.db.bean.CreditCardBean;
 import ozamkovyi.db.entity.Client;
 import ozamkovyi.db.entity.CreditCard;
@@ -286,7 +287,7 @@ public class CreditCardDao {
         }
     }
 
-    public int getCountCardByUser(Client client) {
+    public int getCountCardByUser(ClientBean client) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -309,7 +310,7 @@ public class CreditCardDao {
         return rez;
     }
 
-    public ArrayList<CreditCardBean> getCardList(Client client, int pageNumber, int sortType) {
+    public ArrayList<CreditCardBean> getCardList(ClientBean client, int pageNumber, int sortType) {
         ArrayList<CreditCardBean> listOfCreditCard = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;

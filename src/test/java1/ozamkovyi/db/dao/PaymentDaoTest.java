@@ -5,11 +5,9 @@ import org.junit.Test;
 import ozamkovyi.db.Fields;
 import ozamkovyi.db.bean.PaymentBean;
 import ozamkovyi.db.entity.Payment;
-import ozamkovyi.web.CalendarProcessing;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

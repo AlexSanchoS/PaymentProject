@@ -20,6 +20,117 @@ public class CurrencyDao {
     private static final String SQL_GET_ALL_CURRENCY = "SELECT " + Fields.CURRENCY__NAME + ", " +
             Fields.CURRENCY__ID + " FROM " + Fields.TABLE__CURRENCY;
 
+    private static final String SQL_GET_ALL_CURRENCY_SORT1_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
+            Fields.CURRENCY__ID + ", " +
+            Fields.CURRENCY__COURSE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
+            Fields.CURRENCY__NAME + " limit 10 offset ?";
+
+    private static final String SQL_GET_ALL_CURRENCY_SORT2_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
+            Fields.CURRENCY__ID + ", " +
+            Fields.CURRENCY__COURSE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
+            Fields.CURRENCY__NAME + " DESC limit 10 offset ?";
+
+    private static final String SQL_GET_ALL_CURRENCY_SORT3_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
+            Fields.CURRENCY__ID + ", " +
+            Fields.CURRENCY__COURSE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
+            Fields.CURRENCY__COURSE + " limit 10 offset ?";
+
+    private static final String SQL_GET_ALL_CURRENCY_SORT4_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
+            Fields.CURRENCY__ID + ", " +
+            Fields.CURRENCY__COURSE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
+            Fields.CURRENCY__COURSE + " DESC limit 10 offset ?";
+
+
+    private static final String SQL_GET_COUNT_CURRENCY = "SELECT COUNT(" + Fields.CURRENCY__ID + ") " +
+            " FROM " + Fields.TABLE__CURRENCY;
+
+    private static final String SQL_CHANGE_RATE_FOR_CURRENCY = "UPDATE " + Fields.TABLE__CURRENCY +
+            " SET " + Fields.CURRENCY__COURSE + " =? WHERE " + Fields.CURRENCY__ID + " =?";
+
+
+    public ArrayList<Currency> getAllCurrencyForChange(int page, int sortType) {
+        ArrayList<Currency> listOfCurrency = new ArrayList<>();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        String sort = null;
+        switch (sortType) {
+            case 1:
+                sort = SQL_GET_ALL_CURRENCY_SORT1_LIMIT;
+                break;
+            case 2:
+                sort = SQL_GET_ALL_CURRENCY_SORT2_LIMIT;
+                break;
+            case 3:
+                sort = SQL_GET_ALL_CURRENCY_SORT3_LIMIT;
+                break;
+            case 4:
+                sort = SQL_GET_ALL_CURRENCY_SORT4_LIMIT;
+                break;
+        }
+
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(sort);
+            CurrencyMapper mapper = new CurrencyMapper();
+            pstmt.setInt(1, page * 10 - 10);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Currency currency = mapper.mapRow(rs);
+                listOfCurrency.add(currency);
+            }
+        } catch (SQLException throwables) {
+            logger.error("Can't get all currency", throwables);
+        } finally {
+            close(rs);
+            close(pstmt);
+            close(con);
+        }
+        return listOfCurrency;
+    }
+
+    public int getCountCurrency() {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        int rez = 0;
+        try {
+            con = DBManager.getInstance().getConnection();
+            pstmt = con.prepareStatement(SQL_GET_COUNT_CURRENCY);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                rez = rs.getInt(1);
+            }
+        } catch (SQLException throwables) {
+            logger.error("Can't get client count", throwables);
+        } finally {
+            close(rs);
+            close(pstmt);
+            close(con);
+        }
+        return rez;
+    }
+
+    public void changeRate(int id, float rate) {
+        PreparedStatement pstmt = null;
+        Connection con = null;
+        DBManager dbManager = DBManager.getInstance();
+        try {
+            con = dbManager.getConnection();
+            pstmt = con.prepareStatement(SQL_CHANGE_RATE_FOR_CURRENCY);
+            pstmt.setFloat(1, rate);
+            pstmt.setInt(2, id);
+            System.out.println(pstmt);
+            pstmt.executeUpdate();
+
+        } catch (SQLException throwables) {
+            logger.error("Can't change status for bank account", throwables);
+        } finally {
+            dbManager.commitAndClose(con);
+        }
+    }
+
+
     public ArrayList<Currency> getAllCurrency() {
         ArrayList<Currency> listOfCurrency = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -28,11 +139,10 @@ public class CurrencyDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_ALL_CURRENCY);
+            CurrencyMapper mapper = new CurrencyMapper();
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                Currency currency = new Currency();
-                currency.setId(rs.getInt(Fields.CURRENCY__ID));
-                currency.setName(rs.getString(Fields.CURRENCY__NAME));
+                Currency currency = mapper.mapRowForGetAllCurrency(rs);
                 listOfCurrency.add(currency);
             }
         } catch (SQLException throwables) {
@@ -64,6 +174,17 @@ public class CurrencyDao {
                 currency.setId(rs.getInt(Fields.CURRENCY__ID));
                 currency.setName(rs.getString(Fields.CURRENCY__NAME));
                 currency.setCourse(rs.getFloat(Fields.CURRENCY__COURSE));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return currency;
+        }
+
+        public Currency mapRowForGetAllCurrency(ResultSet rs) {
+            Currency currency = new Currency();
+            try {
+                currency.setId(rs.getInt(Fields.CURRENCY__ID));
+                currency.setName(rs.getString(Fields.CURRENCY__NAME));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

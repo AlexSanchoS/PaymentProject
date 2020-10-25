@@ -1,9 +1,9 @@
 package ozamkovyi.db.entity;
 
 public abstract class User {
-    private int id;
-    private String login;
-    private String password;
+    protected int id;
+    protected String login;
+    protected String password;
 
 
     public int getId() {

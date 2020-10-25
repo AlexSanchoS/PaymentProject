@@ -70,6 +70,9 @@
             <button name="buttonAllUsers"
                     class="button"><%=bundle.getString("adminHomepage_jsp.button.allUsers")%>
             </button>
+            <button name="buttonExchangeRate"
+                    class="button"><%=bundle.getString("adminHomepage_jsp.button.exchangeRate")%>
+            </button>
         </div>
 
         <div class="main_content">

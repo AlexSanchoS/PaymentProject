@@ -73,6 +73,23 @@ public class AdminHomepageServletTest {
     }
 
     @Test
+    public void shouldRedirectToAdminExchangeRate() throws ServletException, IOException {
+        AdminHomepageServlet servlet = new AdminHomepageServlet();
+
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        HttpSession session = mock(HttpSession.class);
+        ArrayList<BankAccountBean> listOfBankAccountForUnlock = new ArrayList<>();
+
+        when(request.getSession()).thenReturn(session);
+        when(request.getParameter("buttonExchangeRate")).thenReturn("ok");
+        when(session.getAttribute("listOfBankAccountForUnlock")).thenReturn(listOfBankAccountForUnlock);
+        servlet.doPost(request, response);
+
+        verify(response, times(1)).sendRedirect("/adminExchangeRate");
+    }
+
+    @Test
     public void shouldRedirectToAdminHomepageSortByName() throws ServletException, IOException {
         AdminHomepageServlet servlet = new AdminHomepageServlet();
 

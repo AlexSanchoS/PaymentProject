@@ -28,4 +28,18 @@ public class CurrencyDaoTest {
         Assert.assertEquals(name, currency.getName());
         Assert.assertEquals(course, currency.getCourse(), 0.001);
     }
+
+    @Test
+    public void ClientMapperForGetAllCurrency() throws SQLException {
+        CurrencyDao.CurrencyMapper currencyMapper = new CurrencyDao.CurrencyMapper();
+        ResultSet rs = mock(ResultSet.class);
+        int id = 1;
+        String name = "Alex";
+        when(rs.getInt(Fields.CURRENCY__ID)).thenReturn(id);
+        when(rs.getString(Fields.CURRENCY__NAME)).thenReturn(name);
+        Currency currency = currencyMapper.mapRowForGetAllCurrency(rs);
+
+        Assert.assertEquals(id, currency.getId());
+        Assert.assertEquals(name, currency.getName());
+    }
 }

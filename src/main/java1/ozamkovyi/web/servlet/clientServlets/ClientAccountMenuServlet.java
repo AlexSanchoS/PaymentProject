@@ -21,7 +21,7 @@ public class ClientAccountMenuServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Client currentUser = (Client) session.getAttribute("currentUser");
+        ClientBean currentUser = (ClientBean) session.getAttribute("currentUser");
 
         Object page = session.getAttribute("pageNumber");
         int pageNumber = 0;

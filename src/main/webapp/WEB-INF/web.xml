@@ -133,11 +133,20 @@
 
     <servlet>
         <servlet-name>allAccountsForUser</servlet-name>
-        <servlet-class>java1.ozamkovyi.web.servlet.adminServlets.AllAccountForUserServlet</servlet-class>
+        <servlet-class>ozamkovyi.web.servlet.adminServlets.AllAccountForUserServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>allAccountsForUser</servlet-name>
         <url-pattern>/adminAllAccountsForUser</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>adminExchangeRate</servlet-name>
+        <servlet-class>ozamkovyi.web.servlet.adminServlets.AdminExchangeRateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>adminExchangeRate</servlet-name>
+        <url-pattern>/adminExchangeRate</url-pattern>
     </servlet-mapping>
 
 

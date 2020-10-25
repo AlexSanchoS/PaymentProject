@@ -128,6 +128,8 @@ public class ClientDao {
         }
     }
 
+
+
     public ArrayList<ClientBean> getListOfClientForAdmin(int page, int sortType) {
         ArrayList<ClientBean> listOfClient = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -229,7 +231,6 @@ public class ClientDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_STATUS_BY_ID);
-            ClientMapper mapper = new ClientMapper();
             pstmt.setInt(1, client.getId());
             rs = pstmt.executeQuery();
             if (rs.next()) {
