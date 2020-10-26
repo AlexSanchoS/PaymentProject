@@ -38,23 +38,15 @@ public class LoginServletTest {
     AdminDao mockAdminDao = mock(AdminDao.class);
 
 
-
     @BeforeTest
     public void setUp() throws SQLException {
         String login = "test";
         String password = "test";
-//        try {
-//            when(mockInitContext.lookup("java:/comp/env")).thenReturn(mockContext);
-//        } catch (NamingException e) {
-//            e.printStackTrace();
-//        }
         when(mockRequest.getSession()).thenReturn(mockSession);
-        doReturn(new Admin()).when(mockAdminDao).findAdminByLoginAndPassword(login,password);
+        doReturn(new Admin()).when(mockAdminDao).findAdminByLoginAndPassword(login, password);
         when(mockRequest.getParameter("loginButton")).thenReturn("ok");
         when(mockRequest.getParameter("loginLabel")).thenReturn(login);
         when(mockRequest.getParameter("passwordLabel")).thenReturn(password);
-//        when(DBManager.getInstance().getConnection()).thenReturn(mockConnection);
-//        when(new AdminDao().findAdminByLoginAndPassword(login, password)).thenReturn(new Admin());
     }
 
     @Test

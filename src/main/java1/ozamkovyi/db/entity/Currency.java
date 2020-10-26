@@ -29,11 +29,4 @@ public class Currency extends Entity{
         this.course = course;
     }
 
-    @Override
-    public String toString() {
-        return "Currency{" +
-                "name='" + name + '\'' +
-                ", course=" + course +
-                '}';
-    }
 }

@@ -1,4 +1,6 @@
-<%@ page import="java.util.ResourceBundle" %><%--
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="ozamkovyi.web.tag.LocalizationTag" %>
+<%@ page import="ozamkovyi.web.tag.PaginationTeg" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 08.10.2020
@@ -12,43 +14,31 @@
     <title>clientCardMenu</title>
     <link rel="stylesheet" href="../style/styleForAdminHomepage6.css">
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib prefix="myt" uri="myTag" %>
+
 </head>
 <body>
 <%
     String locale = (String) session.getAttribute("locale");
     ResourceBundle bundle = (ResourceBundle) session.getAttribute("resourceBundle");
     session.setAttribute("currentURL", "/adminExchangeRate");
-    String engDisable = "disabled";
-    String uaDisable = "";
-    if (locale.equals("ua")) {
-        uaDisable = "disabled";
-        engDisable = "";
-    }
-    pageContext.setAttribute("uaDisable", uaDisable);
-    pageContext.setAttribute("engDisable", engDisable);
-
-    String nextDisable = "disabled";
-    String previousDisable = "disabled";
-    int countCard = (int) session.getAttribute("countCurrency");
-    int pageNumber = (int) session.getAttribute("pageNumber");
-    if (countCard > pageNumber * 10) {
-        nextDisable = "";
-    }
-    if (pageNumber > 1) {
-        previousDisable = "";
-    }
-    pageContext.setAttribute("nextDisable", nextDisable);
-    pageContext.setAttribute("previousDisable", previousDisable);
+    LocalizationTag.locale = locale;
+    PaginationTeg.count = (int)session.getAttribute("countCurrency");
+    PaginationTeg.pageNumber = (int)session.getAttribute("pageNumber");
 %>
 
 <form method="get" action="/userLocalization">
     <div class="standart_buttons">
         <div class="leng_buttons">
             <div class="button_eng">
-                <button class="button_l" name="engButton" ${engDisable}>Eng</button>
+                <button class="button_l" name="engButton" <myt:localizationTag
+                        btn="en"
+                />>Eng</button>
             </div>
             <div class="button_ukr">
-                <button class="button_l" name="uaButton" ${uaDisable}>Ua</button>
+                <button class="button_l" name="uaButton" <myt:localizationTag
+                        btn="ua"
+                />>Ua</button>
             </div>
         </div>
 
@@ -114,8 +104,12 @@
 
             </table>
             <div class="bottom_buttons">
-                <button name="previousPage" class="bottom_button" ${previousDisable}>&#60;&#60;</button>
-                <button name="nextPage" class="bottom_button" ${nextDisable}>&#62;&#62;</button>
+                <button name="previousPage" class="bottom_button" <myt:paginationTeg
+                        btn="previousPage"
+                />>&#60;&#60;</button>
+                <button name="nextPage" class="bottom_button" <myt:paginationTeg
+                        btn="nextPage"
+                />>&#62;&#62;</button>
             </div>
         </div>
     </div>

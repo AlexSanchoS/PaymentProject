@@ -25,9 +25,4 @@ public class BankAccountTest {
         assertEquals(userId, bankAccount.getUserId());
         assertEquals(accountStatusId, bankAccount.getAccountStatusId());
     }
-    @Test
-    public void bankAccountToStringTest() {
-        BankAccount bankAccount = new BankAccount();
-        assertEquals("BankAccount{number='null', balance=0, currencyId=0, userId=0, accountStatusId=0}", bankAccount.toString());
-    }
 }

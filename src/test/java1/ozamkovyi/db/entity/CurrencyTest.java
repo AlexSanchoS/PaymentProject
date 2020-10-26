@@ -18,10 +18,4 @@ public class CurrencyTest {
         Assert.assertEquals(name, currency.getName());
         Assert.assertEquals(course, currency.getCourse(), 0.001);
     }
-
-    @Test
-    public void toStringTest(){
-        Currency currency = new Currency();
-        Assert.assertEquals("Currency{name='null', course=0.0}", currency.toString());
-    }
 }

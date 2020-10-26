@@ -1,5 +1,6 @@
 <%@ page import="ozamkovyi.db.entity.Client" %>
-<%@ page import="java.util.ResourceBundle" %><%--
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="ozamkovyi.web.tag.LocalizationTag" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 07.10.2020
@@ -7,6 +8,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="myt" uri="myTag" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -19,23 +21,20 @@
     ResourceBundle bundle = (ResourceBundle) session.getAttribute("resourceBundle");
     session.setAttribute("currentURL", "/clientHomepage");
     Client client = (Client) session.getAttribute("currentUser");
-    String engDisable = "disabled";
-    String uaDisable = "";
-    if (locale.equals("ua")) {
-        uaDisable = "disabled";
-        engDisable = "";
-    }
-    pageContext.setAttribute("uaDisable", uaDisable);
-    pageContext.setAttribute("engDisable", engDisable);
+    LocalizationTag.locale = locale;
 %>
 <form method="get" action="/userLocalization">
     <div class="standart_buttons">
         <div class="leng_buttons">
             <div class="button_eng">
-                <button class="button_l" name="engButton" ${engDisable}>Eng</button>
+                <button class="button_l" name="engButton" <myt:localizationTag
+                        btn="en"
+                />>Eng</button>
             </div>
             <div class="button_ukr">
-                <button class="button_l" name="uaButton" ${uaDisable}>Ua</
+                <button class="button_l" name="uaButton" <myt:localizationTag
+                        btn="ua"
+                />>Ua</
                 >
             </div>
         </div>

@@ -11,10 +11,4 @@ public class AdminTest {
         admin.setLanguage(language);
         Assert.assertEquals(language, admin.getLanguage());
     }
-
-    @Test
-    public void toStringTest(){
-        Admin admin = new Admin();
-        Assert.assertEquals("Admin{login='null', password='null', language='null'}", admin.toString());
-    }
 }

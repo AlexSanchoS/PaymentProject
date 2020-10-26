@@ -52,7 +52,7 @@ public class PaymentBean extends Payment {
         this.senderCardNumber = senderCardNumber;
     }
 
-    public String getStringDate(){
+    public String getStringDate() {
         return CalendarProcessing.fullDate2String(date);
     }
 
@@ -64,34 +64,33 @@ public class PaymentBean extends Payment {
         this.statusNameUkr = statusNameUkr;
     }
 
-    public String getStatusByLocal(String locale){
-        if (locale.equals("ua")){
+    public String getStatusByLocal(String locale) {
+        if (locale.equals("ua")) {
             return statusNameUkr;
-        }
-        else{
+        } else {
             return statusName;
         }
     }
 
-    public String getButtonNameByStatus(ResourceBundle bundle){
-        if (statusName.equals(Fields.PAYMENT_STATUS__PREPARED)){
+    public String getButtonNameByStatus(ResourceBundle bundle) {
+        if (statusName.equals(Fields.PAYMENT_STATUS__PREPARED)) {
             return bundle.getString("clientPaymentMenu_jsp.button.confirm");
-        }else{
+        } else {
             return bundle.getString("clientPaymentMenu_jsp.button.repeat");
         }
     }
 
-    public boolean transactionIfValid(){
+    public boolean transactionIfValid() {
         CreditCardBean senderCreditCard = new CreditCardDao().getCardById(senderCardId);
         CreditCardBean recipientCreditCard = new CreditCardDao().getCardById(recipientCardId);
-        if (!senderCreditCard.isValid()||!recipientCreditCard.isValid()){
+        if (!senderCreditCard.isValid() || !recipientCreditCard.isValid()) {
             return false;
         }
         int senderCardBalance = new CreditCardDao().getUAHBalance(senderCardId);
-        if (senderCardBalance<amount*100){
+        if (senderCardBalance < amount * 100) {
             return false;
         }
-        new BankAccountDao().addToBalance(senderCreditCard.getBankAccountNumber(), amount*(-1));
+        new BankAccountDao().addToBalance(senderCreditCard.getBankAccountNumber(), amount * (-1));
         new BankAccountDao().addToBalance(recipientCreditCard.getBankAccountNumber(), amount);
         return true;
     }

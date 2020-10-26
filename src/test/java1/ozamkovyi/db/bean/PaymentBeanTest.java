@@ -45,6 +45,7 @@ public class PaymentBeanTest {
     public void paymentBeanGetAndSetTest(){
         PaymentBean paymentBean = new PaymentBean();
         String statusName = "bl";
+        String statusNameUkr = "роз";
         String recipientCardNumber="1234123412341234";
         String recipientName = "Alex";
         String senderCardNumber = "4321432143214321";
@@ -52,12 +53,14 @@ public class PaymentBeanTest {
         String date2 = CalendarProcessing.fullDate2String(date);
 
         paymentBean.setStatusName(statusName);
+        paymentBean.setStatusNameUkr(statusNameUkr);
         paymentBean.setRecipientCardNumber(recipientCardNumber);
         paymentBean.setRecipientName(recipientName);
         paymentBean.setSenderCardNumber(senderCardNumber);
         paymentBean.setDate(date);
 
         Assert.assertEquals(statusName, paymentBean.getStatusName());
+        Assert.assertEquals(statusNameUkr, paymentBean.getStatusNameUkr());
         Assert.assertEquals(recipientCardNumber, paymentBean.getRecipientCardNumber());
         Assert.assertEquals(recipientName, paymentBean.getRecipientName());
         Assert.assertEquals(senderCardNumber, paymentBean.getSenderCardNumber());
@@ -74,4 +77,14 @@ public class PaymentBeanTest {
         Assert.assertEquals("Repeat", paymentBean.getButtonNameByStatus(resourceBundle));
     }
 
+    @Test
+    public void getStatusByLocalTest(){
+        PaymentBean paymentBean = new PaymentBean();
+        String statusName = "bl";
+        String statusNameUkr = "роз";
+        paymentBean.setStatusName(statusName);
+        paymentBean.setStatusNameUkr(statusNameUkr);
+        Assert.assertEquals(statusNameUkr, paymentBean.getStatusByLocal("ua"));
+        Assert.assertEquals(statusName, paymentBean.getStatusByLocal("en"));
+    }
 }

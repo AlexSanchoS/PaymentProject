@@ -52,16 +52,4 @@ public class BankAccount extends Entity {
     public void setAccountStatusId(int accountStatusId) {
         this.accountStatusId = accountStatusId;
     }
-
-    @Override
-    public String toString() {
-        return "BankAccount{" +
-                "number='" + number + '\'' +
-                ", balance=" + balance +
-                ", currencyId=" + currencyId +
-                ", userId=" + userId +
-                ", accountStatusId=" + accountStatusId +
-                '}';
-    }
-
 }

@@ -1,4 +1,5 @@
 <%@ page import="java.util.ResourceBundle" %>
+<%@ page import="ozamkovyi.web.tag.LocalizationTag" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -7,30 +8,29 @@
     <link rel="stylesheet" href="./../style/styleForNewPaymen6.css">
 </head>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="myt" uri="myTag" %>
+
 
 <body>
 <%
     String locale = (String) session.getAttribute("locale");
     ResourceBundle bundle = (ResourceBundle) session.getAttribute("resourceBundle");
     session.setAttribute("currentURL", "/clientAddPayment");
-    String engDisable = "disabled";
-    String uaDisable = "";
-    if (locale.equals("ua")) {
-        uaDisable = "disabled";
-        engDisable = "";
-    }
-    pageContext.setAttribute("uaDisable", uaDisable);
-    pageContext.setAttribute("engDisable", engDisable);
+    LocalizationTag.locale = locale;
 
 %>
 
 <form method="get" action="/notUserLocalization">
     <div class="leng_buttons">
         <div class="button_eng">
-            <button class="button_l" name="engButton" ${engDisable}>Eng</button>
+            <button class="button_l" name="engButton" <myt:localizationTag
+                    btn="en"
+            />>Eng</button>
         </div>
         <div class="button_ukr">
-            <button class="button_l" name="uaButton" ${uaDisable}>Ua</button>
+            <button class="button_l" name="uaButton" <myt:localizationTag
+                    btn="ua"
+            />>Ua</button>
         </div>
     </div>
 
