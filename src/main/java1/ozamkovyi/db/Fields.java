@@ -37,6 +37,7 @@ public final class Fields {
 
     public static final String PAYMENT_STATUS__ID = "id";
     public static final String PAYMENT_STATUS__STATUS = "status";
+    public static final String PAYMENT_STATUS__STATUS_UA = "status_ukr";
 
     public static final String ADMIN__ID = "id";
     public static final String ADMIN__LOGIN = "login";
@@ -58,7 +59,7 @@ public final class Fields {
 
     public static final String CURRENCY__ID = "id";
     public static final String CURRENCY__NAME = "name";
-    public static final String CURRENCY__COURSE = "course";
+    public static final String CURRENCY__COURSE = "rate";
 
     public static final String PAYMENT__ID = "id";
     public static final String PAYMENT__NUMBER = "number";

@@ -35,7 +35,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `PaymentDB`.`currency` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(10) NOT NULL,
-  `course` FLOAT UNSIGNED NOT NULL,
+  `rate` FLOAT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -129,6 +129,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `PaymentDB`.`payment_status` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `status` ENUM('sent', 'prepared', 'rejected') NOT NULL,
+  `status_ukr` ENUM('відправлений', 'підготовлений', 'відхилений') NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -140,25 +141,24 @@ CREATE TABLE IF NOT EXISTS `PaymentDB`.`payment` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `date` TIMESTAMP NOT NULL,
   `amount` DOUBLE UNSIGNED NOT NULL,
-  `number` INT NOT NULL,
   `payment_status_id` INT NOT NULL,
   `recipient_credit_card` INT NOT NULL,
   `sender_credit_card` INT NOT NULL,
   PRIMARY KEY (`id`, `payment_status_id`, `recipient_credit_card`, `sender_credit_card`),
   INDEX `fk_payment_paymentStatus1_idx` (`payment_status_id` ASC),
-  INDEX `fk_recipient_credit_card_idx` (`recipient_credit_card` ASC),
-  INDEX `fk_sender_credit_card_idx` (`sender_credit_card` ASC),
+  INDEX `fk_payment_credit_card1_idx` (`recipient_credit_card` ASC),
+  INDEX `fk_payment_credit_card2_idx` (`sender_credit_card` ASC),
   CONSTRAINT `fk_payment_paymentStatus1`
     FOREIGN KEY (`payment_status_id`)
     REFERENCES `PaymentDB`.`payment_status` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_recipient_credit_card`
+  CONSTRAINT `fk_payment_credit_card1`
     FOREIGN KEY (`recipient_credit_card`)
     REFERENCES `PaymentDB`.`credit_card` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_sender_credit_card`
+  CONSTRAINT `fk_payment_credit_card2`
     FOREIGN KEY (`sender_credit_card`)
     REFERENCES `PaymentDB`.`credit_card` (`id`)
     ON DELETE NO ACTION
@@ -182,6 +182,10 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
+
+
+ALTER TABLE `paymentdb`.`payment`
+ADD COLUMN `number` INT(11) NOT NULL AFTER `amount`;
 
 INSERT INTO `paymentdb`.`client` (`id`, `login`, `password`, `name`, `date_of_birth`, `language`, `status`) VALUES ('1', '1234', '1234', 'Zam Alex', '1997-08-01', 'en', 'unblock');
 INSERT INTO `paymentdb`.`client` (`id`, `login`, `password`, `name`, `date_of_birth`, `language`, `status`) VALUES ('2', '2222', '2222', 'Zam Tanua', '2002-01-05', 'ua', 'block');
@@ -209,13 +213,13 @@ INSERT INTO `paymentdb`.`account_status` (`id`, `status`) VALUES ('3', 'expectat
 INSERT INTO `paymentdb`.`card_status` (`id`, `status`) VALUES ('1', 'unlocked');
 INSERT INTO `paymentdb`.`card_status` (`id`, `status`) VALUES ('2', 'blocked');
 
-INSERT INTO `paymentdb`.`payment_status` (`id`, `status`) VALUES ('1', 'sent');
-INSERT INTO `paymentdb`.`payment_status` (`id`, `status`) VALUES ('2', 'prepared');
-INSERT INTO `paymentdb`.`payment_status` (`id`, `status`) VALUES ('3', 'rejected');
+INSERT INTO `paymentdb`.`payment_status` (`id`, `status`, `status_ukr`) VALUES ('1', 'sent', 'відправлений');
+INSERT INTO `paymentdb`.`payment_status` (`id`, `status`, `status_ukr`) VALUES ('2', 'prepared', 'підготовлений');
+INSERT INTO `paymentdb`.`payment_status` (`id`, `status`, `status_ukr`) VALUES ('3', 'rejected', 'відхилений');
 
-INSERT INTO `paymentdb`.`currency` (`id`, `name`, `course`) VALUES ('1', 'EUR', '33,32');
-INSERT INTO `paymentdb`.`currency` (`id`, `name`, `course`) VALUES ('2', 'USD', '28,34');
-INSERT INTO `paymentdb`.`currency` (`id`, `name`, `course`) VALUES ('3', 'UAH', '1');
+INSERT INTO `paymentdb`.`currency` (`id`, `name`, `rate`) VALUES ('1', 'EUR', '33,32');
+INSERT INTO `paymentdb`.`currency` (`id`, `name`, `rate`) VALUES ('2', 'USD', '28,34');
+INSERT INTO `paymentdb`.`currency` (`id`, `name`, `rate`) VALUES ('3', 'UAH', '1');
 
 INSERT INTO `paymentdb`.`bank_account` (`number`, `balance`, `currency_id`, `user_id`, `account_status_id`) VALUES ('98987814563217895301', '7896', '1', '1', '1');
 INSERT INTO `paymentdb`.`bank_account` (`number`, `balance`, `currency_id`, `user_id`, `account_status_id`) VALUES ('98987814563217895302', '12356', '2', '2', '2');

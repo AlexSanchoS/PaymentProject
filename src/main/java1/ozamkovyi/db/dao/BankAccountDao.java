@@ -296,7 +296,7 @@ public class BankAccountDao {
      *            Client for search.
      * @return count.
      */
-    public int getCountBankAccountByUser(ClientBean client) {
+    public int getCountBankAccountByUser(int id) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -304,7 +304,7 @@ public class BankAccountDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_COUNT_BANK_ACCOUNT_BY_CLIENT_ID);
-            pstmt.setInt(1, client.getId());
+            pstmt.setInt(1, id);
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getInt(1);
@@ -332,7 +332,7 @@ public class BankAccountDao {
      *              Sorting type
      * @return ArrayList of BankAccount.
      */
-    public ArrayList<BankAccountBean> getAccountList(ClientBean client, int page, int sortType) {
+    public ArrayList<BankAccountBean> getAccountList(int id, int page, int sortType) {
         ArrayList<BankAccountBean> listOfBankAccount = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -361,7 +361,7 @@ public class BankAccountDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(sort);
-            pstmt.setInt(1, client.getId());
+            pstmt.setInt(1, id);
             BankAccountBeanMapper mapper = new BankAccountBeanMapper();
             pstmt.setInt(2, page * 10 - 10);
             rs = pstmt.executeQuery();

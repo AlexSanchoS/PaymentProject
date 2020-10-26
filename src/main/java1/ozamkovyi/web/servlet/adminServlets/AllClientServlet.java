@@ -102,13 +102,13 @@ public class AllClientServlet extends HttpServlet {
 
             if (req.getParameter("unblockButton " + client.getId()) != null) {
                 if (client.getStatus().equals(Fields.CLIENT_STATUS__BLOCK)) {
-                    ArrayList<BankAccountBean> listOfAcc = new BankAccountDao().getAccountList(client, 1, 1);
+                    ArrayList<BankAccountBean> listOfAcc = new BankAccountDao().getAccountList(client.getId(), 1, 1);
                     for (BankAccountBean account : listOfAcc) {
                         new BankAccountDao().changeStatusFotBankAccount(account, Fields.ACCOUNT_STATUS__EXPECTATION);
                     }
                     new ClientDao().setStatus(client, Fields.CLIENT_STATUS__UNBLOCK);
                 } else {
-                    ArrayList<BankAccountBean> listOfAcc = new BankAccountDao().getAccountList(client, 1, 1);
+                    ArrayList<BankAccountBean> listOfAcc = new BankAccountDao().getAccountList(client.getId(), 1, 1);
                     for (BankAccountBean account : listOfAcc) {
                         new BankAccountDao().changeStatusFotBankAccount(account, Fields.ACCOUNT_STATUS__BLOCKED);
                     }

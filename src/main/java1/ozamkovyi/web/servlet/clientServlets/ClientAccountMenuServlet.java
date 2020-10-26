@@ -21,7 +21,7 @@ public class ClientAccountMenuServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        ClientBean currentUser = (ClientBean) session.getAttribute("currentUser");
+        Client currentUser = (Client) session.getAttribute("currentUser");
 
         Object page = session.getAttribute("pageNumber");
         int pageNumber = 0;
@@ -35,8 +35,8 @@ public class ClientAccountMenuServlet extends HttpServlet {
             pageNumber = (int) page;
             sortType = (int) session.getAttribute("sortType");
         }
-        session.setAttribute("countAccount", new BankAccountDao().getCountBankAccountByUser(currentUser));
-        ArrayList<BankAccountBean> listOfBankAccount = new BankAccountDao().getAccountList(currentUser, pageNumber, sortType);
+        session.setAttribute("countAccount", new BankAccountDao().getCountBankAccountByUser(currentUser.getId()));
+        ArrayList<BankAccountBean> listOfBankAccount = new BankAccountDao().getAccountList(currentUser.getId(), pageNumber, sortType);
         session.setAttribute("listOfBankAccount", listOfBankAccount);
         ArrayList<Currency> listOfCurrencyForNewAccount = new CurrencyDao().getAllCurrency();
         session.setAttribute("listOfCurrencyForNewAccount", listOfCurrencyForNewAccount);

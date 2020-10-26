@@ -287,7 +287,7 @@ public class CreditCardDao {
         }
     }
 
-    public int getCountCardByUser(ClientBean client) {
+    public int getCountCardByUser(int id) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -295,7 +295,7 @@ public class CreditCardDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_COUNT_CARD_BY_CLIENT_ID);
-            pstmt.setInt(1, client.getId());
+            pstmt.setInt(1, id);
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getInt(1);
@@ -310,7 +310,7 @@ public class CreditCardDao {
         return rez;
     }
 
-    public ArrayList<CreditCardBean> getCardList(ClientBean client, int pageNumber, int sortType) {
+    public ArrayList<CreditCardBean> getCardList(int id, int pageNumber, int sortType) {
         ArrayList<CreditCardBean> listOfCreditCard = new ArrayList<>();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -334,7 +334,7 @@ public class CreditCardDao {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(sort);
             CreditCardBeanMapper mapper = new CreditCardBeanMapper();
-            pstmt.setInt(1, client.getId());
+            pstmt.setInt(1, id);
             pstmt.setInt(2, pageNumber * 10 - 10);
             rs = pstmt.executeQuery();
 
@@ -565,6 +565,8 @@ public class CreditCardDao {
                 creditCard.setUserId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID));
                 creditCard.setCardStatusId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__CARD_STATUS_ID));
                 creditCard.setCardStatusName(rs.getString(Fields.TABLE__CARD_STATUS + "." + Fields.CARD_STATUS__STATUS));
+                creditCard.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
+                creditCard.setCurrency(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
                 creditCard.setAccountStatusName(rs.getString(Fields.TABLE__ACCOUNT_STATUS + "." + Fields.ACCOUNT_STATUS__STATUS));
                 return creditCard;
             } catch (SQLException e) {

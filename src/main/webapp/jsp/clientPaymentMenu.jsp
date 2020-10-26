@@ -127,7 +127,7 @@
                         <td>${payment.getSenderCardNumber()}</td>
                         <td>${payment.getRecipientCardNumber()}</td>
                         <td>${payment.getRecipientName()}</td>
-                        <td>${payment.getStatusName()}</td>
+                        <td>${payment.getStatusByLocal(locale)}</td>
                         <td class="block_card_section">
                             <button name="blocButton ${payment.getId()}"
                                     class="block_card">${payment.getButtonNameByStatus(resourceBundle)}</button>

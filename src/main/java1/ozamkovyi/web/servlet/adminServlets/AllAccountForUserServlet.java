@@ -31,9 +31,9 @@ public class AllAccountForUserServlet extends HttpServlet {
             sortType = (int) session.getAttribute("sortType");
         }
         ClientBean currentClient = (ClientBean) session.getAttribute("currentClient");
-        session.setAttribute("countAccount", new BankAccountDao().getCountBankAccountByUser(currentClient));
+        session.setAttribute("countAccount", new BankAccountDao().getCountBankAccountByUser(currentClient.getId()));
         session.setAttribute("listOfCurrencyForNewAccount", new CurrencyDao().getAllCurrency());
-        session.setAttribute("listOfBankAccount", new BankAccountDao().getAccountList(currentClient, pageNumber, sortType));
+        session.setAttribute("listOfBankAccount", new BankAccountDao().getAccountList(currentClient.getId(), pageNumber, sortType));
         getServletContext().getRequestDispatcher("/jsp/allAccountForUser.jsp").forward(req, resp);
     }
 

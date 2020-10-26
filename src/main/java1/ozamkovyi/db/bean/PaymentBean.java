@@ -12,6 +12,8 @@ public class PaymentBean extends Payment {
 
     private String statusName;
 
+    private String statusNameUkr;
+
     private String recipientCardNumber;
 
     private String recipientName;
@@ -54,6 +56,22 @@ public class PaymentBean extends Payment {
         return CalendarProcessing.fullDate2String(date);
     }
 
+    public String getStatusNameUkr() {
+        return statusNameUkr;
+    }
+
+    public void setStatusNameUkr(String statusNameUkr) {
+        this.statusNameUkr = statusNameUkr;
+    }
+
+    public String getStatusByLocal(String locale){
+        if (locale.equals("ua")){
+            return statusNameUkr;
+        }
+        else{
+            return statusName;
+        }
+    }
 
     public String getButtonNameByStatus(ResourceBundle bundle){
         if (statusName.equals(Fields.PAYMENT_STATUS__PREPARED)){

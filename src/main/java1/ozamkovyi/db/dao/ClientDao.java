@@ -159,8 +159,8 @@ public class ClientDao {
 
             while (rs.next()) {
                 ClientBean client = mapper.mapRowForListOfClientForAdmin(rs);
-                client.setCreditCardCount(new CreditCardDao().getCountCardByUser(client));
-                client.setAccountCount(new BankAccountDao().getCountBankAccountByUser(client));
+                client.setCreditCardCount(new CreditCardDao().getCountCardByUser(client.getId()));
+                client.setAccountCount(new BankAccountDao().getCountBankAccountByUser(client.getId()));
                 listOfClient.add(client);
             }
         } catch (SQLException throwables) {

@@ -22,7 +22,7 @@ public class ClientCardMenuServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        ClientBean currentUser = (ClientBean) session.getAttribute("currentUser");
+        Client currentUser = (Client) session.getAttribute("currentUser");
         Object page = session.getAttribute("pageNumber");
         int pageNumber = 0;
         int sortType = 0;
@@ -33,7 +33,7 @@ public class ClientCardMenuServlet extends HttpServlet {
             System.out.println("page = null");
             sortType = 1;
             pageNumber = 1;
-            listOfCreditCard = new CreditCardDao().getCardList(currentUser, pageNumber, sortType);
+            listOfCreditCard = new CreditCardDao().getCardList(currentUser.getId(), pageNumber, sortType);
             for (CreditCardBean creditCard : listOfCreditCard) {
                 if (!creditCard.isValid()) {
                     new CreditCardDao().blocCard(creditCard);
@@ -42,14 +42,12 @@ public class ClientCardMenuServlet extends HttpServlet {
         } else {
             pageNumber = (int) page;
             sortType = (int) session.getAttribute("sortType");
-            listOfCreditCard = new CreditCardDao().getCardList(currentUser, pageNumber, sortType);
+            listOfCreditCard = new CreditCardDao().getCardList(currentUser.getId(), pageNumber, sortType);
         }
 
-        session.setAttribute("countCard", new CreditCardDao().getCountCardByUser(currentUser));
+        session.setAttribute("countCard", new CreditCardDao().getCountCardByUser(currentUser.getId()));
         session.setAttribute("listOfCreditCard", listOfCreditCard);
-        listOfCreditCard.get(0).getButtonBloc((ResourceBundle) session.getAttribute("resourceBundle"));
-        ArrayList<BankAccountBean> listOfAccountForCreditCard = new BankAccountDao().getAllAccount(currentUser);
-        session.setAttribute("listOfAccountForCreditCard", listOfAccountForCreditCard);
+        session.setAttribute("listOfAccountForCreditCard",  new BankAccountDao().getAllAccount(currentUser));
         getServletContext().getRequestDispatcher("/jsp/clientCardMenu.jsp").forward(req, resp);
 
 

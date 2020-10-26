@@ -28,6 +28,7 @@ public class PaymentDao {
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD + "," +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD + ", " +
+                    Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS_UA + ", " +
                     Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS + " FROM " +
                     Fields.TABLE__PAYMENT + " join " +
                     Fields.TABLE__PAYMENT_STATUS + " join " +
@@ -48,6 +49,7 @@ public class PaymentDao {
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD + "," +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD + ", " +
+                    Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS_UA + ", " +
                     Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS + " FROM " +
                     Fields.TABLE__PAYMENT + " join " +
                     Fields.TABLE__PAYMENT_STATUS + " join " +
@@ -68,6 +70,7 @@ public class PaymentDao {
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD + "," +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD + ", " +
+                    Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS_UA + ", " +
                     Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS + " FROM " +
                     Fields.TABLE__PAYMENT + " join " +
                     Fields.TABLE__PAYMENT_STATUS + " join " +
@@ -88,6 +91,7 @@ public class PaymentDao {
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD + "," +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD + ", " +
+                    Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS_UA + ", " +
                     Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS + " FROM " +
                     Fields.TABLE__PAYMENT + " join " +
                     Fields.TABLE__PAYMENT_STATUS + " join " +
@@ -108,6 +112,7 @@ public class PaymentDao {
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD + "," +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD + ", " +
+                    Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS_UA + ", " +
                     Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS + " FROM " +
                     Fields.TABLE__PAYMENT + " join " +
                     Fields.TABLE__PAYMENT_STATUS + " join " +
@@ -128,6 +133,7 @@ public class PaymentDao {
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD + "," +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD + ", " +
+                    Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS_UA + ", " +
                     Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS + " FROM " +
                     Fields.TABLE__PAYMENT + " join " +
                     Fields.TABLE__PAYMENT_STATUS + " join " +
@@ -148,6 +154,7 @@ public class PaymentDao {
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD + "," +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD + ", " +
+                    Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS_UA + ", " +
                     Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS + " FROM " +
                     Fields.TABLE__PAYMENT + " join " +
                     Fields.TABLE__PAYMENT_STATUS + " join " +
@@ -168,6 +175,7 @@ public class PaymentDao {
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD + "," +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD + ", " +
+                    Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS_UA + ", " +
                     Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS + " FROM " +
                     Fields.TABLE__PAYMENT + " join " +
                     Fields.TABLE__PAYMENT_STATUS + " join " +
@@ -533,6 +541,7 @@ public class PaymentDao {
                 payment.setSenderCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__SENDER_CREDIT_CARD));
                 payment.setRecipientCardId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__RECIPIENT_CREDIT_CARD));
                 payment.setStatusName(rs.getString(Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS));
+                payment.setStatusNameUkr(rs.getString(Fields.TABLE__PAYMENT_STATUS + "." + Fields.PAYMENT_STATUS__STATUS_UA));
 
                 return payment;
             } catch (SQLException e) {

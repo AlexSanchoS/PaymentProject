@@ -32,8 +32,8 @@ public class AllCardsForUserServlet extends HttpServlet {
             sortType = (int) session.getAttribute("sortType");
         }
         ClientBean currentClient = (ClientBean) session.getAttribute("currentClient");
-        session.setAttribute("countCard", new CreditCardDao().getCountCardByUser(currentClient));
-        session.setAttribute("listOfCreditCard", new CreditCardDao().getCardList(currentClient, pageNumber, sortType));
+        session.setAttribute("countCard", new CreditCardDao().getCountCardByUser(currentClient.getId()));
+        session.setAttribute("listOfCreditCard", new CreditCardDao().getCardList(currentClient.getId(), pageNumber, sortType));
         session.setAttribute("listOfAccountForCreditCard", new BankAccountDao().getAllAccount(currentClient));
         getServletContext().getRequestDispatcher("/jsp/allCardsForUser.jsp").forward(req, resp);
     }
