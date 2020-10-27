@@ -59,13 +59,15 @@
     <%
         if (session.getAttribute("wrongRegistrationDate") == "true") {
             session.setAttribute("wrongRegistrationDate", "false");
+            pageContext.setAttribute("wrong",bundle.getString("wrongRegistrationDate"));
         }
 
         if (session.getAttribute("clientNotAdults") == "true") {
-            session.setAttribute("wrongRegistrationDate", "false");
+            session.setAttribute("clientNotAdults", "false");
+            pageContext.setAttribute("wrong",bundle.getString("clientNotAdult"));
         }
     %>
-    <h3>${myVariable}</h3>
+    <h3>${wrong}</h3>
 </form>
 
 </body>

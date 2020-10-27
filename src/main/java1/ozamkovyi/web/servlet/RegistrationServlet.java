@@ -1,6 +1,7 @@
 package ozamkovyi.web.servlet;
 
 
+import ozamkovyi.db.dao.ClientDao;
 import ozamkovyi.db.entity.Client;
 
 import javax.servlet.ServletException;
@@ -27,15 +28,21 @@ public class RegistrationServlet extends HttpServlet {
             session.setAttribute("clientNotAdults", "true");
             req.getRequestDispatcher("/jsp/registration.jsp").forward(req, resp);
         } else {
-            client.addNewClientToDB();
-            session.setAttribute("currentUser", client);
-            Cookie cookieLogin = new Cookie("login", req.getParameter("loginLabel"));
-            Cookie cookiePassword = new Cookie("password", req.getParameter("passwordLabel"));
-            cookieLogin.setMaxAge(COOKIE_MAX_AGE);
-            cookiePassword.setMaxAge(COOKIE_MAX_AGE);
-            resp.addCookie(cookieLogin);
-            resp.addCookie(cookiePassword);
-            getServletContext().getRequestDispatcher("/jsp/clientHomepage.jsp").forward(req, resp);
+            Client client1 = new ClientDao().findClientByLoginAndPassword(client.getLogin(), client.getPassword());
+            if (client1 == null) {
+                client.addNewClientToDB();
+                session.setAttribute("currentUser", client);
+                Cookie cookieLogin = new Cookie("login", req.getParameter("loginLabel"));
+                Cookie cookiePassword = new Cookie("password", req.getParameter("passwordLabel"));
+                cookieLogin.setMaxAge(COOKIE_MAX_AGE);
+                cookiePassword.setMaxAge(COOKIE_MAX_AGE);
+                resp.addCookie(cookieLogin);
+                resp.addCookie(cookiePassword);
+                getServletContext().getRequestDispatcher("/jsp/clientHomepage.jsp").forward(req, resp);
+            }else{
+                req.getRequestDispatcher("/jsp/registration.jsp").forward(req, resp);
+                session.setAttribute("wrongRegistrationDate", "true");
+            }
         }
 
     }
