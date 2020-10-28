@@ -23,7 +23,6 @@ import java.util.ArrayList;
  * Data access object for BankAccount entity.
  *
  * @author O.Zamkovyi
- *
  */
 public class BankAccountDao {
 
@@ -255,13 +254,11 @@ public class BankAccountDao {
                     "' ORDER BY " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " DESC limit 10 offset ?";
 
 
-
     /**
-     * Returns a BankAccount for current User.
+     * Returns a bank account list for current client.
      *
-     * @param client
-     *            Client for search.
-     * @return ArrayList of BankAccount.
+     * @param client Client for search.
+     * @return ArrayList of BankAccountBean.
      */
     public ArrayList<BankAccountBean> getAllAccount(Client client) {
         ArrayList<BankAccountBean> listOfBankAccount = new ArrayList<>();
@@ -290,11 +287,10 @@ public class BankAccountDao {
 
 
     /**
-     * Returns count BankAccounts for current user.
+     * Returns count of bank accounts for current client.
      *
-     * @param client
-     *            Client for search.
-     * @return count.
+     * @param id Client id for search.
+     * @return count of bank account.
      */
     public int getCountBankAccountByUser(int id) {
         PreparedStatement pstmt = null;
@@ -320,17 +316,15 @@ public class BankAccountDao {
     }
 
     /**
-     * Returns a BankAccount list for current User
+     * Returns a bank account list for current client
      * use sort and limit.
      * used for pagination
      * Every page has 10 records
-     * @param client
-     *            Client for search.
-     * @param page
-     *             Page number
-     * @param sortType
-     *              Sorting type
-     * @return ArrayList of BankAccount.
+     *
+     * @param id       Client id for search.
+     * @param page     Page number
+     * @param sortType Sorting type
+     * @return ArrayList of BankAccountBean.
      */
     public ArrayList<BankAccountBean> getAccountList(int id, int page, int sortType) {
         ArrayList<BankAccountBean> listOfBankAccount = new ArrayList<>();
@@ -381,15 +375,14 @@ public class BankAccountDao {
     }
 
     /**
-     * Returns a block BankAccount list
+     * Returns a blocked bank account list
      * use sort and limit.
      * used for pagination
      * Every page has 10 records
-     * @param page
-     *             Page number
-     * @param sortType
-     *              Sorting type
-     * @return ArrayList of block BankAccount.
+     *
+     * @param page     Page number
+     * @param sortType Sorting type
+     * @return ArrayList of block BankAccountBean.
      */
     public ArrayList<BankAccountBean> getAccountListForUnlock(int page, int sortType) {
         ArrayList<BankAccountBean> listOfBankAccount = new ArrayList<>();
@@ -432,13 +425,11 @@ public class BankAccountDao {
         return listOfBankAccount;
     }
 
-    ///!!!!!!!!
-    ////nead to move in other class
     /**
-     * Return id for bank account status
-     * @param status
-     *            Bank account status.
-     * @return id of status.
+     * Returns id for bank account status
+     *
+     * @param status Bank account status.
+     * @return status id.
      */
     private int getStatusIdByStatus(String status) {
         PreparedStatement pstmt = null;
@@ -466,11 +457,10 @@ public class BankAccountDao {
     }
 
     /**
-     * Change status for bank account
-     * @param bankAccountBean
-     *            Bank account for changing
-     * @param newStatus
-     *             New status for banck account
+     * Changes status for bank account
+     *
+     * @param bankAccountBean Bank account for changing
+     * @param newStatus       New status for bank account
      */
     public void changeStatusFotBankAccount(BankAccountBean bankAccountBean, String newStatus) {
         PreparedStatement pstmt = null;
@@ -496,10 +486,10 @@ public class BankAccountDao {
     }
 
     /**
-     * Return balance for bank account
-     * @param number
-     *            bank account number
-     * @return balance
+     * Returns balance for bank account
+     *
+     * @param number bank account number
+     * @return bank account balance
      */
     private int getAccountBalance(String number) {
         PreparedStatement pstmt = null;
@@ -526,14 +516,13 @@ public class BankAccountDao {
     }
 
     /**
-     * Add balance for bank account
-     * @param number
-     *            bank account number
-     * @param amount
-     *             amount for adding
+     * Adds balance to the bank account
+     *
+     * @param number bank account number
+     * @param amount athe amount of replenishment
      */
     public void addToBalance(String number, double amount) {
-        double course = getCourse(number);
+        double course = getRate(number);
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
@@ -555,12 +544,12 @@ public class BankAccountDao {
     }
 
     /**
-     * Get course for current currency
-     * @param number
-     *            bank account number
-     * @return course
+     * Gets rate for current currency
+     *
+     * @param number bank account number
+     * @return rate
      */
-    private double getCourse(String number) {
+    private double getRate(String number) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -584,10 +573,12 @@ public class BankAccountDao {
     }
 
     /**
-     * Generate new account number for bank account
+     * Returns new account number for bank account
+     * generates a bank account number and checks if it is not used
+     *
      * @return number for bank account
      */
-    private String generatorNewCardNumber() {
+    private String generatorNewBankAccountNumber() {
         String re = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -597,7 +588,7 @@ public class BankAccountDao {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_IS_NUMBER_ALREADY_EXISTING);
             while (rez != 0) {
-                re = CreditCardBean.generatorCardNumber();
+                re = BankAccountBean.generatorAccountNumber();
                 pstmt.setString(1, re);
                 rs = pstmt.executeQuery();
                 if (rs.next()) {
@@ -615,11 +606,10 @@ public class BankAccountDao {
     }
 
     /**
-     * Create new account
-     * @param currency
-     *            currency for new account
-     * @param client
-     *              client for new account
+     * Creates new account
+     *
+     * @param currency currency for new account
+     * @param client   client for new account
      */
     public void addNewAccount(Currency currency, ClientBean client) {
         PreparedStatement pstmt = null;
@@ -629,7 +619,7 @@ public class BankAccountDao {
         try {
             con = DBManager.getInstance().getConnection();
             int newStatusId = getStatusIdByStatus(Fields.ACCOUNT_STATUS__EXPECTATION);
-            String newAccountNumber = generatorNewCardNumber();
+            String newAccountNumber = generatorNewBankAccountNumber();
             pstmt = con.prepareStatement(SQL_ADD_NEW_BANK_ACCOUNT);
             String newValidity = CalendarProcessing.getValidityForNewCard();
             pstmt.setString(1, newAccountNumber);
@@ -648,8 +638,7 @@ public class BankAccountDao {
     }
 
     /**
-     * @return  count blocked BankAccount
-     *
+     * @return count of blocked BankAccount
      */
     public int getCountBankAccountForUnlock() {
         PreparedStatement pstmt = null;
@@ -675,8 +664,8 @@ public class BankAccountDao {
 
     /**
      * Close autoClosable object
-     * @param forClose
-     *          object for closing
+     *
+     * @param forClose object for closing
      */
     private void close(AutoCloseable forClose) {
         if (forClose != null) {
@@ -689,7 +678,7 @@ public class BankAccountDao {
     }
 
     /**
-     * Extracts a Admin from the result set row.
+     * Extracts a bank account from the result set row.
      */
     static class BankAccountMapper implements EntityMapper<BankAccount> {
 
@@ -710,7 +699,9 @@ public class BankAccountDao {
         }
     }
 
-
+    /**
+     * Extracts a bank account bean from the result set row.
+     */
     static class BankAccountBeanMapper implements EntityMapper<BankAccountBean> {
         @Override
         public BankAccountBean mapRow(ResultSet rs) {
@@ -727,6 +718,7 @@ public class BankAccountDao {
                 throw new IllegalStateException(e);
             }
         }
+
         public BankAccountBean mapRowForGetAllAccount(ResultSet rs) {
             try {
                 BankAccountBean bankAccountBean = new BankAccountBean();
@@ -740,6 +732,7 @@ public class BankAccountDao {
                 throw new IllegalStateException(e);
             }
         }
+
         public BankAccountBean mapRowForGetAccountList(ResultSet rs) {
             try {
                 BankAccountBean bankAccountBean = new BankAccountBean();
@@ -755,6 +748,7 @@ public class BankAccountDao {
                 throw new IllegalStateException(e);
             }
         }
+
         public BankAccountBean mapRowForGetAccountListForUnlock(ResultSet rs) {
             try {
                 BankAccountBean bankAccountBean = new BankAccountBean();

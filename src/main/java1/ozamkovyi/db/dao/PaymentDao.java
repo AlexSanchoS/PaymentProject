@@ -16,6 +16,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * Data access object for payment entity.
+ *
+ * @author O.Zamkovyi
+ */
+
+
 public class PaymentDao {
 
     private static final Logger logger = Logger.getLogger(PaymentDao.class);
@@ -239,6 +246,10 @@ public class PaymentDao {
                     Fields.CREDIT_CARD__NUMBER + " = ?";
 
 
+    /**
+     * Set recipient credit card number for payment
+     * @param payment current payment
+     */
     private void getRecipientCardNumberAndName(PaymentBean payment) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -261,6 +272,10 @@ public class PaymentDao {
         }
     }
 
+    /**
+     * Set sender credit card number for payment
+     * @param payment current payment
+     */
     private void getSenderCardNumber(PaymentBean payment) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -281,6 +296,18 @@ public class PaymentDao {
             close(con);
         }
     }
+
+    /**
+     * Returns a payment list for current client
+     * use sort and limit.
+     * used for pagination
+     * Every page has 10 records
+     *
+     * @param client    current client.
+     * @param page     Page number
+     * @param sortType Sorting type
+     * @return ArrayList of PaymentBean.
+     */
 
     public ArrayList<PaymentBean> getPaymentList(Client client, int page, int sortType) {
         ArrayList<PaymentBean> listOfPayment = new ArrayList<>();
@@ -338,7 +365,12 @@ public class PaymentDao {
         return listOfPayment;
     }
 
-    public int getCountPaymentByUser(Client client) {
+    /**
+     * Returns count of client payment
+     * @param client current client
+     * @return count of payment
+     */
+    public int getCountPaymentByClient(Client client) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -361,6 +393,11 @@ public class PaymentDao {
         return rez;
     }
 
+    /**
+     * Returns id for payment status
+     * @param status current status
+     * @return status id
+     */
     private int getPaymentStatusIdByName(String status) {
         int rez = 0;
         PreparedStatement pstmt = null;
@@ -385,6 +422,11 @@ public class PaymentDao {
         return rez;
     }
 
+    /**
+     * Returns credit card id by credit card number
+     * @param number number of current credit card
+     * @return credit card id
+     */
     private int getCreditCardIdByNumber(String number) {
         int rez = 0;
         PreparedStatement pstmt = null;
@@ -409,6 +451,12 @@ public class PaymentDao {
         return rez;
     }
 
+    /**
+     * Returns the number for a new payment
+     * Finds the number of the last payment for the current client and increases it by 1
+     * @param client current client
+     * @return payment number
+     */
     private int getNewPaymentNumber(Client client) {
         int rez = 0;
         PreparedStatement pstmt = null;
@@ -433,6 +481,13 @@ public class PaymentDao {
         return ++rez;
     }
 
+    /**
+     * Adds new payment to the database
+     * @param client current client
+     * @param senderNumber number of sender credit card
+     * @param recipientNumber number of recipient credit card
+     * @param amount amount of payment
+     */
     public void createNewPayment(Client client, String senderNumber, String recipientNumber, double amount) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -456,6 +511,11 @@ public class PaymentDao {
         }
     }
 
+    /**
+     * Updates status if payment
+     * @param payment current payment
+     * @param newStatus new status for payment
+     */
     public void updatePaymentStatus(PaymentBean payment, String newStatus) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -474,6 +534,11 @@ public class PaymentDao {
         }
     }
 
+    /**
+     * Close autoClosable object
+     *
+     * @param forClose object for closing
+     */
     private void close(AutoCloseable forClose) {
         if (forClose != null) {
             try {
@@ -484,6 +549,9 @@ public class PaymentDao {
         }
     }
 
+    /**
+     * Extracts a Payment from the result set row.
+     */
     static class PaymentMapper implements EntityMapper<Payment> {
 
         @Override
@@ -507,6 +575,9 @@ public class PaymentDao {
         }
     }
 
+    /**
+     * Extracts a PaymentBaen from the result set row.
+     */
     static class PaymentBeanMapper implements EntityMapper<PaymentBean> {
 
         @Override

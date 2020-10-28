@@ -18,6 +18,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * Data access object for credit card entity.
+ *
+ * @author O.Zamkovyi
+ */
+
 public class CreditCardDao {
 
     private static final Logger logger = Logger.getLogger(CreditCardDao.class);
@@ -186,6 +192,12 @@ public class CreditCardDao {
                     Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__ID + " and " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + " = ?";
 
+    /**
+     * Returns a unblock credit card list for current client
+     * @param client      current client.
+     * @return ArrayList of CreditCard.
+     */
+
     public ArrayList<CreditCard> getAllUnblockCreditCard(Client client) {
         ArrayList<CreditCard> listOfCreditCard = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -212,6 +224,12 @@ public class CreditCardDao {
         return listOfCreditCard;
     }
 
+    /**
+     * Returns number new credit card
+     * generates a credit card number and checks if it is not used
+     *
+     * @return number for credit card
+     */
     private String generatorNewCardNumber() {
         String re = null;
         PreparedStatement pstmt = null;
@@ -239,6 +257,10 @@ public class CreditCardDao {
         return re;
     }
 
+    /**
+     * Blocks all credit cards linked to a current bank account
+     * @param bankAccount current bank account
+     */
     public void blockAllCardForAccount(BankAccountBean bankAccount) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -261,11 +283,15 @@ public class CreditCardDao {
         }
     }
 
+    /**
+     * Adds new credit card to the database
+     * @param account bank account for new credit card
+     */
+
     public void addNewCard(BankAccountBean account) {
         PreparedStatement pstmt = null;
         Connection con = null;
         DBManager dbManager = DBManager.getInstance();
-        ResultSet rs = null;
         try {
             con = DBManager.getInstance().getConnection();
             int newStatusId = getIdStatusForCreditCard(Fields.CARD_STATUS__BLOCKED);
@@ -287,7 +313,12 @@ public class CreditCardDao {
         }
     }
 
-    public int getCountCardByUser(int id) {
+    /**
+     * Returns count of client credit card
+     * @param id current client id
+     * @return count of client credit card
+     */
+    public int getCountCardByClient(int id) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         Connection con = null;
@@ -310,6 +341,17 @@ public class CreditCardDao {
         return rez;
     }
 
+    /**
+     * Returns a credit card list for current client
+     * use sort and limit.
+     * used for pagination
+     * Every page has 10 records
+     *
+     * @param id       Client id for search.
+     * @param pageNumber     Page number
+     * @param sortType Sorting type
+     * @return ArrayList of CreditCardBaen.
+     */
     public ArrayList<CreditCardBean> getCardList(int id, int pageNumber, int sortType) {
         ArrayList<CreditCardBean> listOfCreditCard = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -352,6 +394,11 @@ public class CreditCardDao {
         return listOfCreditCard;
     }
 
+    /**
+     * Returns id for credit card status
+     * @param value current credit card status
+     * @return id
+     */
     private int getIdStatusForCreditCard(String value) {
         int rez = 0;
         PreparedStatement pstmt = null;
@@ -377,6 +424,11 @@ public class CreditCardDao {
         return rez;
     }
 
+    /**
+     * Returns credit card be id
+     * @param id id for current credit card
+     * @return CreditCardBean entity
+     */
     public CreditCardBean getCardById(int id) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -402,6 +454,10 @@ public class CreditCardDao {
         return creditCard;
     }
 
+    /**
+     * Blocks credit card
+     * @param card credit card for blocking
+     */
     public void blocCard(CreditCardBean card) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -422,6 +478,10 @@ public class CreditCardDao {
         }
     }
 
+    /**
+     * Unblocks credit card
+     * @param card credit card for unblocking
+     */
     public void unblockCard(CreditCardBean card) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -442,6 +502,11 @@ public class CreditCardDao {
 
     }
 
+    /**
+     * Returns credit card balance in UAH
+     * @param id credit card id
+     * @return balance in UAH
+     */
     public int getUAHBalance(int id) {
         int rez = 0;
         PreparedStatement pstmt = null;
@@ -467,6 +532,11 @@ public class CreditCardDao {
         return rez;
     }
 
+    /**
+     * Close autoClosable object
+     *
+     * @param forClose object for closing
+     */
     private void close(AutoCloseable forClose) {
         if (forClose != null) {
             try {
@@ -477,7 +547,9 @@ public class CreditCardDao {
         }
     }
 
-
+    /**
+     * Extracts a CreditCard from the result set row.
+     */
     static class CreditCardMapper implements EntityMapper<CreditCard> {
 
         @Override
@@ -513,6 +585,9 @@ public class CreditCardDao {
 
     }
 
+    /**
+     * Extracts a CreditCardBean from the result set row.
+     */
     static class CreditCardBeanMapper implements EntityMapper<CreditCardBean> {
 
         @Override

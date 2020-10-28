@@ -7,6 +7,14 @@ import ozamkovyi.web.CalendarProcessing;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+/**
+ * Provide records for:
+ * Client card menu
+ * All card list for user
+ *
+ * @author O.Zamkovyi
+ */
+
 public class CreditCardBean extends CreditCard {
     private String currency;
 
@@ -48,6 +56,13 @@ public class CreditCardBean extends CreditCard {
         this.accountStatusName = accountStatusName;
     }
 
+    /**
+     * Returns disable for block/unblock button in jsp
+     * button available when account has status 'unblock' and card is valid
+     *
+     * @return disable for button
+     */
+
     public String getDisabled() {
         if ((accountStatusName.equals(Fields.ACCOUNT_STATUS__UNBLOCKED) && isValid())) {
             return "";
@@ -56,6 +71,12 @@ public class CreditCardBean extends CreditCard {
         }
     }
 
+    /**
+     * Returns content for block/unblock button in jsp
+     *
+     * @param bundle Current bundle
+     * @return content for button
+     */
     public String getButtonBloc(ResourceBundle bundle) {
         if (cardStatusName.equals(Fields.CARD_STATUS__BLOCKED)) {
             return bundle.getString("clientCardMenu_jsp.button.unblock");
@@ -64,9 +85,20 @@ public class CreditCardBean extends CreditCard {
         }
     }
 
+    /**
+     * Return double card balance
+     * @return double balance
+     */
     public double getBalanceDouble() {
         return ((double) balance) / 100;
     }
+
+    /**
+     * Generate number for nuw card
+     * number consist of 16 digits
+     * the first 6 digits are the same for all cards
+     * @return card number
+     */
 
     public static String generatorCardNumber() {
         StringBuilder sb = new StringBuilder();
@@ -77,6 +109,11 @@ public class CreditCardBean extends CreditCard {
         }
         return sb.toString();
     }
+
+    /**
+     * Return valid status for card
+     * @return card valid status
+     */
 
     public boolean isValid() {
         return CalendarProcessing.isCardValid(this);

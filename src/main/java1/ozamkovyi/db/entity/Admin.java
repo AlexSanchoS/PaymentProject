@@ -1,5 +1,12 @@
 package ozamkovyi.db.entity;
 
+/**
+ * Admin entity.
+ *
+ * @author O.Zamkovyi
+ *
+ */
+
 public class Admin extends User {
     private String language;
 

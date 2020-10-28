@@ -9,16 +9,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import org.apache.log4j.Logger;
 
-public class AdminDao {
+/**
+ * Data access object for Admin entity.
+ *
+ * @author O.Zamkovyi
+ */
 
-    /**
-     * Data access object for Admin entity.
-     *
-     * @author O.Zamkovyi
-     *
-     */
+public class AdminDao {
 
     private static final Logger logger = Logger.getLogger(AdminDao.class);
 
@@ -32,10 +32,8 @@ public class AdminDao {
     /**
      * Returns a Admin with the given login and password.
      *
-     * @param login
-     *            User login.
-     * @param password
-     *             User password.
+     * @param login    User login.
+     * @param password User password.
      * @return Admin entity.
      */
     public Admin findAdminByLoginAndPassword(String login, String password) {
@@ -66,8 +64,7 @@ public class AdminDao {
     /**
      * Update Admin local.
      *
-     * @param admin
-     *            Admin to update.
+     * @param admin Admin to update.
      */
     public void setAdminLocal(Admin admin) {
         PreparedStatement pstmt = null;
@@ -89,8 +86,8 @@ public class AdminDao {
 
     /**
      * Close autoClosable object
-     * @param forClose
-     *          object for closing
+     *
+     * @param forClose object for closing
      */
     private void close(AutoCloseable forClose) {
         if (forClose != null) {

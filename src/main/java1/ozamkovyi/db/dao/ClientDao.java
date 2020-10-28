@@ -11,6 +11,12 @@ import ozamkovyi.db.Fields;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Data access object for Client entity.
+ *
+ * @author O.Zamkovyi
+ */
+
 public class ClientDao {
 
     private static final org.apache.log4j.Logger logger = Logger.getLogger(ClientDao.class);
@@ -56,6 +62,14 @@ public class ClientDao {
             " FROM " + Fields.TABLE__CLIENT + " WHERE " + Fields.CLIENT__ID + " = ?";
 
 
+    /**
+     * Returns a client with the given login and password.
+     *
+     * @param login    User login.
+     * @param password User password.
+     * @return Client entity.
+     */
+
     public Client findClientByLoginAndPassword(String login, String password) {
         Client client = null;
         PreparedStatement pstmt = null;
@@ -81,6 +95,11 @@ public class ClientDao {
         return client;
     }
 
+    /**
+     * Adds a new client to the database
+     *
+     * @param client Client to add.
+     */
     public void addNewClientToDB(Client client) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -111,6 +130,12 @@ public class ClientDao {
 
     }
 
+    /**
+     * Update client local.
+     *
+     * @param client Client to update.
+     */
+
     public void setClientLocal(Client client) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -128,7 +153,16 @@ public class ClientDao {
         }
     }
 
-
+    /**
+     * Returns a client list
+     * use sort and limit.
+     * used for pagination
+     * Every page has 10 records
+     *
+     * @param page     Page number
+     * @param sortType Sorting type
+     * @return ArrayList of ClientBean.
+     */
 
     public ArrayList<ClientBean> getListOfClientForAdmin(int page, int sortType) {
         ArrayList<ClientBean> listOfClient = new ArrayList<>();
@@ -159,7 +193,7 @@ public class ClientDao {
 
             while (rs.next()) {
                 ClientBean client = mapper.mapRowForListOfClientForAdmin(rs);
-                client.setCreditCardCount(new CreditCardDao().getCountCardByUser(client.getId()));
+                client.setCreditCardCount(new CreditCardDao().getCountCardByClient(client.getId()));
                 client.setAccountCount(new BankAccountDao().getCountBankAccountByUser(client.getId()));
                 listOfClient.add(client);
             }
@@ -172,6 +206,10 @@ public class ClientDao {
         }
         return listOfClient;
     }
+
+    /**
+     * @return count of Client
+     */
 
     public int getCountClient() {
         PreparedStatement pstmt = null;
@@ -196,6 +234,12 @@ public class ClientDao {
 
     }
 
+    /**
+     * Update client status.
+     *
+     * @param client Client to update.
+     * @param status new client status.
+     */
     public void setStatus(Client client, String status) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -213,6 +257,11 @@ public class ClientDao {
         }
     }
 
+    /**
+     * Close autoClosable object
+     *
+     * @param forClose object for closing
+     */
     private void close(AutoCloseable forClose) {
         if (forClose != null) {
             try {
@@ -222,6 +271,12 @@ public class ClientDao {
             }
         }
     }
+
+    /**
+     * Returns status of client
+     * @param client current client
+     * @return status of client
+     */
 
     public String getClientStatus(Client client) {
         PreparedStatement pstmt = null;
@@ -246,7 +301,9 @@ public class ClientDao {
         return rez;
     }
 
-
+    /**
+     * Extracts a Client from the result set row.
+     */
     static class ClientMapper implements EntityMapper<Client> {
 
         @Override
@@ -268,6 +325,9 @@ public class ClientDao {
         }
     }
 
+    /**
+     * Extracts a ClientBean from the result set row.
+     */
     static class ClientBeanMapper implements EntityMapper<ClientBean> {
 
         @Override

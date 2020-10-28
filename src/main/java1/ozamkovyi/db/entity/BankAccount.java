@@ -1,5 +1,12 @@
 package ozamkovyi.db.entity;
 
+/**
+ * Bank account entity.
+ *
+ * @author O.Zamkovyi
+ *
+ */
+
 public class BankAccount extends Entity {
 
     protected String number;

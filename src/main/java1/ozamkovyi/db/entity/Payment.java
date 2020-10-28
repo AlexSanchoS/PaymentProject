@@ -2,6 +2,13 @@ package ozamkovyi.db.entity;
 
 import java.util.Calendar;
 
+/**
+ * Payment entity.
+ *
+ * @author O.Zamkovyi
+ *
+ */
+
 public class Payment extends Entity {
 
     protected int id;

@@ -31,7 +31,7 @@ public class ClientPaymentMenuServlet extends HttpServlet {
             pageNumber = (int) page;
             sortType = (int) session.getAttribute("sortType");
         }
-        session.setAttribute("countPayment", new PaymentDao().getCountPaymentByUser(currentUser));
+        session.setAttribute("countPayment", new PaymentDao().getCountPaymentByClient(currentUser));
         ArrayList<PaymentBean> listOfPayment = new PaymentDao().getPaymentList(currentUser, pageNumber, sortType);
         session.setAttribute("listOfPayment", listOfPayment);
         getServletContext().getRequestDispatcher("/jsp/clientPaymentMenu.jsp").forward(req, resp);

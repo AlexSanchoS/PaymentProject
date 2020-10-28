@@ -2,6 +2,13 @@ package ozamkovyi.db.entity;
 
 import java.util.Calendar;
 
+/**
+ * Credit card entity.
+ *
+ * @author O.Zamkovyi
+ *
+ */
+
 public class CreditCard extends Entity {
 
     public static final String FIRST_PART_FOR_CARD_NUMBER = "510621";

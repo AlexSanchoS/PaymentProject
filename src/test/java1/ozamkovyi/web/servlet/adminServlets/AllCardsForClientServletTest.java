@@ -12,10 +12,10 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 
-public class AllCardsForUserServletTest {
+public class AllCardsForClientServletTest {
     @Test
     public void shouldRedirectToAllCardForUserNextPage() throws ServletException, IOException {
-        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+        AllCardsForClientServlet servlet = new AllCardsForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -33,7 +33,7 @@ public class AllCardsForUserServletTest {
 
     @Test
     public void shouldRedirectToAllCardForUserPreviousPage() throws ServletException, IOException {
-        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+        AllCardsForClientServlet servlet = new AllCardsForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -51,7 +51,7 @@ public class AllCardsForUserServletTest {
 
     @Test
     public void shouldRedirectToAdminAllUsers() throws ServletException, IOException {
-        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+        AllCardsForClientServlet servlet = new AllCardsForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -68,7 +68,7 @@ public class AllCardsForUserServletTest {
 
     @Test
     public void shouldRedirectToAdminExchangeRate() throws ServletException, IOException {
-        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+        AllCardsForClientServlet servlet = new AllCardsForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -85,7 +85,7 @@ public class AllCardsForUserServletTest {
 
     @Test
     public void shouldRedirectToAdminHomepage() throws ServletException, IOException {
-        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+        AllCardsForClientServlet servlet = new AllCardsForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -102,7 +102,7 @@ public class AllCardsForUserServletTest {
 
     @Test
     public void shouldRedirectToAllCardForUserSortByCurrency() throws ServletException, IOException {
-        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+        AllCardsForClientServlet servlet = new AllCardsForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -121,7 +121,7 @@ public class AllCardsForUserServletTest {
 
     @Test
     public void shouldRedirectToAllCardForUserSortByCurrency2() throws ServletException, IOException {
-        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+        AllCardsForClientServlet servlet = new AllCardsForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -138,7 +138,7 @@ public class AllCardsForUserServletTest {
     }
     @Test
     public void shouldRedirectToAllCardForUserSortByCurrencyNull() throws ServletException, IOException {
-        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+        AllCardsForClientServlet servlet = new AllCardsForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -156,7 +156,7 @@ public class AllCardsForUserServletTest {
 
     @Test
     public void shouldRedirectToAllCardForUserSortByBalance() throws ServletException, IOException {
-        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+        AllCardsForClientServlet servlet = new AllCardsForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -175,7 +175,7 @@ public class AllCardsForUserServletTest {
 
     @Test
     public void shouldRedirectToAllCardForUserSortByBalance2() throws ServletException, IOException {
-        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+        AllCardsForClientServlet servlet = new AllCardsForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -192,7 +192,7 @@ public class AllCardsForUserServletTest {
     }
     @Test
     public void shouldRedirectToAllCardForUserSortByBalanceNull() throws ServletException, IOException {
-        AllCardsForUserServlet servlet = new AllCardsForUserServlet();
+        AllCardsForClientServlet servlet = new AllCardsForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);

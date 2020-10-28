@@ -7,6 +7,13 @@ import ozamkovyi.web.CalendarProcessing;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 
+/**
+ * Client entity.
+ *
+ * @author O.Zamkovyi
+ *
+ */
+
 public class Client extends User {
 
     public static final int ADULTS_AGE = 18;

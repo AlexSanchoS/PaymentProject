@@ -12,6 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Data access object for currency entity.
+ *
+ * @author O.Zamkovyi
+ */
+
 public class CurrencyDao {
 
     private static final Logger logger = Logger.getLogger(CurrencyDao.class);
@@ -47,6 +53,16 @@ public class CurrencyDao {
     private static final String SQL_CHANGE_RATE_FOR_CURRENCY = "UPDATE " + Fields.TABLE__CURRENCY +
             " SET " + Fields.CURRENCY__COURSE + " =? WHERE " + Fields.CURRENCY__ID + " =?";
 
+    /**
+     * Returns a currency list
+     * use sort and limit.
+     * used for pagination
+     * Every page has 10 records
+     *
+     * @param page     Page number
+     * @param sortType Sorting type
+     * @return ArrayList of currency.
+     */
 
     public ArrayList<Currency> getAllCurrencyForChange(int page, int sortType) {
         ArrayList<Currency> listOfCurrency = new ArrayList<>();
@@ -89,6 +105,12 @@ public class CurrencyDao {
         return listOfCurrency;
     }
 
+    /**
+     * Returns count of currency.
+     *
+     * @return count of currency.
+     */
+
     public int getCountCurrency() {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -111,6 +133,11 @@ public class CurrencyDao {
         return rez;
     }
 
+    /**
+     * Changes rate for currency
+     * @param id currency id
+     * @param rate new rate for currency
+     */
     public void changeRate(int id, float rate) {
         PreparedStatement pstmt = null;
         Connection con = null;
@@ -130,7 +157,10 @@ public class CurrencyDao {
         }
     }
 
-
+    /**
+     * Returns a currency list
+     * @return ArrayList of Currency
+     */
     public ArrayList<Currency> getAllCurrency() {
         ArrayList<Currency> listOfCurrency = new ArrayList<>();
         PreparedStatement pstmt = null;
@@ -155,6 +185,12 @@ public class CurrencyDao {
         return listOfCurrency;
     }
 
+    /**
+     * Close autoClosable object
+     *
+     * @param forClose object for closing
+     */
+
     private static void close(AutoCloseable forClose) {
         if (forClose != null) {
             try {
@@ -164,6 +200,10 @@ public class CurrencyDao {
             }
         }
     }
+
+    /**
+     * Extracts a Admin from the result set row.
+     */
 
     static class CurrencyMapper implements EntityMapper<Currency> {
 

@@ -1,5 +1,12 @@
 package ozamkovyi.db.entity;
 
+/**
+ * Currency entity.
+ *
+ * @author O.Zamkovyi
+ *
+ */
+
 public class Currency extends Entity{
     protected int id;
     protected String name;

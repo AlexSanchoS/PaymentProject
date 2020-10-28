@@ -64,6 +64,13 @@ public class PaymentBean extends Payment {
         this.statusNameUkr = statusNameUkr;
     }
 
+    /**
+     * Return payment status different locales
+     * @param locale
+     *      current locale
+     * @return payment status
+     */
+
     public String getStatusByLocal(String locale) {
         if (locale.equals("ua")) {
             return statusNameUkr;
@@ -72,6 +79,13 @@ public class PaymentBean extends Payment {
         }
     }
 
+    /**
+     * Returns content for confirm/repeat button in jsp
+     *
+     * @param bundle Current bundle
+     * @return content for button
+     */
+
     public String getButtonNameByStatus(ResourceBundle bundle) {
         if (statusName.equals(Fields.PAYMENT_STATUS__PREPARED)) {
             return bundle.getString("clientPaymentMenu_jsp.button.confirm");
@@ -79,6 +93,15 @@ public class PaymentBean extends Payment {
             return bundle.getString("clientPaymentMenu_jsp.button.repeat");
         }
     }
+
+    /**
+     * Check transaction valid
+     * transaction is valid if:
+     * Sender credit card is unblock and valid
+     * Recipient credit card is unblock and valid
+     * Sender card has enough money
+     * @return validation for transaction
+     */
 
     public boolean transactionIfValid() {
         CreditCardBean senderCreditCard = new CreditCardDao().getCardById(senderCardId);

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class AllAccountForUserServlet extends HttpServlet {
+public class AllAccountForClientServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -34,7 +34,7 @@ public class AllAccountForUserServlet extends HttpServlet {
         session.setAttribute("countAccount", new BankAccountDao().getCountBankAccountByUser(currentClient.getId()));
         session.setAttribute("listOfCurrencyForNewAccount", new CurrencyDao().getAllCurrency());
         session.setAttribute("listOfBankAccount", new BankAccountDao().getAccountList(currentClient.getId(), pageNumber, sortType));
-        getServletContext().getRequestDispatcher("/jsp/allAccountForUser.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/jsp/allAccountForClient.jsp").forward(req, resp);
     }
 
 

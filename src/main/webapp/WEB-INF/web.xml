@@ -123,7 +123,7 @@
 
     <servlet>
         <servlet-name>allCardsForUser</servlet-name>
-        <servlet-class>ozamkovyi.web.servlet.adminServlets.AllCardsForUserServlet</servlet-class>
+        <servlet-class>ozamkovyi.web.servlet.adminServlets.AllCardsForClientServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>allCardsForUser</servlet-name>
@@ -132,7 +132,7 @@
 
     <servlet>
         <servlet-name>allAccountsForUser</servlet-name>
-        <servlet-class>ozamkovyi.web.servlet.adminServlets.AllAccountForUserServlet</servlet-class>
+        <servlet-class>ozamkovyi.web.servlet.adminServlets.AllAccountForClientServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>allAccountsForUser</servlet-name>

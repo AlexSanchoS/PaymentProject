@@ -1,5 +1,12 @@
 package ozamkovyi.db;
 
+/**
+ * Holder for fields names of DB tables and beans.
+ *
+ * @author O.Zamkovyi
+ *
+ */
+
 public final class Fields {
 
     public static final String CLIENT__ID = "id";

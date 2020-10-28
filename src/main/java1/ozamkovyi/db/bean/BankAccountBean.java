@@ -6,6 +6,14 @@ import ozamkovyi.db.entity.BankAccount;
 import java.util.Random;
 import java.util.ResourceBundle;
 
+/**
+ * Provide records for:
+ * Client account menu
+ * All account list for user
+ *
+ * @author O.Zamkovyi
+ */
+
 public class BankAccountBean extends BankAccount {
 
     protected String accountStatusName;
@@ -43,6 +51,13 @@ public class BankAccountBean extends BankAccount {
         ClientName = clientName;
     }
 
+    /**
+     * Returns content for block/unblock button in jsp
+     *
+     * @param bundle Current bundle
+     * @return content for button
+     */
+
     public String getButtonBloc(ResourceBundle bundle) {
         if (accountStatusName.equals(Fields.ACCOUNT_STATUS__UNBLOCKED)) {
             return bundle.getString("clientAccountMenu_jsp.button.bloc");
@@ -51,6 +66,12 @@ public class BankAccountBean extends BankAccount {
         }
     }
 
+    /**
+     * Returns disable for block/unblock button in jsp
+     * button disabled when account has status 'expectation'
+     *
+     * @return disable for button
+     */
     public String getDisable() {
         if (accountStatusName.equals(Fields.ACCOUNT_STATUS__EXPECTATION)) {
             return "disabled";
@@ -58,6 +79,13 @@ public class BankAccountBean extends BankAccount {
             return "";
         }
     }
+
+    /**
+     * Generate title for account
+     * title consist of number, currency name and balance
+     *
+     * @return title for account
+     */
 
     public String getAccountForNewCard() {
         StringBuilder sb = new StringBuilder();
@@ -67,7 +95,14 @@ public class BankAccountBean extends BankAccount {
         return sb.toString();
     }
 
-    public static String generatorCardNumber() {
+    /**
+     * Generate number for nuw account
+     * number consist of 20 digits
+     *
+     * @return account number
+     */
+
+    public static String generatorAccountNumber() {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < 20; i++) {
@@ -75,6 +110,13 @@ public class BankAccountBean extends BankAccount {
         }
         return sb.toString();
     }
+
+    /**
+     * Returns disable for refill button in jsp
+     * button available when account has status 'unblock'
+     *
+     * @return disable for button
+     */
 
     public String getDisableRefill() {
         if (accountStatusName.equals(Fields.ACCOUNT_STATUS__UNBLOCKED)) {

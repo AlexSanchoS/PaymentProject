@@ -7,8 +7,6 @@ import ozamkovyi.db.dao.CreditCardDao;
 import ozamkovyi.db.dao.BankAccountDao;
 import ozamkovyi.db.Fields;
 
-import ozamkovyi.db.entity.*;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +42,7 @@ public class ClientCardMenuServlet extends HttpServlet {
             listOfCreditCard = new CreditCardDao().getCardList(currentUser.getId(), pageNumber, sortType);
         }
 
-        session.setAttribute("countCard", new CreditCardDao().getCountCardByUser(currentUser.getId()));
+        session.setAttribute("countCard", new CreditCardDao().getCountCardByClient(currentUser.getId()));
         session.setAttribute("listOfCreditCard", listOfCreditCard);
         session.setAttribute("listOfAccountForCreditCard",  new BankAccountDao().getAllAccount(currentUser));
         getServletContext().getRequestDispatcher("/jsp/clientCardMenu.jsp").forward(req, resp);

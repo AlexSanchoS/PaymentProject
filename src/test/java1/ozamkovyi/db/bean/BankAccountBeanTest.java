@@ -64,7 +64,7 @@ public class BankAccountBeanTest {
     @Test
     public void generatorCardNumberTest() {
         BankAccountBean bankAccountBean = new BankAccountBean();
-        Assert.assertTrue(bankAccountBean.generatorCardNumber().length() == 20);
+        Assert.assertTrue(bankAccountBean.generatorAccountNumber().length() == 20);
     }
 
 

@@ -1,6 +1,13 @@
 package ozamkovyi.db.entity;
 
-public abstract class User {
+/**
+ * Root for admin and client entity.
+ *
+ * @author O.Zamkovyi
+ *
+ */
+
+public abstract class User extends Entity{
     protected int id;
     protected String login;
     protected String password;

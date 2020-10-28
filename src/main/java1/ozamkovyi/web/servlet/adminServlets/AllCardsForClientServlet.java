@@ -1,7 +1,6 @@
 package ozamkovyi.web.servlet.adminServlets;
 
 import ozamkovyi.db.Fields;
-import ozamkovyi.db.bean.BankAccountBean;
 import ozamkovyi.db.bean.ClientBean;
 import ozamkovyi.db.bean.CreditCardBean;
 import ozamkovyi.db.dao.BankAccountDao;
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class AllCardsForUserServlet extends HttpServlet {
+public class AllCardsForClientServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -32,10 +31,10 @@ public class AllCardsForUserServlet extends HttpServlet {
             sortType = (int) session.getAttribute("sortType");
         }
         ClientBean currentClient = (ClientBean) session.getAttribute("currentClient");
-        session.setAttribute("countCard", new CreditCardDao().getCountCardByUser(currentClient.getId()));
+        session.setAttribute("countCard", new CreditCardDao().getCountCardByClient(currentClient.getId()));
         session.setAttribute("listOfCreditCard", new CreditCardDao().getCardList(currentClient.getId(), pageNumber, sortType));
         session.setAttribute("listOfAccountForCreditCard", new BankAccountDao().getAllAccount(currentClient));
-        getServletContext().getRequestDispatcher("/jsp/allCardsForUser.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/jsp/allCardsForClient.jsp").forward(req, resp);
     }
 
     @Override

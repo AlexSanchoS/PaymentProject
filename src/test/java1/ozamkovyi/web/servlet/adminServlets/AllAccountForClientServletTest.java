@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
-public class AllAccountForUserServletTest {
+public class AllAccountForClientServletTest {
     @Test
     public void shouldRedirectToAllAccountForUserNextPage() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -34,7 +34,7 @@ public class AllAccountForUserServletTest {
 
     @Test
     public void shouldRedirectToAllAccountForUserPreviousPage() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -52,7 +52,7 @@ public class AllAccountForUserServletTest {
 
     @Test
     public void shouldRedirectToAdminAllUsers() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -68,7 +68,7 @@ public class AllAccountForUserServletTest {
     }
     @Test
     public void shouldRedirectToAdminExchangeRate() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -87,7 +87,7 @@ public class AllAccountForUserServletTest {
 
     @Test
     public void shouldRedirectToAdminHomepage() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -104,7 +104,7 @@ public class AllAccountForUserServletTest {
 
     @Test
     public void shouldRedirectToAllAccountForUserSortByCurrency() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -123,7 +123,7 @@ public class AllAccountForUserServletTest {
 
     @Test
     public void shouldRedirectToAllAccountForUserSortByCurrency2() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -140,7 +140,7 @@ public class AllAccountForUserServletTest {
     }
     @Test
     public void shouldRedirectToAllAccountForUserSortByCurrencyNull() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -158,7 +158,7 @@ public class AllAccountForUserServletTest {
 
     @Test
     public void shouldRedirectToAllAccountForUserSortByNumber() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -177,7 +177,7 @@ public class AllAccountForUserServletTest {
 
     @Test
     public void shouldRedirectToAllAccountForUserSortByNumber2() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -194,7 +194,7 @@ public class AllAccountForUserServletTest {
     }
     @Test
     public void shouldRedirectToAllAccountForUserSortByNumberNull() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -211,7 +211,7 @@ public class AllAccountForUserServletTest {
 
     @Test
     public void shouldRedirectToAllAccountForUserSortByBalance() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -228,7 +228,7 @@ public class AllAccountForUserServletTest {
     }
     @Test
     public void shouldRedirectToAllAccountForUserSortByBalance2() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -246,7 +246,7 @@ public class AllAccountForUserServletTest {
 
     @Test
     public void shouldRedirectToAllAccountForUserSortByBalanceNull() throws ServletException, IOException {
-        AllAccountForUserServlet servlet = new AllAccountForUserServlet();
+        AllAccountForClientServlet servlet = new AllAccountForClientServlet();
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
