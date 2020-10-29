@@ -48,6 +48,7 @@ public class AdminDao {
             pstmt.setString(1, login);
             pstmt.setString(2, password);
             rs = pstmt.executeQuery();
+            logger.trace("SQL in 'findAdminByLoginAndPassword' request = " + pstmt.toString());
             if (rs.next()) {
                 admin = mapper.mapRow(rs);
             }
@@ -75,6 +76,7 @@ public class AdminDao {
             pstmt = con.prepareStatement(SQL__SET_CLIENT_LOCAL);
             pstmt.setString(1, admin.getLanguage());
             pstmt.setInt(2, admin.getId());
+            logger.trace("SQL in 'setAdminLocal' request = " + pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException throwables) {
             logger.error("Can't set admin local", throwables);
@@ -107,6 +109,7 @@ public class AdminDao {
 
         @Override
         public Admin mapRow(ResultSet rs) {
+            logger.trace("Result set in 'EntityMapper<Admin>' = " + rs.toString());
             try {
                 Admin admin = new Admin();
                 admin.setId(rs.getInt(Fields.ADMIN__ID));

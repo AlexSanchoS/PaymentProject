@@ -408,6 +408,7 @@ public class PaymentDao {
             con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_GET_PAYMENT_STATUS_ID_BY_NAME);
             pstmt.setString(1, status);
+            logger.trace("SQL in 'getPaymentStatusIdByName' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getInt(1);
@@ -437,6 +438,7 @@ public class PaymentDao {
             con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_GET_CREDIT_CARD_ID_BY_NUMBER);
             pstmt.setString(1, number);
+            logger.trace("SQL in 'getCreditCardIdByNumber' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getInt(1);
@@ -467,6 +469,7 @@ public class PaymentDao {
             con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_GET_MAX_PAYMENT_NUMBER_FOR_CLIENT);
             pstmt.setInt(1, client.getId());
+            logger.trace("SQL in 'getNewPaymentNumber' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getInt(1);
@@ -501,6 +504,7 @@ public class PaymentDao {
             pstmt.setInt(4, getPaymentStatusIdByName(Fields.PAYMENT_STATUS__PREPARED));
             pstmt.setInt(5, getCreditCardIdByNumber(senderNumber));
             pstmt.setInt(6, getCreditCardIdByNumber(recipientNumber));
+            logger.trace("SQL in 'createNewPayment' request = " + pstmt.toString());
 
             pstmt.executeUpdate();
 
@@ -525,6 +529,7 @@ public class PaymentDao {
             pstmt = con.prepareStatement(SQL_UPDATE_PAYMENT_STATUS);
             pstmt.setInt(1, getPaymentStatusIdByName(newStatus));
             pstmt.setInt(2, payment.getId());
+            logger.trace("SQL in 'updatePaymentStatus' request = " + pstmt.toString());
             pstmt.executeUpdate();
 
         } catch (SQLException throwables) {
@@ -557,6 +562,7 @@ public class PaymentDao {
         @Override
         public Payment mapRow(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRow Payment' = " + rs.toString());
                 Payment payment = new Payment();
                 Calendar calendar = CalendarProcessing.string2FullDate(rs.getString(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE));
                 payment.setId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID));
@@ -583,6 +589,7 @@ public class PaymentDao {
         @Override
         public PaymentBean mapRow(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRow PaymentBean' = " + rs.toString());
                 PaymentBean payment = new PaymentBean();
                 Calendar calendar = CalendarProcessing.string2FullDate(rs.getString(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE));
                 payment.setId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID));
@@ -602,6 +609,7 @@ public class PaymentDao {
 
         public PaymentBean mapRowForGetPaymentList(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRowForGetPaymentList' = " + rs.toString());
                 PaymentBean payment = new PaymentBean();
                 Calendar calendar = CalendarProcessing.string2FullDate(rs.getString(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE));
                 payment.setId(rs.getInt(Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID));

@@ -90,6 +90,7 @@ public class CurrencyDao {
             pstmt = con.prepareStatement(sort);
             CurrencyMapper mapper = new CurrencyMapper();
             pstmt.setInt(1, page * 10 - 10);
+            logger.trace("SQL in 'getAllCurrencyForChange' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 Currency currency = mapper.mapRow(rs);
@@ -119,6 +120,7 @@ public class CurrencyDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_COUNT_CURRENCY);
+            logger.trace("SQL in 'getCountCurrency' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getInt(1);
@@ -147,7 +149,7 @@ public class CurrencyDao {
             pstmt = con.prepareStatement(SQL_CHANGE_RATE_FOR_CURRENCY);
             pstmt.setFloat(1, rate);
             pstmt.setInt(2, id);
-            System.out.println(pstmt);
+            logger.trace("SQL in 'changeRate' request = " + pstmt.toString());
             pstmt.executeUpdate();
 
         } catch (SQLException throwables) {
@@ -170,6 +172,7 @@ public class CurrencyDao {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_ALL_CURRENCY);
             CurrencyMapper mapper = new CurrencyMapper();
+            logger.trace("SQL in 'getAllCurrency' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 Currency currency = mapper.mapRowForGetAllCurrency(rs);
@@ -211,6 +214,7 @@ public class CurrencyDao {
         public Currency mapRow(ResultSet rs) {
             Currency currency = new Currency();
             try {
+                logger.trace("Result set in 'mapRow' = " + rs.toString());
                 currency.setId(rs.getInt(Fields.CURRENCY__ID));
                 currency.setName(rs.getString(Fields.CURRENCY__NAME));
                 currency.setCourse(rs.getFloat(Fields.CURRENCY__COURSE));
@@ -223,6 +227,7 @@ public class CurrencyDao {
         public Currency mapRowForGetAllCurrency(ResultSet rs) {
             Currency currency = new Currency();
             try {
+                logger.trace("Result set in 'mapRowForGetAllCurrency' = " + rs.toString());
                 currency.setId(rs.getInt(Fields.CURRENCY__ID));
                 currency.setName(rs.getString(Fields.CURRENCY__NAME));
             } catch (SQLException throwables) {

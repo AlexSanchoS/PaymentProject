@@ -270,6 +270,7 @@ public class BankAccountDao {
             pstmt = con.prepareStatement(SQL_GET_ALL_ACCOUNT_NUMBER_AND_CURRENCY);
             BankAccountBeanMapper mapper = new BankAccountBeanMapper();
             pstmt.setInt(1, client.getId());
+            logger.trace("SQL in 'getAllAccount' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 BankAccountBean bankAccountBean = mapper.mapRowForGetAllAccount(rs);
@@ -301,6 +302,7 @@ public class BankAccountDao {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_COUNT_BANK_ACCOUNT_BY_CLIENT_ID);
             pstmt.setInt(1, id);
+            logger.trace("SQL in 'getCountBankAccountByUser' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getInt(1);
@@ -358,6 +360,7 @@ public class BankAccountDao {
             pstmt.setInt(1, id);
             BankAccountBeanMapper mapper = new BankAccountBeanMapper();
             pstmt.setInt(2, page * 10 - 10);
+            logger.trace("SQL in 'getAccountList' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -409,6 +412,7 @@ public class BankAccountDao {
             pstmt = con.prepareStatement(sort);
             BankAccountBeanMapper mapper = new BankAccountBeanMapper();
             pstmt.setInt(1, page * 10 - 10);
+            logger.trace("SQL in 'getAccountListForUnlock' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -442,6 +446,7 @@ public class BankAccountDao {
             pstmt = con.prepareStatement(SQL_GET_STATUS_ACCOUNT_ID_BY_NAME);
             pstmt.setString(1, status);
             System.out.println(pstmt);
+            logger.trace("SQL in 'getStatusIdByStatus' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 statusId = rs.getInt(1);
@@ -475,6 +480,7 @@ public class BankAccountDao {
             if (newStatus.equals(Fields.ACCOUNT_STATUS__BLOCKED)) {
                 new CreditCardDao().blockAllCardForAccount(bankAccountBean);
             }
+            logger.trace("SQL in 'changeStatusFotBankAccount' request = " + pstmt.toString());
             pstmt.executeUpdate();
 
         } catch (SQLException throwables) {
@@ -501,6 +507,7 @@ public class BankAccountDao {
             con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_GET_ACCOUNT_BALANCE_BY_NUMBER);
             pstmt.setString(1, number);
+            logger.trace("SQL in 'getAccountBalance' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 statusId = rs.getInt(1);
@@ -533,7 +540,7 @@ public class BankAccountDao {
             int newBalance = (int) (currentBalance + amount / course * 100);
             pstmt.setInt(1, newBalance);
             pstmt.setString(2, number);
-            System.out.println(pstmt);
+            logger.trace("SQL in 'addToBalance' request = " + pstmt.toString());
             pstmt.executeUpdate();
 
         } catch (SQLException throwables) {
@@ -558,6 +565,7 @@ public class BankAccountDao {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_COURSE_FOR_BANK_ACCOUNT);
             pstmt.setString(1, number);
+            logger.trace("SQL in 'getRate' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getDouble(1);
@@ -590,6 +598,7 @@ public class BankAccountDao {
             while (rez != 0) {
                 re = BankAccountBean.generatorAccountNumber();
                 pstmt.setString(1, re);
+                logger.trace("SQL in 'generatorNewBankAccountNumber' request = " + pstmt.toString());
                 rs = pstmt.executeQuery();
                 if (rs.next()) {
                     rez = rs.getInt(1);
@@ -627,7 +636,7 @@ public class BankAccountDao {
             pstmt.setInt(3, currency.getId());
             pstmt.setInt(4, client.getId());
             pstmt.setInt(5, newStatusId);
-            System.out.println(pstmt);
+            logger.trace("SQL in 'addNewAccount' request = " + pstmt.toString());
             pstmt.executeUpdate();
 
         } catch (SQLException throwables) {
@@ -648,6 +657,7 @@ public class BankAccountDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_COUNT_BANK_ACCOUNT_FOR_UNLOCK);
+            logger.trace("SQL in 'getCountBankAccountForUnlock' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getInt(1);
@@ -685,6 +695,7 @@ public class BankAccountDao {
         @Override
         public BankAccount mapRow(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRow BankAccount' = " + rs.toString());
                 BankAccount bankAccount = new BankAccount();
                 bankAccount.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
                 bankAccount.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
@@ -706,6 +717,7 @@ public class BankAccountDao {
         @Override
         public BankAccountBean mapRow(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRow BankAccountBean' = " + rs.toString());
                 BankAccountBean bankAccount = new BankAccountBean();
                 bankAccount.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
                 bankAccount.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
@@ -721,6 +733,7 @@ public class BankAccountDao {
 
         public BankAccountBean mapRowForGetAllAccount(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRowForGetAllAccount' = " + rs.toString());
                 BankAccountBean bankAccountBean = new BankAccountBean();
                 bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
                 bankAccountBean.setCurrencyName(rs.getString(Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME));
@@ -735,6 +748,7 @@ public class BankAccountDao {
 
         public BankAccountBean mapRowForGetAccountList(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRowForGetAccountList' = " + rs.toString());
                 BankAccountBean bankAccountBean = new BankAccountBean();
                 bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
                 bankAccountBean.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));
@@ -751,6 +765,7 @@ public class BankAccountDao {
 
         public BankAccountBean mapRowForGetAccountListForUnlock(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRowForGetAccountListForUnlock' = " + rs.toString());
                 BankAccountBean bankAccountBean = new BankAccountBean();
                 bankAccountBean.setNumber(rs.getString(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER));
                 bankAccountBean.setBalance(rs.getLong(Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE));

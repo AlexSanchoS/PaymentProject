@@ -81,6 +81,7 @@ public class ClientDao {
             ClientMapper mapper = new ClientMapper();
             pstmt.setString(1, login);
             pstmt.setString(2, password);
+            logger.trace("SQL in 'findClientByLoginAndPassword' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 client = mapper.mapRow(rs);
@@ -117,6 +118,7 @@ public class ClientDao {
             pstmt.setString(5, client.getLanguage());
             pstmt.setString(6, client.getStatus());
             pstmt.executeUpdate();
+            logger.trace("SQL in 'addNewClientToDB' request = " + pstmt.toString());
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 client.setId(rs.getInt(1));
@@ -145,6 +147,7 @@ public class ClientDao {
             pstmt = con.prepareStatement(SQL__SET_CLIENT_LOCAL);
             pstmt.setString(1, client.getLanguage());
             pstmt.setInt(2, client.getId());
+            logger.trace("SQL in 'setClientLocal' request = " + pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException throwables) {
             logger.error("Can't set client local", throwables);
@@ -189,6 +192,7 @@ public class ClientDao {
             pstmt = con.prepareStatement(sort);
             ClientBeanMapper mapper = new ClientBeanMapper();
             pstmt.setInt(1, page * 10 - 10);
+            logger.trace("SQL in 'getListOfClientForAdmin' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -219,6 +223,7 @@ public class ClientDao {
         try {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_COUNT_CLIENT);
+            logger.trace("SQL in 'getCountClient' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getInt(1);
@@ -249,6 +254,7 @@ public class ClientDao {
             pstmt = con.prepareStatement(SQL__SET_CLIENT_STATUS);
             pstmt.setString(1, status);
             pstmt.setInt(2, client.getId());
+            logger.trace("SQL in 'setStatus' request = " + pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException throwables) {
             logger.error("Can't set client status", throwables);
@@ -287,6 +293,7 @@ public class ClientDao {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_STATUS_BY_ID);
             pstmt.setInt(1, client.getId());
+            logger.trace("SQL in 'getClientStatus' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getString(1);
@@ -309,6 +316,7 @@ public class ClientDao {
         @Override
         public Client mapRow(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRow<Client>' = " + rs.toString());
                 Client client = new Client();
                 client.setId(rs.getInt(Fields.CLIENT__ID));
                 client.setLogin(rs.getString(Fields.CLIENT__LOGIN));
@@ -333,6 +341,7 @@ public class ClientDao {
         @Override
         public ClientBean mapRow(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRow<ClientBean>' = " + rs.toString());
                 ClientBean client = new ClientBean();
                 client.setId(rs.getInt(Fields.CLIENT__ID));
                 client.setLogin(rs.getString(Fields.CLIENT__LOGIN));
@@ -350,6 +359,7 @@ public class ClientDao {
 
         public ClientBean mapRowForListOfClientForAdmin(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRowForListOfClientForAdmin' = " + rs.toString());
                 ClientBean client = new ClientBean();
                 client.setId(rs.getInt(Fields.CLIENT__ID));
                 client.setName(rs.getString(Fields.CLIENT__NAME));

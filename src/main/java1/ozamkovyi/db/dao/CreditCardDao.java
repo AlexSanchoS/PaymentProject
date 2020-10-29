@@ -209,6 +209,7 @@ public class CreditCardDao {
             pstmt.setString(1, Fields.CARD_STATUS__UNBLOCKED);
             pstmt.setInt(2, client.getId());
             CreditCardMapper mapper = new CreditCardMapper();
+            logger.trace("SQL in 'getAllUnblockCreditCard' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 CreditCard creditCard = mapper.mapRowForGetAllUnblockCreditCard(rs);
@@ -242,6 +243,7 @@ public class CreditCardDao {
             while (rez != 0) {
                 re = CreditCardBean.generatorCardNumber();
                 pstmt.setString(1, re);
+                logger.trace("SQL in 'generatorNewCardNumber' request = " + pstmt.toString());
                 rs = pstmt.executeQuery();
                 if (rs.next()) {
                     rez = rs.getInt(1);
@@ -270,6 +272,7 @@ public class CreditCardDao {
             con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_GET_ALL_CARD_FOR_ACCOUNT);
             pstmt.setString(1, bankAccount.getNumber());
+            logger.trace("SQL in 'blockAllCardForAccount' request = " + pstmt.toString());
             pstmt.executeUpdate();
             while (rs.next()) {
                 CreditCardBean creditCard = new CreditCardBean();
@@ -303,7 +306,7 @@ public class CreditCardDao {
             pstmt.setString(3, account.getNumber());
             pstmt.setInt(4, account.getUserId());
             pstmt.setInt(5, newStatusId);
-            System.out.println(pstmt);
+            logger.trace("SQL in 'addNewCard' request = " + pstmt.toString());
             pstmt.executeUpdate();
 
         } catch (SQLException throwables) {
@@ -327,6 +330,7 @@ public class CreditCardDao {
             con = DBManager.getInstance().getConnection();
             pstmt = con.prepareStatement(SQL_GET_COUNT_CARD_BY_CLIENT_ID);
             pstmt.setInt(1, id);
+            logger.trace("SQL in 'getCountCardByClient' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getInt(1);
@@ -378,6 +382,7 @@ public class CreditCardDao {
             CreditCardBeanMapper mapper = new CreditCardBeanMapper();
             pstmt.setInt(1, id);
             pstmt.setInt(2, pageNumber * 10 - 10);
+            logger.trace("SQL in 'getCardList' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -409,6 +414,7 @@ public class CreditCardDao {
             con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_GET_STATUS_CREDIT_CARD);
             pstmt.setString(1, value);
+            logger.trace("SQL in 'getIdStatusForCreditCard' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = rs.getInt(1);
@@ -439,6 +445,7 @@ public class CreditCardDao {
             pstmt = con.prepareStatement(SQL_GET_CREDIT_CARD_BY_ID);
             CreditCardBeanMapper mapper = new CreditCardBeanMapper();
             pstmt.setInt(1, id);
+            logger.trace("SQL in 'getCardById' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
@@ -469,6 +476,7 @@ public class CreditCardDao {
             pstmt = con.prepareStatement(SQL_BLOC_UNBLOCK_CREDIT_CARD);
             pstmt.setInt(1, newStatusId);
             pstmt.setInt(2, card.getId());
+            logger.trace("SQL in 'blocCard' request = " + pstmt.toString());
             pstmt.executeUpdate();
 
         } catch (SQLException throwables) {
@@ -493,6 +501,7 @@ public class CreditCardDao {
             pstmt = con.prepareStatement(SQL_BLOC_UNBLOCK_CREDIT_CARD);
             pstmt.setInt(1, newStatusId);
             pstmt.setInt(2, card.getId());
+            logger.trace("SQL in 'unblockCard' request = " + pstmt.toString());
             pstmt.executeUpdate();
         } catch (SQLException throwables) {
             logger.error("Can't unblock credit card", throwables);
@@ -517,6 +526,7 @@ public class CreditCardDao {
             con = dbManager.getConnection();
             pstmt = con.prepareStatement(SQL_GET_UAH_BALANCE_BY_ID);
             pstmt.setInt(1, id);
+            logger.trace("SQL in 'getUAHBalance' request = " + pstmt.toString());
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 rez = (int) rs.getDouble(1);
@@ -555,6 +565,7 @@ public class CreditCardDao {
         @Override
         public CreditCard mapRow(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRow CreditCard' = " + rs.toString());
                 CreditCard creditCard = new CreditCard();
                 Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
                 creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
@@ -573,6 +584,7 @@ public class CreditCardDao {
 
         public CreditCard mapRowForGetAllUnblockCreditCard(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRowForGetAllUnblockCreditCard' = " + rs.toString());
                 CreditCardBean creditCard = new CreditCardBean();
                 creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
                 creditCard.setNumber(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER));
@@ -593,6 +605,7 @@ public class CreditCardDao {
         @Override
         public CreditCardBean mapRow(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRow CreditCardBean' = " + rs.toString());
                 CreditCardBean creditCard = new CreditCardBean();
                 Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
                 creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
@@ -610,6 +623,7 @@ public class CreditCardDao {
 
         public CreditCardBean mapRowForGetCardById(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRowForGetCardById' = " + rs.toString());
                 CreditCardBean creditCard = new CreditCardBean();
                 Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
                 creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));
@@ -628,9 +642,9 @@ public class CreditCardDao {
             }
         }
 
-
         public CreditCardBean mapRowForGetCardList(ResultSet rs) {
             try {
+                logger.trace("Result set in 'mapRowForGetCardList' = " + rs.toString());
                 CreditCardBean creditCard = new CreditCardBean();
                 Calendar date = CalendarProcessing.string2Date(rs.getString(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY));
                 creditCard.setId(rs.getInt(Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID));

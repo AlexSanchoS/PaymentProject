@@ -5,8 +5,17 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
+/**
+ * Custom tag for localization button
+ *
+ * @author O.Zamkovyi
+ */
+
 public class LocalizationTag extends TagSupport {
 
+    /**
+     * Current locale for user
+     */
     public static String locale;
     private String btn;
 
@@ -18,6 +27,12 @@ public class LocalizationTag extends TagSupport {
         this.btn = btn;
     }
 
+
+    /**
+     * @return "disabled" if localization button equals current locale
+     * or "" if localization button not equals current locale
+     * @throws JspException
+     */
     @Override
     public int doStartTag() throws JspException {
         JspWriter out = pageContext.getOut();

@@ -9,10 +9,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * Servlet for login exception page
+ * @author  O. Zamkovyi
+ */
 public class ErrorServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(ErrorServlet.class);
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        logger.debug("Exception servlet");
         Exception exception = (Exception) req.getAttribute("javax.servlet.error.exception");
         logger.error(exception);
         PrintWriter out = resp.getWriter();
