@@ -2,7 +2,6 @@ package ozamkovyi.db.dao;
 
 import ozamkovyi.db.EntityMapper;
 import ozamkovyi.db.bean.BankAccountBean;
-import ozamkovyi.db.bean.ClientBean;
 import ozamkovyi.db.bean.CreditCardBean;
 import ozamkovyi.db.entity.Client;
 import ozamkovyi.db.entity.CreditCard;
@@ -29,7 +28,7 @@ public class CreditCardDao {
     private static final Logger logger = Logger.getLogger(CreditCardDao.class);
 
 
-    private static final String SQL__FIND_CARD_BY_ID_SORT1_LIMIT =
+    private static final String SQL__FIND_CARD_BY_ID_SORT_BY_CURRENCY_LIMIT =
             "SELECT " + Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + ", " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER + "," +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY + ", " +
@@ -54,7 +53,7 @@ public class CreditCardDao {
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID + " = ? " +
                     " ORDER BY " + Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + " limit 10 offset ?";
 
-    private static final String SQL__FIND_CARD_BY_ID_SORT2_LIMIT =
+    private static final String SQL__FIND_CARD_BY_ID_SORT_BY_CURRENCY_DESC_LIMIT =
             "SELECT " + Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + ", " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER + "," +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY + ", " +
@@ -79,7 +78,7 @@ public class CreditCardDao {
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID + " = ? " +
                     " ORDER BY " + Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + " DESC limit 10 offset ?";
 
-    private static final String SQL__FIND_CARD_BY_ID_SORT3_LIMIT =
+    private static final String SQL__FIND_CARD_BY_ID_SORT_BY_BALANCE_LIMIT =
             "SELECT " + Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + ", " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER + "," +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY + ", " +
@@ -104,7 +103,7 @@ public class CreditCardDao {
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__USER_ID + " = ? " +
                     " ORDER BY " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + " limit 10 offset ?";
 
-    private static final String SQL__FIND_CARD_BY_ID_SORT4_LIMIT =
+    private static final String SQL__FIND_CARD_BY_ID_SORT_BY_BALANCE_DESC_LIMIT =
             "SELECT " + Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__ID + ", " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__NUMBER + "," +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__VALIDITY + ", " +
@@ -183,7 +182,7 @@ public class CreditCardDao {
 
     private static final String SQL_GET_UAH_BALANCE_BY_ID =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + "*" +
-                    Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__COURSE + " FROM " +
+                    Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__RATE + " FROM " +
                     Fields.TABLE__CREDIT_CARD + " join " + Fields.TABLE__BANK_ACCOUNT + " join " +
                     Fields.TABLE__CURRENCY + " on " +
                     Fields.TABLE__CREDIT_CARD + "." + Fields.CREDIT_CARD__BANK_ACCOUNT_NUMBER + "=" +
@@ -364,16 +363,16 @@ public class CreditCardDao {
         String sort = null;
         switch (sortType) {
             case 1:
-                sort = SQL__FIND_CARD_BY_ID_SORT1_LIMIT;
+                sort = SQL__FIND_CARD_BY_ID_SORT_BY_CURRENCY_LIMIT;
                 break;
             case 2:
-                sort = SQL__FIND_CARD_BY_ID_SORT2_LIMIT;
+                sort = SQL__FIND_CARD_BY_ID_SORT_BY_CURRENCY_DESC_LIMIT;
                 break;
             case 3:
-                sort = SQL__FIND_CARD_BY_ID_SORT3_LIMIT;
+                sort = SQL__FIND_CARD_BY_ID_SORT_BY_BALANCE_LIMIT;
                 break;
             case 4:
-                sort = SQL__FIND_CARD_BY_ID_SORT4_LIMIT;
+                sort = SQL__FIND_CARD_BY_ID_SORT_BY_BALANCE_DESC_LIMIT;
                 break;
         }
         try {

@@ -5,7 +5,6 @@ import ozamkovyi.db.EntityMapper;
 import ozamkovyi.db.Fields;
 import ozamkovyi.db.bean.BankAccountBean;
 import ozamkovyi.db.bean.ClientBean;
-import ozamkovyi.db.bean.CreditCardBean;
 import ozamkovyi.db.entity.BankAccount;
 import ozamkovyi.db.entity.Client;
 import ozamkovyi.db.entity.Currency;
@@ -28,7 +27,7 @@ public class BankAccountDao {
 
     private static final Logger logger = Logger.getLogger(BankAccountDao.class);
 
-    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT1_LIMIT =
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_NUMBER_LIMIT =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + ", " +
@@ -44,7 +43,7 @@ public class BankAccountDao {
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID + " =? " +
                     " ORDER BY " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " limit 10 offset ?";
 
-    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT2_LIMIT =
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_NUMBER_DESC_LIMIT =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + ", " +
@@ -60,7 +59,7 @@ public class BankAccountDao {
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID + " =? " +
                     " ORDER BY " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " DESC limit 10 offset ?";
 
-    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT3_LIMIT =
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_CURRENCY_LIMIT =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + ", " +
@@ -76,7 +75,7 @@ public class BankAccountDao {
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID + " =? " +
                     " ORDER BY " + Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + " limit 10 offset ?";
 
-    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT4_LIMIT =
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_CURRENCY_DESC_LIMIT =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + ", " +
@@ -92,7 +91,7 @@ public class BankAccountDao {
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID + " =? " +
                     " ORDER BY " + Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__NAME + " DESC limit 10 offset ?";
 
-    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT5_LIMIT =
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_BALANCE_LIMIT =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + ", " +
@@ -108,7 +107,7 @@ public class BankAccountDao {
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__USER_ID + " =? " +
                     " ORDER BY " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + " limit 10 offset ?";
 
-    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT6_LIMIT =
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_BALANCE_DESC_LIMIT =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + ", " +
@@ -142,7 +141,7 @@ public class BankAccountDao {
             " where " + Fields.ACCOUNT_STATUS__STATUS + " = ?";
 
     private static final String SQL_GET_COURSE_FOR_BANK_ACCOUNT =
-            "SELECT " + Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__COURSE +
+            "SELECT " + Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__RATE +
                     " FROM " + Fields.TABLE__BANK_ACCOUNT + " join " + Fields.TABLE__CURRENCY +
                     " on " + Fields.TABLE__CURRENCY + "." + Fields.CURRENCY__ID + " = " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__CURRENCY_ID + "  and " +
@@ -182,7 +181,7 @@ public class BankAccountDao {
                     Fields.TABLE__BANK_ACCOUNT + " WHERE " +
                     Fields.BANK_ACCOUNT__NUMBER + " = ?";
 
-    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT1_LIMIT =
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT_BY_CLIENT_NAME_LIMIT =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + ", " +
@@ -200,7 +199,7 @@ public class BankAccountDao {
                     Fields.ACCOUNT_STATUS__EXPECTATION +
                     "' ORDER BY " + Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + " limit 10 offset ?";
 
-    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT2_LIMIT =
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT_BY_CLIENT_NAME_DESC_LIMIT =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + ", " +
@@ -218,7 +217,7 @@ public class BankAccountDao {
                     Fields.ACCOUNT_STATUS__EXPECTATION +
                     "' ORDER BY " + Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + " DESC limit 10 offset ?";
 
-    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT3_LIMIT =
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORTBY_NUMBER_LIMIT =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + ", " +
@@ -236,7 +235,7 @@ public class BankAccountDao {
                     Fields.ACCOUNT_STATUS__EXPECTATION +
                     "' ORDER BY " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + " limit 10 offset ?";
 
-    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT4_LIMIT =
+    private static final String SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT_BY_NUMBER_DESC_LIMIT =
             "SELECT " + Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__NUMBER + ", " +
                     Fields.TABLE__BANK_ACCOUNT + "." + Fields.BANK_ACCOUNT__BALANCE + ", " +
                     Fields.TABLE__CLIENT + "." + Fields.CLIENT__NAME + ", " +
@@ -336,22 +335,22 @@ public class BankAccountDao {
         String sort = null;
         switch (sortType) {
             case 1:
-                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT1_LIMIT;
+                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_NUMBER_LIMIT;
                 break;
             case 2:
-                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT2_LIMIT;
+                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_NUMBER_DESC_LIMIT;
                 break;
             case 3:
-                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT3_LIMIT;
+                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_CURRENCY_LIMIT;
                 break;
             case 4:
-                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT4_LIMIT;
+                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_CURRENCY_DESC_LIMIT;
                 break;
             case 5:
-                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT5_LIMIT;
+                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_BALANCE_LIMIT;
                 break;
             case 6:
-                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT6_LIMIT;
+                sort = SQL_GET_BANK_ACCOUNT_LIST_BY_CLIENT_ID_SORT_BY_BALANCE_DESC_LIMIT;
                 break;
         }
         try {
@@ -395,16 +394,16 @@ public class BankAccountDao {
         String sort = null;
         switch (sortType) {
             case 1:
-                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT1_LIMIT;
+                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT_BY_CLIENT_NAME_LIMIT;
                 break;
             case 2:
-                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT2_LIMIT;
+                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT_BY_CLIENT_NAME_DESC_LIMIT;
                 break;
             case 3:
-                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT3_LIMIT;
+                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORTBY_NUMBER_LIMIT;
                 break;
             case 4:
-                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT4_LIMIT;
+                sort = SQL_GET_BANK_ACCOUNT_LIST_FOR_UNLOCK_SORT_BY_NUMBER_DESC_LIMIT;
                 break;
         }
         try {

@@ -66,7 +66,7 @@ public final class Fields {
 
     public static final String CURRENCY__ID = "id";
     public static final String CURRENCY__NAME = "name";
-    public static final String CURRENCY__COURSE = "rate";
+    public static final String CURRENCY__RATE = "rate";
 
     public static final String PAYMENT__ID = "id";
     public static final String PAYMENT__NUMBER = "number";

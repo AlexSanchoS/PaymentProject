@@ -26,32 +26,32 @@ public class CurrencyDao {
     private static final String SQL_GET_ALL_CURRENCY = "SELECT " + Fields.CURRENCY__NAME + ", " +
             Fields.CURRENCY__ID + " FROM " + Fields.TABLE__CURRENCY;
 
-    private static final String SQL_GET_ALL_CURRENCY_SORT1_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
+    private static final String SQL_GET_ALL_CURRENCY_SORT_BY_NAME_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
             Fields.CURRENCY__ID + ", " +
-            Fields.CURRENCY__COURSE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
+            Fields.CURRENCY__RATE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
             Fields.CURRENCY__NAME + " limit 10 offset ?";
 
-    private static final String SQL_GET_ALL_CURRENCY_SORT2_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
+    private static final String SQL_GET_ALL_CURRENCY_SORT_BY_NAME_DESC_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
             Fields.CURRENCY__ID + ", " +
-            Fields.CURRENCY__COURSE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
+            Fields.CURRENCY__RATE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
             Fields.CURRENCY__NAME + " DESC limit 10 offset ?";
 
-    private static final String SQL_GET_ALL_CURRENCY_SORT3_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
+    private static final String SQL_GET_ALL_CURRENCY_SORT_BY_RATE_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
             Fields.CURRENCY__ID + ", " +
-            Fields.CURRENCY__COURSE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
-            Fields.CURRENCY__COURSE + " limit 10 offset ?";
+            Fields.CURRENCY__RATE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
+            Fields.CURRENCY__RATE + " limit 10 offset ?";
 
-    private static final String SQL_GET_ALL_CURRENCY_SORT4_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
+    private static final String SQL_GET_ALL_CURRENCY_SORT_BY_RATE_DESC_LIMIT = "SELECT " + Fields.CURRENCY__NAME + ", " +
             Fields.CURRENCY__ID + ", " +
-            Fields.CURRENCY__COURSE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
-            Fields.CURRENCY__COURSE + " DESC limit 10 offset ?";
+            Fields.CURRENCY__RATE + " FROM " + Fields.TABLE__CURRENCY + " ORDER BY " +
+            Fields.CURRENCY__RATE + " DESC limit 10 offset ?";
 
 
     private static final String SQL_GET_COUNT_CURRENCY = "SELECT COUNT(" + Fields.CURRENCY__ID + ") " +
             " FROM " + Fields.TABLE__CURRENCY;
 
     private static final String SQL_CHANGE_RATE_FOR_CURRENCY = "UPDATE " + Fields.TABLE__CURRENCY +
-            " SET " + Fields.CURRENCY__COURSE + " =? WHERE " + Fields.CURRENCY__ID + " =?";
+            " SET " + Fields.CURRENCY__RATE + " =? WHERE " + Fields.CURRENCY__ID + " =?";
 
     /**
      * Returns a currency list
@@ -72,16 +72,16 @@ public class CurrencyDao {
         String sort = null;
         switch (sortType) {
             case 1:
-                sort = SQL_GET_ALL_CURRENCY_SORT1_LIMIT;
+                sort = SQL_GET_ALL_CURRENCY_SORT_BY_NAME_LIMIT;
                 break;
             case 2:
-                sort = SQL_GET_ALL_CURRENCY_SORT2_LIMIT;
+                sort = SQL_GET_ALL_CURRENCY_SORT_BY_NAME_DESC_LIMIT;
                 break;
             case 3:
-                sort = SQL_GET_ALL_CURRENCY_SORT3_LIMIT;
+                sort = SQL_GET_ALL_CURRENCY_SORT_BY_RATE_LIMIT;
                 break;
             case 4:
-                sort = SQL_GET_ALL_CURRENCY_SORT4_LIMIT;
+                sort = SQL_GET_ALL_CURRENCY_SORT_BY_RATE_DESC_LIMIT;
                 break;
         }
 
@@ -217,7 +217,7 @@ public class CurrencyDao {
                 logger.trace("Result set in 'mapRow' = " + rs.toString());
                 currency.setId(rs.getInt(Fields.CURRENCY__ID));
                 currency.setName(rs.getString(Fields.CURRENCY__NAME));
-                currency.setCourse(rs.getFloat(Fields.CURRENCY__COURSE));
+                currency.setCourse(rs.getFloat(Fields.CURRENCY__RATE));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

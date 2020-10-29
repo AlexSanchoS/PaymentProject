@@ -35,22 +35,22 @@ public class ClientDao {
                     Fields.CLIENT__NAME + ", " + Fields.CLIENT__DATE_OF_BIRTH + ", " + Fields.CLIENT__LANGUAGE + "," +
                     Fields.CLIENT__STATUS + ") VALUES (?, ?, ?, ?, ?, ?)";
 
-    private static final String SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT1_LIMIT =
+    private static final String SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT_BY_NAME_LIMIT =
             "SELECT " + Fields.CLIENT__ID + ", " + Fields.CLIENT__NAME + "," +
                     Fields.CLIENT__STATUS + " from " + Fields.TABLE__CLIENT +
                     " ORDER BY " + Fields.CLIENT__NAME + " limit 10 offset ?";
 
-    private static final String SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT2_LIMIT =
+    private static final String SQL__GET_CLIENT_LIST_FOR_ADMIN_SORTBY_NAME_DESC_LIMIT =
             "SELECT " + Fields.CLIENT__ID + ", " + Fields.CLIENT__NAME + "," +
                     Fields.CLIENT__STATUS + " from " + Fields.TABLE__CLIENT +
                     " ORDER BY " + Fields.CLIENT__NAME + " DESC limit 10 offset ?";
 
-    private static final String SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT3_LIMIT =
+    private static final String SQL__GET_CLIENT_LIST_FOR_ADMIN_SORTBY_STATUS_LIMIT =
             "SELECT " + Fields.CLIENT__ID + ", " + Fields.CLIENT__NAME + "," +
                     Fields.CLIENT__STATUS + " from " + Fields.TABLE__CLIENT +
                     " ORDER BY " + Fields.CLIENT__STATUS + " limit 10 offset ?";
 
-    private static final String SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT4_LIMIT =
+    private static final String SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT_BY_STATUS_DESC_LIMIT =
             "SELECT " + Fields.CLIENT__ID + ", " + Fields.CLIENT__NAME + "," +
                     Fields.CLIENT__STATUS + " from " + Fields.TABLE__CLIENT +
                     " ORDER BY " + Fields.CLIENT__STATUS + " DESC limit 10 offset ?";
@@ -175,16 +175,16 @@ public class ClientDao {
         String sort = null;
         switch (sortType) {
             case 1:
-                sort = SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT1_LIMIT;
+                sort = SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT_BY_NAME_LIMIT;
                 break;
             case 2:
-                sort = SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT2_LIMIT;
+                sort = SQL__GET_CLIENT_LIST_FOR_ADMIN_SORTBY_NAME_DESC_LIMIT;
                 break;
             case 3:
-                sort = SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT3_LIMIT;
+                sort = SQL__GET_CLIENT_LIST_FOR_ADMIN_SORTBY_STATUS_LIMIT;
                 break;
             case 4:
-                sort = SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT4_LIMIT;
+                sort = SQL__GET_CLIENT_LIST_FOR_ADMIN_SORT_BY_STATUS_DESC_LIMIT;
                 break;
         }
         try {

@@ -27,7 +27,7 @@ public class PaymentDao {
 
     private static final Logger logger = Logger.getLogger(PaymentDao.class);
 
-    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT1_LIMIT =
+    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_NUMBER_LIMIT =
             "SELECT " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE + ", " +
@@ -48,7 +48,7 @@ public class PaymentDao {
                     "ORDER BY " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER +
                     " limit 10 offset ?";
 
-    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT2_LIMIT =
+    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_NUMBER_DESC_LIMIT =
             "SELECT " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE + ", " +
@@ -69,7 +69,7 @@ public class PaymentDao {
                     "ORDER BY " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER +
                     " DESC limit 10 offset ?";
 
-    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT3_LIMIT =
+    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_DATE_LIMIT =
             "SELECT " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE + ", " +
@@ -90,7 +90,7 @@ public class PaymentDao {
                     "ORDER BY " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE +
                     " limit 10 offset ?";
 
-    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT4_LIMIT =
+    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_DATE_DESC_LIMIT =
             "SELECT " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE + ", " +
@@ -111,7 +111,7 @@ public class PaymentDao {
                     "ORDER BY " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE +
                     " DESC limit 10 offset ?";
 
-    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT5_LIMIT =
+    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_AMOUNT_LIMIT =
             "SELECT " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE + ", " +
@@ -132,7 +132,7 @@ public class PaymentDao {
                     "ORDER BY " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__AMOUNT +
                     " limit 10 offset ?";
 
-    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT6_LIMIT =
+    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_AMOUNT_DESC_LIMIT =
             "SELECT " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE + ", " +
@@ -153,7 +153,7 @@ public class PaymentDao {
                     "ORDER BY " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__AMOUNT +
                     " DESC limit 10 offset ?";
 
-    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT7_LIMIT =
+    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_STATUS_LIMIT =
             "SELECT " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE + ", " +
@@ -174,7 +174,7 @@ public class PaymentDao {
                     "ORDER BY " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__PAYMENT_STATUS_ID +
                     " limit 10 offset ?";
 
-    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT8_LIMIT =
+    public static final String SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_STATUS_DESC_LIMIT =
             "SELECT " + Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__ID + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__NUMBER + ", " +
                     Fields.TABLE__PAYMENT + "." + Fields.PAYMENT__DATE + ", " +
@@ -317,28 +317,28 @@ public class PaymentDao {
         String sort = null;
         switch (sortType) {
             case 1:
-                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT1_LIMIT;
+                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_NUMBER_LIMIT;
                 break;
             case 2:
-                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT2_LIMIT;
+                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_NUMBER_DESC_LIMIT;
                 break;
             case 3:
-                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT3_LIMIT;
+                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_DATE_LIMIT;
                 break;
             case 4:
-                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT4_LIMIT;
+                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_DATE_DESC_LIMIT;
                 break;
             case 5:
-                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT5_LIMIT;
+                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_AMOUNT_LIMIT;
                 break;
             case 6:
-                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT6_LIMIT;
+                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_AMOUNT_DESC_LIMIT;
                 break;
             case 7:
-                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT7_LIMIT;
+                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_STATUS_LIMIT;
                 break;
             case 8:
-                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT8_LIMIT;
+                sort = SQL_GET_PAYMENT_BY_CLIENT_SORT_BY_STATUS_DESC_LIMIT;
                 break;
         }
         try {

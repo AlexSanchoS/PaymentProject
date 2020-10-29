@@ -21,7 +21,7 @@ public class CurrencyDaoTest {
         float course = 12.3f;
         when(rs.getInt(Fields.CURRENCY__ID)).thenReturn(id);
         when(rs.getString(Fields.CURRENCY__NAME)).thenReturn(name);
-        when(rs.getFloat(Fields.CURRENCY__COURSE)).thenReturn(course);
+        when(rs.getFloat(Fields.CURRENCY__RATE)).thenReturn(course);
         Currency currency = currencyMapper.mapRow(rs);
 
         Assert.assertEquals(id, currency.getId());
