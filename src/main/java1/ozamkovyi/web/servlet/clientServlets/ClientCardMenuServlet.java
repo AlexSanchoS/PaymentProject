@@ -2,11 +2,11 @@ package ozamkovyi.web.servlet.clientServlets;
 
 import org.apache.log4j.Logger;
 import ozamkovyi.db.bean.BankAccountBean;
-import ozamkovyi.db.bean.ClientBean;
 import ozamkovyi.db.bean.CreditCardBean;
 import ozamkovyi.db.dao.CreditCardDao;
 import ozamkovyi.db.dao.BankAccountDao;
 import ozamkovyi.db.Fields;
+import ozamkovyi.db.entity.Client;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +26,7 @@ public class ClientCardMenuServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        ClientBean currentUser = (ClientBean) session.getAttribute("currentUser");
+        Client currentUser = (Client) session.getAttribute("currentUser");
         // if session attribute 'pageNumber' = null
         // then set session attributes 'pageNumber' and 'sortType' with values 1
         Object page = session.getAttribute("pageNumber");
