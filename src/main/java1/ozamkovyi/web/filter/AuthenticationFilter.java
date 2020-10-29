@@ -27,6 +27,11 @@ public class AuthenticationFilter implements Filter {
     private static final Logger logger = Logger.getLogger(AuthenticationFilter.class);
 
     @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
@@ -252,5 +257,10 @@ public class AuthenticationFilter implements Filter {
                 resp.sendRedirect("/adminHomepage");
             }
         }
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }
