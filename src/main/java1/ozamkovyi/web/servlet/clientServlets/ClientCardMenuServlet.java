@@ -21,6 +21,7 @@ import java.util.ArrayList;
  * @author O. Zamkovyi
  */
 public class ClientCardMenuServlet extends HttpServlet {
+
     private static final Logger logger = Logger.getLogger(ClientCardMenuServlet.class);
 
     @Override
@@ -37,7 +38,6 @@ public class ClientCardMenuServlet extends HttpServlet {
             logger.trace("page number = null");
             session.setAttribute("pageNumber", 1);
             session.setAttribute("sortType", 1);
-            System.out.println("page = null");
             sortType = 1;
             pageNumber = 1;
             listOfCreditCard = new CreditCardDao().getCardList(currentUser.getId(), pageNumber, sortType);
